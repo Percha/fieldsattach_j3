@@ -1,0 +1,7 @@
+@charset "UTF-8";
+
+.file label{ font-weight: bold; font-size: 14px; }
+
+.config {  padding:0px 5px 5px 30px; background-image: url(img/info.png); background-position: left top; background-repeat: no-repeat; }
+.config .label{ font-size: 15px;}
+.config .label,.config span{ font-weight: bold;}

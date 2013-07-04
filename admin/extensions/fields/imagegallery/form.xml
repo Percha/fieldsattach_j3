@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: FIELDSATTACHIMAGE.xml 62 2010-11-28 16:08:16Z cristian $ -->
+<form>
+	<fields name="params">  
+            <fieldset
+		name="parametros_imagegallery"
+		label="PLG_IMAGEGALLERY_IMAGEGALLERY_OPTIONS"
+	>
+                <field
+			name="field_imagegallery_description"
+			type="Description"
+                        default="PLG_IMAGEGALLERY_DESCRIPTION"
+		/> 
+                
+                <field name="galleryimage2" type="list"
+			default="1"
+			label="PLG_IMAGEGALLERY_IMAGE2"
+			size="1"
+		>
+			<option value="1">JSHOW</option>
+			<option value="0">JHIDE</option>
+		</field>
+                 <field name="galleryimage3" type="list"
+			default="1"
+			label="PLG_IMAGEGALLERY_IMAGE3"
+			size="1"
+		>
+			<option value="1">JSHOW</option>
+			<option value="0">JHIDE</option>
+		</field>
+                 <field name="gallerydescription" type="list"
+			default="1"
+			label="PLG_IMAGEGALLERY_SHOWDESCRIPTION"
+			size="1"
+		>
+			<option value="1">JSHOW</option>
+			<option value="0">JHIDE</option>
+		</field>
+		 
+            </fieldset>
+	</fields>
+</form>
+
+

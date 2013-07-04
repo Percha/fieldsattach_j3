@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="Extra fields filter search" option="COM_SEARCH_SEARCH_VIEW_DEFAULT_OPTION">
+		<help
+			key = "JHELP_MENUS_MENU_ITEM_SEARCH_RESULTS"
+		/>
+		<message>
+			<![CDATA[COM_SEARCH_SEARCH_VIEW_DEFAULT_DESC]]>
+		</message>
+	</layout>
+
+	<!-- Add fields to the request variables for the layout. -->
+	<fields name="request">
+		<fieldset name="request" label="COM_SEARCH_FIELDSET_OPTIONAL_LABEL" addfieldpath="/components/com_fieldsattach/views/advancedsearch/fields/">
+
+			<field name="searchword" type="text"
+				description="COM_SEARCH_FIELD_DESC"
+				label="COM_SEARCH_FIELD_LABEL"
+			/>
+                         
+                        <field
+			name="advancedsearchcategories"
+			type="category"
+			extension="com_content"
+			multiple="true"
+			size="10"
+			default=""
+			label="COM_FIELDSATTACH_ADVANCEDSEARCH_CATEGORIES_LABEL" >
+			<option value="">JOPTION_ALL_CATEGORIES</option>
+			</field>
+                        
+                        
+                        <field
+			name="fields"
+			type="FieldsExtra" 
+			size="10"
+			default=""
+			label="COM_FIELDSATTACH_ADVANCEDSEARCH_FIELDS_LABEL" 
+                        required="required"
+                        > 
+			</field>
+                        
+		
+		</fieldset>
+	</fields>
+	<!-- Add fields to the parameters object for the layout. -->	
+	<fields name="params">
+
+		<!-- Basic options. -->
+		<fieldset name="basic" label="COM_MENUS_BASIC_FIELDSET_LABEL">
+         <field name="conditionmode" type="list"
+
+				
+				label="COM_FIELDSATTACHSEARCH_CONDITION"
+			>
+				 
+				<option value="OR">OR</option>
+				<option value="AND">AND</option>
+			</field>
+                        <field name="paramrules" type="hidden" /> 
+                        
+                        <!--<field name="paramlinkconditions" type="text" label="LINKCONDITIONS" />-->
+                        
+                        
+                         <field
+			name="limit"
+			type="text" 
+			size="10"
+			default="20"
+			label="Default List Limit" > 
+			</field>
+                        
+                         
+			<field name="search_areas" type="list"
+
+				description="COM_SEARCH_FIELD_SEARCH_AREAS_DESC"
+				label="COM_SEARCH_FIELD_SEARCH_AREAS_LABEL"
+			>
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+
+			<field name="show_date" type="list"
+
+				description="COM_SEARCH_CONFIG_FIELD_CREATED_DATE_DESC"
+				label="COM_SEARCH_CONFIG_FIELD_CREATED_DATE_LABEL"
+			>
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+			</field>
+			
+			<field name="spacer1" type="spacer" class="text"
+			label="COM_SEARCH_SAVED_SEARCH_OPTIONS"
+			/>
+			
+			<!-- Add fields to define saved search. -->
+
+			<field name="searchphrase" type="radio"
+				default="0"
+				description="COM_SEARCH_FOR_DESC"
+				label="COM_SEARCH_FOR_LABEL"
+			>
+				<option value="0">COM_SEARCH_ALL_WORDS</option>
+				<option value="1">COM_SEARCH_ANY_WORDS</option>
+				<option value="2">COM_SEARCH_EXACT_PHRASE</option>
+			</field>
+			<field name="ordering" type="selectorder"
+				default="0"
+				description="COM_SEARCH_ORDERING_DESC"
+				label="COM_SEARCH_ORDERING_LABEL"
+			>
+				<option value="newest">COM_SEARCH_NEWEST_FIRST</option>
+				<option value="oldest">COM_SEARCH_OLDEST_FIRST</option>
+				<option value="popular">COM_SEARCH_MOST_POPULAR</option>
+				<option value="alpha">COM_SEARCH_ALPHABETICAL</option>
+				<option value="category">JCATEGORY</option>
+			</field>			
+			
+		</fieldset>
+	</fields>
+</metadata>
