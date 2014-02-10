@@ -14,14 +14,18 @@ window.addEvent('domready', function() {
 	//Event of tab for change propieties
 	var tabmenu = $$('#fieldsattach-form li a');
 	tabmenu.addEvents({
-		'click':function(){ 
+		'click':function(){
+			 
                         hide_all();
                         var name_type = $("jform_type").get('value');
 			 
                         var nom = 'percha_'+name_type+'-params';
 
                          open_actual( nom );
-                         $("jform_extras").value="";
+			//$("jform_extras").setStyle('display','none');
+			//$("jform_extras-lbl").setStyle('display','none');
+			 //Error ****
+                         //$("jform_extras").value="";
                           
                     }
         });

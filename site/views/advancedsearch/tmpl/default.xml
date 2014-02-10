@@ -48,7 +48,7 @@
 
 		<!-- Basic options. -->
 		<fieldset name="basic" label="COM_MENUS_BASIC_FIELDSET_LABEL">
-         <field name="conditionmode" type="list"
+		<!--<field name="conditionmode" type="list"
 
 				
 				label="COM_FIELDSATTACHSEARCH_CONDITION"
@@ -56,7 +56,7 @@
 				 
 				<option value="OR">OR</option>
 				<option value="AND">AND</option>
-			</field>
+			</field>-->
                         <field name="paramrules" type="hidden" /> 
                         
                         <!--<field name="paramlinkconditions" type="text" label="LINKCONDITIONS" />-->

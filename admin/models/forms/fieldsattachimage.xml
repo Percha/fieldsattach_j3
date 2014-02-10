@@ -82,17 +82,17 @@
 			value="0">
 			JUNPUBLISHED</option> 
                 </field>
-                <field name="ordering" type="ordering" class="inputbox"
-
-			label="JFIELD_ORDERING_LABEL" description="JFIELD_ORDERING_DESC" />
-                         
+                      
 
                 
                 
                 
 	</fieldset>
 	<fields name="params">
-		
+		 <field name="ordering" type="ordering" class="inputbox"
+
+			label="JFIELD_ORDERING_LABEL" description="JFIELD_ORDERING_DESC" />
+                  
 	</fields>
 </form>
 

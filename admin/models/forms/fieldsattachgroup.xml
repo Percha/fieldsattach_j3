@@ -77,18 +77,20 @@
                         JUNPUBLISHED</option> 
                 </field>
 
-                <field name="ordering" type="ordering" class="inputbox"
-
-			label="JFIELD_ORDERING_LABEL" description="JFIELD_ORDERING_DESC" />
-                 
+                                
                  
 	</fieldset>
            <fieldset name="links" addfieldpath="/administrator/components/com_fieldsattach/models/fields">
-
+            
                
            </fieldset>
 
         <fieldset name="links" addfieldpath="/administrator/components/com_fieldsattach/models/fields">
+         <field name="ordering" type="ordering" class="inputbox"
+
+			label="JFIELD_ORDERING_LABEL" description="JFIELD_ORDERING_DESC" />
+
+
             <field
 			name="relationinformation"
 			type="description"

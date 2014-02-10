@@ -8,6 +8,7 @@
 
 // no direct access
 defined('_JEXEC') or die;
+JHtml::_('formbehavior.chosen', 'select');
 /*
 echo "default.html :".$this->params->get('advancedsearchcategories', "");
 

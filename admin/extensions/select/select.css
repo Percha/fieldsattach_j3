@@ -1,0 +1,47 @@
+@charset "UTF-8"; 
+
+#select_wrapper{overflow:hidden; width:100%;}
+
+#select_wrapper #select_1 {
+	position: inherit;  
+       	padding: 0;
+}
+ 
+#select_wrapper #select_1 ul.sortables {
+	width: 95%;
+	margin: 0;
+	padding: 0;
+        position:relative;
+         
+}
+ 
+#select_wrapper #select_1 li {
+	padding: 4px 8px;
+        margin: 0 0 4px 0 ;
+	color: #ccc;
+	cursor: pointer;
+	list-style: none;
+	width: 95%;
+	background-color: #eee;
+        position:relative;
+        border:1px solid #CCC;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+}
+
+#select_wrapper #select_1 ul.sortables li { z-index: 1;}
+#select_wrapper #select_1 ul.sortables li .unit{ position: relative; left:0px;z-index: 20000; background-color: #f00; padding: 3px;}
+#select_wrapper #select_1 ul.sortables li .unit input{ z-index: 200000;}
+#select_wrapper #select_1 ul.sortables li {
+	margin: 10px 0 0 0px;
+        padding: 0 0 0  0px;
+}
+
+.title input{ margin: 0 0 0  0px; width: 75%;}
+.title label{ width: 100px;display: block; font-weight: bold; font-size: 13px;}
+.title label.checkbox{ display:inline;}
+/*Buttons*/
+.drag{ position: absolute;top:3px; right: 45px; }
+.delete{ position: absolute;top:3px; right: 4px;}
+.selectheader{ overflow: hidden;}
+#select_1_add{border:none;background: transparent  url(../select/img/add.png) no-repeat 35px;  font-size: 16px; float:right; width:75px; height:35px; text-indent: -45px;}

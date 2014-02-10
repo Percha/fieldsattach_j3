@@ -302,16 +302,22 @@ class FieldsattachViewAdvancedSearch extends JViewLegacy
             //$lineas = explode(chr(13),  $extras);
             
             $str  = '<select name="field_'.$fieldid.'" class="customfields" onchange="changefilter1()" >';
+	    $str .= '<option value="" >'. JText::_("COM_FIELDSATTACH_SELECTONE").'</option>'; 
+                   
+               
+		    
             if(count($extras) > 0){
+		 
                 foreach ($extras as $linea)
                 {
 
                     $tmp = explode('|',  $linea);
                     $title = $tmp[0];
+		    //echo $tmp[0]."--".$tmp[1]." -- ".count($tmp)."<br>";
                     $valor="";
                     if(count($tmp)>=2) $valor = $tmp[1];
                     else $valor=$title;
-                    $valor = $title; 
+                    //$valor = $title; 
                     
                     //CLEAN RETURNS
                     $valor = preg_replace('/\r/u',  '', $valor);

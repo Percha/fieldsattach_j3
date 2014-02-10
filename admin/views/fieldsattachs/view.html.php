@@ -39,15 +39,50 @@ class fieldsattachViewfieldsattachs extends JViewLegacy
 		// Assign data to the view
 		$this->items = $items;
 		$this->pagination = $pagination;
+		
+		//Version
+		$this->version=""; 
+		$xml=JFactory::getXML(JPATH_COMPONENT.DS.'fieldsattach.xml');
+		$this->version =(string)$xml->version;
 
 		// Set the toolbar
 		$this->addToolBar();
+		
+		//Add script
+		$this->jqueryscript();
 
 		// Display the template
 		parent::display($tpl);
 
 		// Set the document
 		//$this->setDocument();
+	}
+	
+	/**
+	 * Add script
+	 */
+	protected function jqueryscript()
+	{
+		$script='var url = "http://fieldsattach.com/update/control.php"; // the script where you handle the form input.
+		jQuery(document).ready(function (){ 
+		    jQuery.ajax({
+			   type: "POST",
+			   url: url,
+			   data: jQuery("#checkupdatesForm").serialize(), 
+			   success: function(data)
+			   {
+				var obj = jQuery.parseJSON( data);
+			       jQuery("#checkupdates").html(""+obj.msg );
+			   },
+				error: function (xhr, ajaxOptions, thrownError) {
+				  
+				   jQuery("#checkupdates").html("");
+				}
+			 });
+			 });';
+		 
+		$doc =& JFactory::getDocument();
+		$doc->addScriptDeclaration( $script );
 	}
 
 	/**

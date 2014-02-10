@@ -15,18 +15,18 @@ JLoader::register('fieldattach',  JPATH_ROOT.DS.'components/com_fieldsattach/hel
 
 //           
 ?>
-
-             
- 
-
 <form id="searchForm" action="<?php echo JRoute::_('index.php?option=com_fieldsattach');?>" method="post">
 
 	<fieldset class="word">
 		<label for="search-searchword">
 			<?php echo JText::_('COM_SEARCH_SEARCH_KEYWORD'); ?>
 		</label>
-		<input type="text" name="searchword" id="search-searchword" size="30" maxlength="<?php echo $upper_limit; ?>" value="<?php echo $this->escape($this->origkeyword); ?>" class="inputbox" />
-		<button name="Search" onclick="this.form.submit()" class="button"><?php echo JText::_('COM_SEARCH_SEARCH');?></button>
+		<div class="btn-group pull-left">
+			<input type="text" name="searchword" id="search-searchword" size="30" maxlength="<?php echo $upper_limit; ?>" value="<?php echo $this->escape($this->origkeyword); ?>" class="inputbox" />
+		</div>
+		<div class="btn-group pull-left">
+			<button name="Search" onclick="this.form.submit()" class="btn hasTooltip" title="<?php echo JText::_('COM_SEARCH_SEARCH');?>"><i class="icon-search"></i></button>
+		</div>
 		<input type="hidden" name="option" value="com_fieldsattach" />
                 <input type="hidden" name="task" value="advancedsearch" />  
                 <input type="hidden" name="advancedsearchcategories" value="<?php echo $this->advancedsearchcategories;?>" /> 
@@ -34,12 +34,18 @@ JLoader::register('fieldattach',  JPATH_ROOT.DS.'components/com_fieldsattach/hel
                 <input type="hidden" name="Itemid" value="<?php echo  JRequest::getVar("Itemid"); ?>" />
 	
 	</fieldset>
+	<div class="searchintro<?php echo $this->params->get('pageclass_sfx'); ?>">
+		<?php if (!empty($this->searchword)):?>
+		<p><?php echo JText::plural('COM_SEARCH_SEARCH_KEYWORD_N_RESULTS', '<span class="badge badge-info">'. $this->total. '</span>');?></p>
+		<?php endif;?>
+	</div>
 
-	<div  class="searchintro<?php echo $this->params->get('pageclass_sfx'); ?>">
+	<!--<div  class="searchintro<?php echo $this->params->get('pageclass_sfx'); ?>">
 		<?php if (!empty($this->searchword)):?>
 		<p><?php echo JText::plural('COM_SEARCH_SEARCH_KEYWORD_N_RESULTS', $this->total);?></p>
 		<?php endif;?>
-	</div>
+	</div>-->
+	
         <?php if(!empty( $this->fields)){ ?>
         <fieldset id="filterfieldsattach" class="phrases filterfieldsattach">
                 <legend><?php echo JText::_('COM_FIELDSATTACH_FILTER');?></legend>
@@ -66,6 +72,13 @@ JLoader::register('fieldattach',  JPATH_ROOT.DS.'components/com_fieldsattach/hel
                         echo FieldsattachViewAdvancedSearch::renderSelect( $val[0], $valor );
                  
                     }else{
+			
+			if($type == "selecttree"){
+				JPluginHelper::importPlugin('fieldsattachment');
+				echo plgfieldsattachment_selecttree::renderInput( "", $val[0], $valor ,"");
+				 
+			}else{
+			
                         //BETWEEN ***********************************
                         if(count($arrayparamrules)>$cont){
                         if($arrayparamrules[$cont]=="BETWEEN"){
@@ -141,6 +154,7 @@ JLoader::register('fieldattach',  JPATH_ROOT.DS.'components/com_fieldsattach/hel
                              <input name="field_<?php echo $val[0];?>" value="<?php echo $valor;?>" onchange="changefilter1()" />
                            <?php
                         }
+			}
                     }
                     $cont++;
                 ?></div>

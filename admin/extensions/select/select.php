@@ -48,7 +48,7 @@ class plgfieldsattachment_select extends extrafield
 	}
 	   
 
-        function renderInput($articleid, $fieldsid, $value, $extras=null )
+        function renderInput($articleid, $fieldsid, $value, $extras )
         {
             $required="";
             
@@ -62,14 +62,14 @@ class plgfieldsattachment_select extends extrafield
             //$str .= "<br> resultado1: ".$tmp;
             $lineas = explode(chr(13),  $tmp);
             //$str .= "<br> resultado2: ".$lineas[0];
-            //Add CSS ***********************
-            // $str =  '<link rel="stylesheet" href="'.JURI::root() .'plugins/fieldsattachment/select/select.css" type="text/css" />'; 
+              //Add CSS ***********************
+           // $str =  '<link rel="stylesheet" href="'.JURI::root() .'plugins/fieldsattachment/select/select.css" type="text/css" />'; 
             $app = JFactory::getApplication();
-            // $templateDir = JURI::base() . 'templates/' . $app->getTemplate(); 
+           // $templateDir = JURI::base() . 'templates/' . $app->getTemplate(); 
             
             //FIND SELECT ****************
             $cont = 0;
-            $default = -1;
+            $default = 0;
             $selected = -1;
             foreach ($lineas as $linea)
             {
@@ -99,7 +99,6 @@ class plgfieldsattachment_select extends extrafield
              
             $str="";
             $str  .= '<select name="field_'.$fieldsid.'" class="customfields '.$required.'">';
-            $str .= '<option value="">'.JText::_("PLG_SELECT_OPTIONS").'</option> '; 
             foreach ($lineas as $linea)
             {
 
@@ -227,12 +226,6 @@ class plgfieldsattachment_select extends extrafield
 	    return $retorno;
 	}
         
-	public function searchinput($fieldsid, $value, $extras)
-	{
-		return plgfieldsattachment_select::renderInput(-1, $fieldsid, $value, $extras);
-		  
-		  
-	}
         
          
 

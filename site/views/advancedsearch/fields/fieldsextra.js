@@ -69,9 +69,7 @@ fields.prototype.initLinkcondition = function()    // Define Method
 
 //FUNCTION EVENT LINK CONDITION =========================================
 fields.prototype.eventLink = function()    // Define Method
-{
-    
-    
+{   
     //FIND IF EXIST ---------------------------------------
     var find = false;
     $('jform_params_paramlinkconditions').set('value',""); 
@@ -165,6 +163,7 @@ fields.prototype.eventRule = function()    // Define Method
                 var tmp = $('jform_params_paramrules').get("value");
                 if(cont>0) tmp += ",";
                 tmp += valor;
+                
                 $('jform_params_paramrules').set('value',tmp); 
             }
             
@@ -262,11 +261,11 @@ fields.prototype.render_fieldsid = function(fieldname)    // Define Method
         strall += str;
         
         
-        
+       
         addLI( this.array_of_fields[cont].id, this.array_of_fields[cont].title, fieldname, this.array_of_fields[cont].textfilter,last);
     }
     
-    
+     
     if($("jform_request_fields")) $("jform_request_fields").set("value", strall);
     if($("jform_params_fields")) $("jform_params_fields").set("value", strall);
      
@@ -300,6 +299,7 @@ fields.prototype.changeFilter = function(id, fieldname)
     
     
 }
+
 //FUNCTION AD LI =========================================
 function addLI( id, text, fieldname, textfilter,last){
     var Parent = document.getElementById("fieldslist");
@@ -307,11 +307,19 @@ function addLI( id, text, fieldname, textfilter,last){
     
     textfilter = String(textfilter).replace(/_/gi, ",");
     
+   
+    
     var tmptext = String(textfilter).split("|")
     if(tmptext.length==1) tmptext[1]="";
     
+   
+     
+    //var tmptext = text;
     
-    text = '<div style="position:relative;width:100%; padding:5px 0 5px 0;border-top:#ddd dotted 1px; "><div style="  padding:5px 0 5px 0;">'+text+'</div>';
+    var title = text;
+    text = '<div style="position:relative;width:100%; padding:10px 0 25px 0;border-bottom:#fff dotted 2px; ">';
+    text += '<h3 style=" padding:0p 0px 10px 0;  ">'+title+'</h3>';
+    text += '<h6>Condition</h6>';
     text += '<select name="rules'+id+'" id="rules'+id+'" class="rules" onchange="javascript:obj.eventRule()">';
     text += '<option value="LIKE">LIKE</option>';
     text += '<option value="EQUAL">EQUAL</option>';
@@ -320,7 +328,9 @@ function addLI( id, text, fieldname, textfilter,last){
     text += '<option value="LOWER">LOWER</option>';
     text += '<option value="BETWEEN">BETWEEN</option>';
     text += '</select>';
+    
     //text += '<div style="width:100%; overflow:hidden;"><input type="text" name="'+fieldname+'_'+id+'_value" id="'+fieldname+'_'+id+'_value" onchange="javascript:obj.changeFilter('+id+',\''+fieldname+'\')" value="'+tmptext[0]+'" size="80" />';
+    text += '<h5>Default value</h5>';
     text += '<div style="width:100%; overflow:hidden;"><input type="text" name="jform_request_fields_'+id+'_value" id="jform_request_fields_'+id+'_value" onchange="javascript:obj.changeFilter('+id+',\''+fieldname+'\')" value="'+tmptext[0]+'" size="80" />';
     
     text += '</div> ';
@@ -345,24 +355,24 @@ function addLI( id, text, fieldname, textfilter,last){
     //ADD TO ORDER
     
     //get the current options selectId's options
-    var options = $('jform_params_ordering').get('html');  
-    text= text.replace("delete", ""); 
-    
+    var options = $('jform_params_ordering').get('html'); 
     
     //Search if it is in select
-    var forsearch = 'value="'+id+'"'
-    
+    var forsearch = 'value="'+tmptext+'"'
+   
     if(String(options).indexOf(forsearch)<0)
     {
-          
-         options = options + '<option value="'+id+'">'+text+'</option>'; 
-         $('jform_params_ordering').set('html', options); 
+         
+         options = options + '<option value="'+tmptext+'">'+tmptext+'</option>'; 
+         //$('jform_params_ordering').set('html', options); 
     }
     
    obj.initRule();
   // obj.initLinkcondition();
     
-} 
+}
+
+
 
 //CREATE OBJECT ARTICLES =========================================
 obj = new fields; 

@@ -210,6 +210,13 @@ class plgfieldsattachment_input extends extrafield
         {
 
         }
+	
+	public function searchinput($fieldsid, $value, $extras)
+	{
+		return plgfieldsattachment_input::renderInput(-1, $fieldsid, $value, $extras);
+		  
+		  
+	}
        
 
 }

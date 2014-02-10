@@ -25,8 +25,9 @@ class fieldsattachHelper
         var $menuTabstr;
         var $exist;
         var $exist_options;
+	
 	/**
-	 * Configure the Linkbar.
+	 * Configure the Link bar.
 	 */
 	public static function addSubmenu($submenu)
 	{
@@ -35,19 +36,19 @@ class fieldsattachHelper
 
                 JSubMenuHelper::addEntry(JText::_('COM_FIELDSATTACH_SUBMENU_UNIDADES'), 'index.php?option=com_fieldsattach&view=fieldsattachunidades', $submenu == 'fieldsattachunidades');
 		JSubMenuHelper::addEntry(JText::_('COM_FIELDSATTACH_SUBMENU_BACKUP'), 'index.php?option=com_fieldsattach&view=fieldsattachbackup', $submenu == 'fieldsattachbackup');
+		 
+		/*ADD ONS*/
+		jimport( 'joomla.filesystem.folder' );
 		
-                // set some global property
-		$document = JFactory::getDocument();
-		$document->addStyleDeclaration('.icon-48-fieldsattach {background-image: url(../media/com_fieldsattach/images/tux-48x48.png);}');
-
-              /*  if ($submenu == 'fieldsattachs')
-		{
-			$document->setTitle(JText::_('COM_FIELDATTACH_MANAGER_FIELDATTACHS')."sssssssssssssss");
-		}
-                if ($submenu == 'fieldsattachunidades')
-		{
-			$document->setTitle(JText::_('COM_FIELDATTACH_MANAGER_FIELDATTACHUNIDADES'));
-		}*/
+		/*SELECTOR TREE*/
+		$folder = JPATH_ROOT.'/administrator/components/com_fieldsattachselector';
+		 
+		$exist = false;
+		if (JFolder::exists($folder)) {$exist = true;}
+		
+		 
+		if($exist) JSubMenuHelper::addEntry(JText::_('COM_FIELDSATTACH_SUBMENU_TREE'), '	index.php?option=com_fieldsattachselector&view=categories&extension=com_fieldsattach', $submenu == 'fieldsattachselecttree');
+		 
 	}
 	/**
 	 * Get the actions
@@ -625,7 +626,7 @@ class fieldsattachHelper
                     }
             }else{
                 //Si tengo el catid impuesto cuando creo un nuevo artículo
-                $query = 'SELECT a.language FROM #__content as a WHERE a.id='. $id.' AND catid =  '.$catid.' '  ;
+                $query = 'SELECT a.language FROM #__content as a WHERE a.id='. $id.' AND catid IN (  '.$catid.' )'  ;
                 $db->setQuery( $query );
                 $elid = $db->loadObject();
                 if(!empty($elid)){

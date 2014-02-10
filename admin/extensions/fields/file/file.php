@@ -516,23 +516,4 @@ class plgfieldsattachment_file extends extrafield
         }
         
          
-	 /**
-	 * getTemplate
-	 *
-	 * @access	public 
-	 * @return  	html of field
-	 * @since	1.0
-	 */
-        function getTemplate($fieldsids)
-        {
-		  parent::getTemplate($fieldsids);
-              
-        }
-         
-
-        
-
-
-       
-
 }

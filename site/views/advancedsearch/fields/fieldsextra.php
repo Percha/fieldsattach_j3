@@ -118,7 +118,7 @@ class JFormFieldFieldsextra extends JFormField
             //$script[] = '		document.id("jform_request_fields").value += id + ",";';
             //$script[] = '		document.id("fieldsid_name").value = title;';
             //$script[] = ' alert(type);';
-            $script[] = ' if( (type=="input") || (type=="date") ||(type=="textarea") || (type=="select") || (type=="selectmultiple")  || (type=="tags") ){';
+            $script[] = ' if( (type=="input") || (type=="date") ||(type=="textarea") || (type=="select") || (type=="selectmultiple")  || (type=="tags") || (type=="selecttree") ){';
             $script[] = '		SqueezeBox.close(); obj.AddId(id, title, object,"");';
             $script[] = ' }else{ alert("'.JText::_("TYPE_NOT_VALID").'");}';
             $script[] = '	}';
@@ -179,10 +179,10 @@ class JFormFieldFieldsextra extends JFormField
           //$html .= "\n".'<input type="text" id="jform[request][fields]" name="jform_request_fields" value="'.$this->value.'" />'   ;
           
           $html .= "\n".'<input type="hidden" id="'.$this->id.'" name="'.$this->name.'" value="'.$this->value.'" />';
-          $html .= "\n".'<input type="hidden" id="jform_request_fields" name="jform_request_fields" value="'.$this->value.'" />';
+          $html .= "\n".'<input type="hidden" id="jform_request_fields_tmp" name="jform_request_fields" value="'.$this->value.'" />';
 
-          $html .= '<div style="width:100%; margin:20px 0 ; padding:20px 0; border-bottom: 2px solid #ccc;  ">
-		    <ul id="fieldslist">
+          $html .= '<div style="width:100%; margin:20px 0 ; padding:20px 0;  ">
+		    <ul id="fieldslist" style="list-style:none; background-color:#eee; padding:10px;">
 			
 		    </ul>
 		</div></div>';

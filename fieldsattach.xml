@@ -12,7 +12,7 @@
 	<copyright>Copyright Info</copyright>
 	<license>License Info</license>
 	<!--  The version string is recorded in the components table -->
-	<version>3.4.9.3</version>
+	<version>3.5.0.0</version>
 	<!-- The description is optional and defaults to the name -->
 	<description></description>
 
@@ -36,10 +36,8 @@
 		<schemas>
 			<schemapath type="mysql">sql/updates/mysql</schemapath>
 		</schemas>
-	</update>
-
-	
-
+	</update> 
+    
 	<!-- Site Main File  Section --> 
 	<files folder="site">
 		<filename>index.html</filename>
@@ -64,9 +62,7 @@
 		<!-- Administration Menu Section -->
 		<menu img="../media/com_fieldsattach/images/logo-16x16.png">COM_FIELSATTACH_MENU</menu>
 		<!-- Administration Main File Copy Section --> 
-		<files folder="admin">
-			
-			<!-- Admin Main File Copy Section -->
+		<files folder="admin"> 			<!-- Admin Main File Copy Section -->
 			<filename>index.html</filename>
 			<filename>config.xml</filename>
 			<filename>access.xml</filename>

@@ -128,15 +128,8 @@
 		<option
 			value="0">
 			JNO</option>
-                </field>
-                <field name="ordering" type="ordering" class="inputbox"
-
-			label="JFIELD_ORDERING_LABEL" description="JFIELD_ORDERING_DESC" />
-               <fieldset
-			name="params"
-			label="JGLOBAL_FIELDSET_DISPLAY_OPTIONS"
-		>
-			<field
+        </field>
+                <field
 				name="extras"
 				type="textarea"
 				label="COM_FIELDSATTACH_FIELDSATTACH_FIELD_SHOW_EXTRAS_LABEL"
@@ -146,9 +139,10 @@
 			>
 
 			</field>
-		</fieldset>
 	</fieldset>
 	<fields name="params">
+    <field name="ordering" type="ordering" class="inputbox" label="JFIELD_ORDERING_LABEL" description="JFIELD_ORDERING_DESC" />
+
 		<!--<fieldset
 			name="percha_textarea"
 			label="JGLOBAL_FIELDSET_TEXTAREA_OPTIONS"

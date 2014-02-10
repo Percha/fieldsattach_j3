@@ -7,10 +7,19 @@
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 	<authorEmail>cristiangrano@hotmail.com	</authorEmail>
 	<authorUrl>www.percha.com</authorUrl>
-	<version>0.4</version>
+	<version>1.6</version>
 	<description>Seach on the extra fields</description>
 	<files>
 		<filename plugin="fieldsattachment">fieldsattachment.php</filename> 
 	</files>
-	 
+	  <config>
+	<fields name="params">
+	<fieldset name="basic">
+	<field name="log" type="radio" default="0" label="">
+ 		<option value="0">Disable</option>
+ 		<option value="1">Enable</option>
+	</field>
+	</fieldset>
+	</fields>
+	</config> 
 </extension>
