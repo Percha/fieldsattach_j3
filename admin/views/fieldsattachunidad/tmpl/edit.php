@@ -13,7 +13,7 @@ defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip');
 JHTML::_('behavior.modal'); 
 JHtml::_('behavior.formvalidation');
-JHtml::_('formbehavior.chosen', 'select');
+//JHtml::_('formbehavior.chosen', 'select');
 
 $params = $this->form->getFieldsets('params');
 
