@@ -875,8 +875,8 @@ class plgSystemfieldsattachment extends JPlugin
 								      
 									eval("\$tmp=".  $function."");
 									 
-									$str .= '<div class="control-group"><label class="control-label"  for="field_'.$field->id.'">' . $field->title; 
-									if($field->required) {$str .= '</label> <span>(*)</span>';}
+									$str .= '<div class="control-group"><label class="control-label"  for="field_'.$field->id.'">' . $field->title .'</label> '; 
+									if($field->required) {$str .= '<span>(*)</span>';}
 									$str .= '<div class="controls">'.$tmp.  '</div>';
 									$str .= '</div>';
 									//Reset field of category description =====================
