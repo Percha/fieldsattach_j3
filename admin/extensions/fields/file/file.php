@@ -222,6 +222,8 @@ class plgfieldsattachment_file extends extrafield
                             var title = $('field_".$fieldsid."_title').value; 
                             var upload = $('field_".$fieldsid."_value').value;
                             
+                            console.log('mountlink');
+                            
                             var result = upload;
                             if(String(title).length>0 || String(upload).length>0 )
                             {
@@ -254,6 +256,10 @@ class plgfieldsattachment_file extends extrafield
                                  mountlink_".$fieldsid."();
                         });
                         
+                        
+                        setInterval(mountlink_".$fieldsid." ,1000);
+
+
                         
                         
                           
