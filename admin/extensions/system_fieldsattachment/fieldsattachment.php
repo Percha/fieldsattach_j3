@@ -590,49 +590,46 @@ class plgSystemfieldsattachment extends JPlugin
                             $db->query();
 
                             //Select last id ----------------------------------
-			    //Cristian 23_09_2013
-			    $valueslst->id = $db->insertid();
+                            //Cristian 23_09_2013
+                            $valueslst->id = $db->insertid();
 			    
-                          /*  $query = 'SELECT  id  FROM #__fieldsattach_values AS a WHERE  a.articleid='.$article->id.' AND a.fieldsid='.$obj->id;
-                            //echo $query;
-                            $db->setQuery( $query );
-                            $result = $db->loadObject();
-                            $valueslst->id = $result->id; */
+                          
                             
                         }
                         else{
                             //UPDATE 
-                           // $valor = JRequest::getVar("field_". $obj->id, '', 'post', null, JREQUEST_ALLOWHTML); 
-                             $valor = $_POST["field_". $obj->id]; 
+                            if(isset($_POST["field_". $obj->id])){ 
+                                $valor = $_POST["field_". $obj->id]; 
                              
-                            if(is_array($valor))
-                            { 
-                                $valortxt="";
-                                for($i = 0; $i < count($valor); $i++ )
+                                if(is_array($valor))
                                 { 
-                                      $valortxt .=  $valor[$i].", ";
+                                    $valortxt="";
+                                    for($i = 0; $i < count($valor); $i++ )
+                                    { 
+                                        $valortxt .=  $valor[$i].", ";
+                                    }
+                                    $valor = $valortxt;
                                 }
-                                $valor = $valortxt;
-                            }
                             
-                            //remove vbad characters
-                            //$valor = preg_replace('/[^(\x20-\x7F)]*/','', $valor);
+                                //remove vbad characters
+                                //$valor = preg_replace('/[^(\x20-\x7F)]*/','', $valor);
                             
-                            //$valor = str_replace('"','&quot;', $valor );
-                            //$valor = htmlspecialchars($valor);
-                            //Remove BAD characters ****
-                            $valor = preg_replace('/border="*"*/','', $valor);
+                                //$valor = str_replace('"','&quot;', $valor );
+                                //$valor = htmlspecialchars($valor);
+                                //Remove BAD characters ****
+                                $valor = preg_replace('/border="*"*/','', $valor);
                             
-                            if($valueslst->type == "listunits"){
+                                if($valueslst->type == "listunits"){
                                   
-                            }else{
-                                 $valor = htmlspecialchars($valor);
-                            }
+                                }else{
+                                    $valor = htmlspecialchars($valor);
+                                }
                             
-                            $query = 'UPDATE  #__fieldsattach_values SET value="'.$valor.'" WHERE id='.$valueslst->id .' AND articleid='.$article->id ;
-                            $db->setQuery($query);
-                            //JError::raiseWarning( 100, $query  );
-                            $db->query(); 
+                                $query = 'UPDATE  #__fieldsattach_values SET value="'.$valor.'" WHERE id='.$valueslst->id .' AND articleid='.$article->id ;
+                                $db->setQuery($query);
+                                //JError::raiseWarning( 100, $query  );
+                                $db->query(); 
+                            }
 							
 							 
 						    
