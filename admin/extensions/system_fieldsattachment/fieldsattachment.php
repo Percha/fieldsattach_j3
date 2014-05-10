@@ -469,7 +469,7 @@ class plgSystemfieldsattachment extends JPlugin
 
             //JError::raiseWarning( 100, "cadna: ".$cadena );
 
-            $query = 'UPDATE  #__categories SET description="'.$cadena.'" WHERE id='.$id ;
+            $query = 'UPDATE  #__categories SET description="'.$db->escape($cadena).'" WHERE id='.$id ;
             $db->setQuery($query);
              //JError::raiseWarning( 100, $patron  );
             $db->query();
