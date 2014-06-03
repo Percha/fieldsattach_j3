@@ -154,12 +154,14 @@ class fieldsattachModelfieldsattachgroup extends JModelAdmin
                 $this->id = $row->id;
 
                 //Update articleid fiueld 
-                $db	= & JFactory::getDBO();
+               /* $db	= & JFactory::getDBO();
                 $tmp = $data["articlesid"] ;
                 $query = 'UPDATE  #__fieldsattach_groups SET articlesid="'. implode(",",$tmp) .'" WHERE id='.$row->id ;
                 
                 $db->setQuery($query);
-                 $db->query();
+                $db->query();
+
+                echo  $query ;*/
                 
                 return true;
 
