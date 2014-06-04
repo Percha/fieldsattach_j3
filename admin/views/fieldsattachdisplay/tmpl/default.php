@@ -17,20 +17,24 @@ JHtml::_('behavior.tooltip');
 	<tr>
 		<td width="100%" valign="top">
 			<div id="cpanel">
-			   <h2>WITH CONTENT PLUGIN</h2>
-			    <p>It Is automatic and more simple. The extra fields will  displayed after the content article.</p>
-	                    <h2>PROGRAMMING FORM</h2>
-                            <h3>IMPORTANT!!!</h33>
-                            After all, write this line in php view of component.<br /><br />
+         <h2>SHOW THE FIELDS</h2><br />
+			   <h3>WITH CONTENT PLUGIN</h3>
+			    <p>It Is automatic and more simple. The extra fields will  displayed after/before the content article.</p>
+          <p style="color:#f00">NOTE: Only for a com_content article view.</p>
+          <br />
+	                    <h3>WITH API</h3>
+                      
+                            <h4>IMPORTANT!!!</h4>
+                            Write this line in php view of component.<br /><br />
 
                             <code>// require helper file<br />
                             JLoader::register('fieldattach',  'components/com_fieldsattach/helpers/fieldattach.php');
                             </code>
                             <br /><br />
-                            <h2>FUNCTIONS ( ONLY ONE FUNCTION FOR ALL TYPES )</h2>
+                            <h4>FUNCTIONS</h4>
 
                                
-                              <h3>getFieldValue($articleid, $fieldid, $category  = false)</h3>
+                              <h5>fieldattach::getFieldValue($articleid, $fieldid, $category  = false)</h5>
                               <table>
                                   <tr>
                                       <td valign="top">Parameters</td>
@@ -43,17 +47,15 @@ JHtml::_('behavior.tooltip');
                                       <td>HTML of field</td>
                                   </tr>
                               </table>
-                              <hr /> <br /><br />
-                            
-                              <h2 style="color:#900;">FUNCTIONS (DEPRECATED)</h2>
-
+                              <hr />  
                                
-                              <h3>getName::getName($id, $fieldsids)</h3>
+                              <h5>fieldattach::getName($id, $fieldsids, $category  = false)</h5>
                               <table>
                                   <tr>
                                       <td valign="top">Parameters</td>
                                       <td>$id(Article id)<br />
-                                      $fieldsids(field id)</td>
+                                      $fieldsids(field id)<br />
+                                    $category, true or false (default false)</td></td>
                                   </tr>
                                   <tr>
                                       <td valign="top">Return</td>
@@ -61,12 +63,13 @@ JHtml::_('behavior.tooltip');
                                   </tr>
                               </table>
                               <hr />
-                              <h3>fieldattach::getValue($id, $fieldsids)</h3>
+                              <h5>fieldattach::getValue($id, $fieldsids, $category  = false)</h5>
                               <table>
                                   <tr>
                                       <td valign="top">Parameters</td>
                                       <td>$id(Article id)<br />
-                                      $fieldsids(field id)</td>
+                                      $fieldsids(field id)<br />
+                                      $category, true or false (default false)</td>
                                   </tr>
                                   <tr>
                                       <td valign="top">Return</td>
@@ -74,216 +77,32 @@ JHtml::_('behavior.tooltip');
                                   </tr>
                               </table>
                               <hr />
-                              <h3>getInput($id, $fieldsids )</h3>
-                               <table>
-                                  <tr>
-                                      <td valign="top">Parameters</td>
-                                      <td>$id(Article id)<br />
-                                      $fieldsids(field id)</td>
-                                  </tr>
-                                  <tr>
-                                      <td valign="top">Return</td>
-                                      <td>input HTML tag   <br /></td>
-                                  </tr>
-                              </table>
-                              <hr />
-                              <h3>getImg($id, $fieldsids, $title=null)</h3>
-                               <table>
-                                  <tr>
-                                      <td valign="top">Parameters</td>
-                                      <td>$id(Article id)<br />
-                                      $fieldsids(field id)<br />
-                                      $title (alt of image)</td>
-                                  </tr>
-                                  <tr>
-                                      <td valign="top">Return</td>
-                                      <td>html of image   <br /><code>&lt;img src="pp.png" alt=" " &#34;&gt;</code></td>
-                                  </tr>
-                              </table>
-                              <hr />
-                              <h3>getSelect($articleid, $fieldsids)</h3>
-                               <table>
-                                  <tr>
-                                      <td valign="top">Parameters</td>
-                                      <td>$id(Article id)<br />
-                                      $fieldsids(field id)</td>
-                                  </tr>
-                                  <tr>
-                                      <td valign="top">Return</td>
-                                      <td>html of   select</td>
-                                  </tr>
-                              </table>
-                              <hr />
-                              <h3>getFileDownload($articleid, $fieldsids)</h3>
-                               <table>
-                                  <tr>
-                                      <td valign="top">Parameters</td>
-                                      <td>$articleid(Article id)<br />
-                                      $fieldsids(field id)</td>
-                                  </tr>
-                                  <tr>
-                                      <td valign="top">Return</td>
-                                      <td>html of   select</td>
-                                  </tr>
-                              </table>
-                              <hr />
-                              <h3>getSelectmultiple($articleid, $fieldsids)</h3>
-                               <table>
-                                  <tr>
-                                      <td valign="top">Parameters</td>
-                                      <td>$id(Article id)<br />
-                                      $fieldsids(field id)</td>
-                                  </tr>
-                                  <tr>
-                                      <td valign="top">Return</td>
-                                      <td>html of multiple select</td>
-                                  </tr>
-                              </table>
-                              <hr />
-                              <h3>getImageGallery($articleid, $fieldsids)</h3>
-                               <table>
-                                  <tr>
-                                      <td valign="top">Parameters</td>
-                                      <td>$id(Article id)<br />
-                                      $fieldsids(field id)</td>
-                                  </tr>
-                                  <tr>
-                                      <td valign="top">Return</td>
-                                      <td>html gallery list</td>
-                                  </tr>
-                              </table>
-                              <hr />
-                              <h3>getImageGallerynyroModal($articleid, $fieldsids)</h3>
-                               <table>
-                                  <tr>
-                                      <td valign="top">Parameters</td>
-                                      <td>$articleid(Article id)<br />
-                                      $fieldsids(field id)</td>
-                                  </tr>
-                                  <tr>
-                                      <td valign="top">Return</td>
-                                      <td>html of gallery, for nyroModal gallery.</td>
-                                  </tr>
-                              </table>
-                              <hr />
-                              <h3>getVimeoVideo($articleid, $fieldsids)</h3>
-                               <table>
-                                  <tr>
-                                      <td valign="top">Parameters</td>
-                                      <td>$articleid(Article id)<br />
-                                      $fieldsids(field id)</td>
-                                  </tr>
-                                  <tr>
-                                      <td valign="top">Return</td>
-                                      <td>video IFRAME</td>
-                                  </tr>
-                              </table>
-                              <hr />
-                              <h3>getYoutubeVideo($articleid, $fieldsids)</h3>
-                               <table>
-                                  <tr>
-                                      <td valign="top">Parameters</td>
-                                      <td>$articleid(Article id)<br />
-                                      $fieldsids(field id)</td>
-                                  </tr>
-                                  <tr>
-                                      <td valign="top">Return</td>
-                                      <td>object video</td>
-                                  </tr>
-                              </table>
-                              <hr />
-                              <h3>getYoutubeVideonyroModal($articleid, $fieldsids)</h3>
-                               <table>
-                                  <tr>
-                                      <td valign="top">Parameters</td>
-                                      <td>$id(Article id)<br />
-                                      $fieldsids(field id)<br />
-                                      $title (alt of image)</td>
-                                  </tr>
-                                  <tr>
-                                      <td valign="top">Return</td>
-                                      <td>html of youtube  <br /><code>&lt;div class="vervideogallery" /&gt;<br />
-                                          &lt;a href="http://www.youtube.com/watch?v='.$result->value.'" class="nyroModal"  &gt;Video&lt;/a&gt;
-                                          <br />&lt;div/&gt;
-                                          </code>
-                                      </td>
-                                  </tr>
-                              </table>
-                              <hr />
-                              <h3>getVimeoVideo($articleid, $fieldsids)</h3>
-                               <table>
-                                  <tr>
-                                      <td valign="top">Parameters</td>
-                                      <td>$id(Article id)<br />
-                                      $fieldsids(field id) </td>
-                                  </tr>
-                                  <tr>
-                                      <td valign="top">Return</td>
-                                      <td>Vimeo Iframe
-                                        <?php
-                                         $orig =' ';
-                                         echo  '<code>'.htmlentities($orig).'</code>' ;
-                                         ?>
-                                      </td>
-                                  </tr>
-                              </table>
-                              <hr />
+                              <h2>   Templating output fieldsattach</h2>
+                              <p>
+Now, from the package 2.8.6.2 and upper,  we have more control to the HTML output of extrafields.</p>
 
-                              <h3>getYoutubeVideo($articleid, $fieldsids)</h3>
-                               <table>
-                                  <tr>
-                                      <td valign="top">Parameters</td>
-                                      <td>$id(Article id)<br />
-                                      $fieldsids(field id) </td>
-                                  </tr>
-                                  <tr>
-                                      <td valign="top">Return</td>
-                                      <td>Object Youtube  <br />
-                                         <?php
-                                         $orig ='';
-                                         echo  '<code>'.htmlentities($orig).'</code>' ;
-                                         ?>
-                                      </td>
-                                  </tr>
-                              </table>
-                              <hr />
-                              <h3>getListUnits($articleid, $fieldsids)</h3>
-                               <table>
-                                  <tr>
-                                      <td valign="top">Parameters</td>
-                                      <td>$id(Article id)<br />
-                                      $fieldsids(field id)</td>
-                                  </tr>
-                                  <tr>
-                                      <td valign="top">Return</td>
-                                      <td>html of table list of units<br />
-                                         <?php
-                                         $orig ='<table>
-	<thead>
-		<tr>
-			<th>Label 1</th>
-			<th>Label 2</th>
-			<th>Label 3</th>
-		</tr>
-	</thead>
-	<tr>
-		<td>Value1</td>
-		<td>Value2</td>
-		<td>Value3</td>
-	</tr>
-	<tr>
-		<td>Value3</td>
-		<td>Value4</td>
-		<td>Value5</td>
-	</tr>
-</table> ';
-                                         echo  '<code>'.htmlentities($orig).'</code>' ;
-                                         ?>
+<p>
+We can change the format of all extra type or of one individual extra field.</p>
 
-                                      </td>
-                                  </tr>
-                              </table>
-                              <hr />
+<p>For example, if we need change the input type output:</p>
+
+<ul>
+  <li>
+ Copy the source template: /plugins/fieldsattachment/input/tmpl/input.tpl.php</li>
+<li>
+
+ Paste to /templates/[YOUR TEMPLATE]/html/com_fieldsattach/fields/input.tpl.php
+
+If you, only want change one id field, you can  change the name for (field id example = 1 ):
+/templates/[YOUR TEMPLATE]/html/com_fieldsattach/fields/1_input.tpl.php
+</li>
+<li>
+ Edit the file and change the format.</li>
+</ul>
+
+<p>
+
+And this,  for all types (it have some exception like listunit)</p>
                               
 			</div>
  
