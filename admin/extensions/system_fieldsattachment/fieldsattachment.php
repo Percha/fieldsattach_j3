@@ -57,11 +57,11 @@ class plgSystemfieldsattachment extends JPlugin
              
              
 		//DELETE ROWS =======================================================
-				$option = JRequest::getCmd('option', '');
-	        	$view = JRequest::getCmd('view', 'default');  
-	           if ( JFactory::getApplication()->isAdmin()) {
-	                if (($option == 'com_content' )&&($view == "articles")) { $this->cleandatabase(); } 
-			   }
+		$option = JRequest::getCmd('option', '');
+    	$view = JRequest::getCmd('view', 'default');  
+        if ( JFactory::getApplication()->isAdmin()) {
+            if (($option == 'com_content' )&&($view == "articles")) { $this->cleandatabase(); } 
+	    }
 	           
 			   
 		parent::__construct($subject, $config);
@@ -71,15 +71,19 @@ class plgSystemfieldsattachment extends JPlugin
                      $this->path= '..'.DS.'images'.DS.'documentscategories';
                 }
                 
-                $mainframe = JFactory::getApplication();
-		if ($mainframe->isAdmin()) {
+        $mainframe = JFactory::getApplication();
+
+        //ADMIN *****
+		if ($mainframe->isAdmin()) 
+		{
  			$document = &JFactory::getDocument();
-                	$document->addStyleSheet(   JURI::base().'../plugins/system/fieldsattachment/js/style.css' );
+                	
+           	$document->addStyleSheet(   JURI::base().'../plugins/system/fieldsattachment/js/style.css' );
 			$dispatcher =& JDispatcher::getInstance();
     
 			JPluginHelper::importPlugin('fieldsattachment'); // very important
-			//select
-    
+			 
+    		//GET TYPES IN PLUGIN FOLDER
 			$this->array_fields = fieldsattachHelper::get_extensions() ;
     
 			 foreach ($this->array_fields as $obj)
@@ -100,77 +104,76 @@ class plgSystemfieldsattachment extends JPlugin
 			//DELETE
 			//JError::raiseWarning( 100,  "DELETE".JRequest::getVar("cid")   ." task:".JRequest::getVar("task")  );
 			if(JRequest::getVar("task") == "articles.trash") { $this->deleteFields();}
-		        return;
-                } 
+		    return;
+        } 
 
  
-	}
+	}	
         
-        /**
+    /**
 	* Function for batch FUCTION
 	*
 	* @access	public
 	* @since	1.5
 	*/
         
-        public function batchcopy($newId, $oldId)
-        {
-            $db	= & JFactory::getDBO();
-            $query = 'SELECT a.* FROM #__content as a  WHERE  a.id ='. $newId ; 
-            $db->setQuery($query);  
- 
-            //echo "WW:".$query;
+    public function batchcopy($newId, $oldId)
+    {
+        $db	= & JFactory::getDBO();
+        $query = 'SELECT a.* FROM #__content as a  WHERE  a.id ='. $newId ; 
+        $db->setQuery($query);  
 
-            $article = $db->loadObject();  
-            plgSystemfieldsattachment::copyArticle($article, $oldId); 
-        }
+
+        $article = $db->loadObject();  
+        plgSystemfieldsattachment::copyArticle($article, $oldId); 
+    }
        
        
 
          
-        /**
+    /**
 	* Function DELETE Fields
 	*
 	* @access	public
 	* @since	1.5
 	*/
         
-        public function deleteFields()
-        {
-            $app = JFactory::getApplication();
-            $db	= & JFactory::getDBO();
-            $arrays = JRequest::getVar("cid");
-            $ids = "";
-            foreach ($arrays as $obj)
-            { 
-                $query = 'DELETE FROM  #__fieldsattach_values WHERE articleid= '.$obj ;
-                $db->setQuery($query);
-                $db->query();
-                $app->enqueueMessage( JTEXT::_("Delete fields of ID ") . $obj )   ;
+    public function deleteFields()
+    {
+        $app = JFactory::getApplication();
+        $db	= & JFactory::getDBO();
+        $arrays = JRequest::getVar("cid");
+        $ids = "";
+        foreach ($arrays as $obj)
+        { 
+            $query = 'DELETE FROM  #__fieldsattach_values WHERE articleid= '.$obj ;
+            $db->setQuery($query);
+            $db->query();
+            $app->enqueueMessage( JTEXT::_("Delete fields of ID ") . $obj )   ;
 
-            } 
+        } 
 
-        }
+    }
         
-        /**
+    /**
 	* Function DELETE Fields
 	*
 	* @access	public
 	* @since	1.5
 	*/
-        public function onContentBeforeDelete($context,  $article, $isNew)
-        {
+    public function onContentBeforeDelete($context,  $article, $isNew)
+    {
 
-        }
+    }
      
-        /**
-	* Function DELETE Fields
+    /**
+	* Function onContentBeforeSave
 	*
 	* @access	public
 	* @since	1.5
 	*/
 
-        public function onContentBeforeSave($context, $article, $isNew)
+    public function onContentBeforeSave($context, $article, $isNew)
 	{ 
 			  
 		//***********************************************************************************************
@@ -185,7 +188,7 @@ class plgSystemfieldsattachment extends JPlugin
 		if( $option=='com_content' && $user->get('id')>0 &&  $view == 'form' &&  $layout == 'edit'  ) $fontend = true;
 		            
 		if (($option=='com_content' ))
-                {
+       	{
 			$app = JFactory::getApplication();
 			$db	= & JFactory::getDBO();
 			$nameslst = fieldsattachHelper::getfields($article->id);
@@ -205,9 +208,10 @@ class plgSystemfieldsattachment extends JPlugin
 					
 					
 			//Si existen fields relacionados se mira uno a uno si tiene valores
-		        if(count($nameslst)>0){
-		                foreach($nameslst as $obj)
-		                {
+	        if(count($nameslst)>0)
+	        {
+                foreach($nameslst as $obj)
+                {
 					$query = 'SELECT   b.required ,b.title FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON a.fieldsid = b.id WHERE a.articleid='.$article->id .' AND a.fieldsid ='. $obj->id ;
 					//echo $query;		
 					
@@ -226,51 +230,48 @@ class plgSystemfieldsattachment extends JPlugin
 						$error_text = JText::sprintf('JLIB_FORM_VALIDATE_FIELD_REQUIRED', $fields_row->title." (". $fields_row->titlegroup.")");
 							   
 						if($fontend) {
-							JError::raiseWarning( 100, $error_text." " );
+							//JError::raiseWarning( 100, $error_text." " );
 						}else{
 							$app->enqueueMessage( $error_text." ", 'error'   )   ;
 							$error=true;
 						}
 						
 					}
-							
+						
 					//Save values or required fields
 					//$session->set('field_'.$obj->id , $valor); 
 					//Delete Session if all ok in fieldsHelper line 1010 
-		                }
-				}
+	            }
+			}
+			
+			
+			if($error){  return false; } 
 				
-				
-				if($error){ 
-                                return false;
-				} 
-				
-				
-		//IF TITLE THEN ACTIVE CONTENT =========================================================================================
-	
-		$db	=& JFactory::getDBO();
-		$user 	=& JFactory::getUser(); 
-			     
-			    
-    
-		//-----------------------
-		$query = 'SELECT  id  FROM #__content WHERE created_by='.$user->get('id').' AND title IS NOT NULL AND state  = -2 AND id='.$article->id;
-		$db->setQuery( $query );
-		$id = $db->loadResult(); 
+					
+			//IF TITLE THEN ACTIVE CONTENT =========================================================================================
 		
-		if(!empty($id))
-		    {   
-		     $article->state = 1;
-		} 
-	}
+			$db	=& JFactory::getDBO();
+			$user 	=& JFactory::getUser(); 
+				     
+				    
+	    
+			//-----------------------
+			$query = 'SELECT  id  FROM #__content WHERE created_by='.$user->get('id').' AND title IS NOT NULL AND state  = -2 AND id='.$article->id;
+			$db->setQuery( $query );
+			$id = $db->loadResult(); 
+			
+			if(!empty($id))
+			{   
+			     $article->state = 1;
+			} 
+		}
 		
 	//Joomla 3 not call to the function correctly ?????
 	//$this->onContentAfterSave($context, $article, $isNew);
-			 
-            
+			  
     }
         
-        /**
+    /**
 	* Save alls fields of cagtegory 
 	*
         *  TODO : CLONE FUNCTIO FOR TRANSLATION
@@ -279,243 +280,244 @@ class plgSystemfieldsattachment extends JPlugin
 	* @access	public
 	* @since	1.5
 	*/
-        public function onContentAfterSaveCategories($context,  $article, $isNew)
+    public function onContentAfterSaveCategories($context,  $article, $isNew)
 	{
            
-             //Ver categorias del artículo ==============================================================
-            //$idscat = $this->recursivecat($article->id);
-            $this->str = fieldsattachHelper::recursivecat($article->id  );
-           
-            $db	= & JFactory::getDBO(); 
-            
-            //JError::raiseWarning( 100,   " IDDDD CATEGORIES: ".$article->id    );
-  /*
-            $query = 'SELECT a.id, a.type, b.recursive, b.catid FROM #__fieldsattach as a INNER JOIN #__fieldsattach_groups as b ON a.groupid = b.id WHERE b.catid IN ('. $this->str .') AND a.published=1 AND b.published = 1 ORDER BY b.ordering, a.ordering,  a.title';
-            $db->setQuery( $query );
-            $nameslst = $db->loadObjectList();  
+         //Ver categorias del artículo ==============================================================
+        //$idscat = $this->recursivecat($article->id);
+        $this->str = fieldsattachHelper::recursivecat($article->id  );
+       
+        $db	= & JFactory::getDBO(); 
+        
+        //JError::raiseWarning( 100,   " IDDDD CATEGORIES: ".$article->id    );
+/*
+        $query = 'SELECT a.id, a.type, b.recursive, b.catid FROM #__fieldsattach as a INNER JOIN #__fieldsattach_groups as b ON a.groupid = b.id WHERE b.catid IN ('. $this->str .') AND a.published=1 AND b.published = 1 ORDER BY b.ordering, a.ordering,  a.title';
+        $db->setQuery( $query );
+        $nameslst = $db->loadObjectList();  
 */
 
-            //***********************************************************************************************
-            //Mirar cual de los grupos es RECURSIVO  ****************  ****************  ****************
-            //***********************************************************************************************
-            /*$cont = 0;
-            foreach ($nameslst as $field)
+        //***********************************************************************************************
+        //Mirar cual de los grupos es RECURSIVO  ****************  ****************  ****************
+        //***********************************************************************************************
+        /*$cont = 0;
+        foreach ($nameslst as $field)
+        {
+            //JError::raiseWarning( 100, $field->catid ." !=".$article->catid  );
+            if( $field->catid != $article->id )
             {
-                //JError::raiseWarning( 100, $field->catid ." !=".$article->catid  );
-                if( $field->catid != $article->id )
-                {
-                    //Mirar si recursivamente si
-                    if(!$field->recursive)
-                        {
-                            //echo "ELIMINO DE LA LISTA " ;
-                            unset($nameslst[$cont]);
-                        }
-                }
-                $cont++;
-            }*/
-            //***********************************************************************************************
-            //Create array of fields   ****************  ****************  ****************
-            //***********************************************************************************************
-            //$fields_tmp0 = fieldsattachHelper::getfieldsForAllCategory($article->id);
-            //$nameslst = array_merge($fields_tmp0, $nameslst );
-
-
-             $fields_tmp0 = fieldsattachHelper::getfieldsForAllCategory($article->id);
-            $fields = fieldsattachHelper::getfieldsCategory($article->id);
-            $nameslst = array_merge($fields_tmp0, $fields);
-            
-            //Si existen fields relacionados se mira uno a uno si tiene valores
-            
-             
-             
-            if(count($nameslst)>0){
-                foreach($nameslst as $obj)
-                {
-                    $query = 'SELECT a.id , b.extras, b.visible FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON a.fieldsid = b.id WHERE a.catid='.$article->id .' AND a.fieldsid ='. $obj->id ;
-                      
-                   
-                    $db->setQuery($query);
-                    $valueslst = $db->loadObject(); 
-                     
-                    if(empty($valueslst->id))
-                        {
-                        
-                            //INSERT
-                            $valor = JRequest::getVar("field_". $obj->id, '', 'post', 'string', JREQUEST_ALLOWHTML);
-                            if(is_array($valor))
-                            {
-                                $valortxt="";
-                                for($i = 0; $i < count($valor); $i++ )
-                                {
-
-                                      $valortxt .=  $valor[$i].", ";
-                                }
-                                $valor = $valortxt;
-                            }
-                            //INSERT
-                            //$valor = str_replace('"','&quot;', $valor );
-                            $valor = htmlspecialchars($valor);
-                            $query = 'INSERT INTO #__fieldsattach_categories_values(catid,fieldsid,value) VALUES ('.$article->id.',\''.  $obj->id .'\',\''.$valor.'\' )     ';
-                            $db->setQuery($query);
-                            $db->query();
-                            
-                          //   JError::raiseWarning( 100,   "   count: ".$query   );
-
-                            //Select last id ----------------------------------
-                            $query = 'SELECT  id  FROM #__fieldsattach_categories_values AS a WHERE  a.catid='.$article->id.' AND a.fieldsid='.$obj->id;
-                            //echo $query;
-                            $db->setQuery( $query );
-                            $result = $db->loadObject();
-                            $valueslst->id = $result->id; 
-                            
-                           
-							
-							//Required 
-							
-
-                        }
-                        else{
-                            //UPDATE
-                            $valor = JRequest::getVar("field_". $obj->id, '', 'post', 'string', JREQUEST_ALLOWHTML); 
-                            if(is_array($valor))
-                            {
-                                $valortxt="";
-                                for($i = 0; $i < count($valor); $i++ )
-                                {
-                                      $valortxt .=  $valor[$i].", ";
-                                }
-                                $valor = $valortxt;
-                            }
-                            //$valor = str_replace('"','&quot;', $valor );
-                            $valor = htmlspecialchars($valor);
-                            $query = 'UPDATE  #__fieldsattach_categories_values SET value="'.$valor.'" WHERE id='.$valueslst->id ;
-                            $db->setQuery($query);
-                         //   JError::raiseWarning( 100, $query  );
-                            $db->query();
-                        }
-
-                        //Acción PLUGIN ========================================================
-                        JPluginHelper::importPlugin('fieldsattachment'); // very important
-                        $query = 'SELECT *  FROM #__extensions as a WHERE a.element="'.$obj->type.'"  AND a.enabled= 1';
-                        // JError::raiseWarning( 100, $obj->type." --- ". $query   );
-                        $db->setQuery( $query );
-                        $results = $db->loadObject();
-                        if(!empty($results)){
-
-                            $function  = "plgfieldsattachment_".$obj->type."::action( ".$article->id.",".$obj->id.",".$valueslst->id.");";
-                            //  JError::raiseWarning( 100,   $function   );
-                            eval($function);
-                        }
-
-                        //JError::raiseWarning( 100,   " IDDDD CATEGORIES: ". $obj->id   );
-                        //TODO Insert in category text 
-                         $this->insertinDescription($article->id, $obj->id, $valueslst->visible);
-                }
+                //Mirar si recursivamente si
+                if(!$field->recursive)
+                    {
+                        //echo "ELIMINO DE LA LISTA " ;
+                        unset($nameslst[$cont]);
+                    }
             }
+            $cont++;
+        }*/
+        //***********************************************************************************************
+        //Create array of fields   ****************  ****************  ****************
+        //***********************************************************************************************
+        //$fields_tmp0 = fieldsattachHelper::getfieldsForAllCategory($article->id);
+        //$nameslst = array_merge($fields_tmp0, $nameslst );
 
 
+        $fields_tmp0 = fieldsattachHelper::getfieldsForAllCategory($article->id);
+        $fields = fieldsattachHelper::getfieldsCategory($article->id);
+        $nameslst = array_merge($fields_tmp0, $fields);
+        
+        //Si existen fields relacionados se mira uno a uno si tiene valores
+        
+         
+         
+        if(count($nameslst)>0)
+        {
+            foreach($nameslst as $obj)
+            {
+                $query = 'SELECT a.id , b.extras, b.visible FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON a.fieldsid = b.id WHERE a.catid='.$article->id .' AND a.fieldsid ='. $obj->id ;
+                  
+               
+                $db->setQuery($query);
+                $valueslst = $db->loadObject(); 
+                 
+                if(empty($valueslst->id))
+                    {
+                    
+                        //INSERT
+                        $valor = JRequest::getVar("field_". $obj->id, '', 'post', 'string', JREQUEST_ALLOWHTML);
+                        if(is_array($valor))
+                        {
+                            $valortxt="";
+                            for($i = 0; $i < count($valor); $i++ )
+                            {
 
-	    return true;
+                                  $valortxt .=  $valor[$i].", ";
+                            }
+                            $valor = $valortxt;
+                        }
+                        //INSERT
+                        //$valor = str_replace('"','&quot;', $valor );
+                        $valor = htmlspecialchars($valor);
+                        $query = 'INSERT INTO #__fieldsattach_categories_values(catid,fieldsid,value) VALUES ('.$article->id.',\''.  $obj->id .'\',\''.$valor.'\' )     ';
+                        $db->setQuery($query);
+                        $db->query();
+                        
+                      //   JError::raiseWarning( 100,   "   count: ".$query   );
 
-            
-        }
-         /**
-	* Insert fields in categori description
+                        //Select last id ----------------------------------
+                        $query = 'SELECT  id  FROM #__fieldsattach_categories_values AS a WHERE  a.catid='.$article->id.' AND a.fieldsid='.$obj->id;
+                        //echo $query;
+                        $db->setQuery( $query );
+                        $result = $db->loadObject();
+                        $valueslst->id = $result->id; 
+                        
+                       
+						
+						//Required 
+						
+
+                    }
+                    else{
+                        //UPDATE
+                        $valor = JRequest::getVar("field_". $obj->id, '', 'post', 'string', JREQUEST_ALLOWHTML); 
+                        if(is_array($valor))
+                        {
+                            $valortxt="";
+                            for($i = 0; $i < count($valor); $i++ )
+                            {
+                                  $valortxt .=  $valor[$i].", ";
+                            }
+                            $valor = $valortxt;
+                        }
+                        //$valor = str_replace('"','&quot;', $valor );
+                        $valor = htmlspecialchars($valor);
+                        $query = 'UPDATE  #__fieldsattach_categories_values SET value="'.$valor.'" WHERE id='.$valueslst->id ;
+                        $db->setQuery($query);
+                     //   JError::raiseWarning( 100, $query  );
+                        $db->query();
+                    }
+
+                    //Acción PLUGIN ========================================================
+                    JPluginHelper::importPlugin('fieldsattachment'); // very important
+                    $query = 'SELECT *  FROM #__extensions as a WHERE a.element="'.$obj->type.'"  AND a.enabled= 1';
+                    // JError::raiseWarning( 100, $obj->type." --- ". $query   );
+                    $db->setQuery( $query );
+                    $results = $db->loadObject();
+                    if(!empty($results))
+                    {
+
+                        $function  = "plgfieldsattachment_".$obj->type."::action( ".$article->id.",".$obj->id.",".$valueslst->id.");";
+                        //  JError::raiseWarning( 100,   $function   );
+                        eval($function);
+                    }
+
+                    //JError::raiseWarning( 100,   " IDDDD CATEGORIES: ". $obj->id   );
+                    //TODO Insert in category text 
+                     $this->insertinDescription($article->id, $obj->id, $valueslst->visible);
+            }
+        } 
+    return true;
+
+    }
+    
+    /**
+	* reset To Description
 	*
 	* @access	public
 	* @since	1.5
 	*/
-       public function resetToDescription($id, $fieldsid,$cadena)
-        {
-            //$patron ="/{\d+}/i";
-           
-            $patron = "{fieldsattach_".$fieldsid."}";
-            $sustitucion="";
-            $cadena = str_replace($patron, $sustitucion, $cadena);
+    public function resetToDescription($id, $fieldsid,$cadena)
+    {
+        //$patron ="/{\d+}/i";
+       
+        $patron = "{fieldsattach_".$fieldsid."}";
+        $sustitucion="";
+        $cadena = str_replace($patron, $sustitucion, $cadena);
 
-            $cadena = str_replace("<p></p>", "", $cadena);
+        $cadena = str_replace("<p></p>", "", $cadena);
 
 
-            return $cadena ;
-        } 
-        /**
-		* Insert fields in categori description
-		*
-		* @access	public
-		* @since	1.5
-		*/
-        public function insertinDescription($id, $fieldsid, $visible)
-        {
-            $db	= & JFactory::getDBO();
-            $query = 'SELECT description  FROM #__categories as a WHERE a.id= '.$id ;
+        return $cadena ;
+    } 
 
-            //$patron ="/{\d+}/i";
-            $patron = "{fieldsattach_".$fieldsid."}";
+
+    /**
+	* Insert fields in category description
+	*
+	* @access	public
+	* @since	1.5
+	*/
+    public function insertinDescription($id, $fieldsid, $visible)
+    {
+        $db	= & JFactory::getDBO();
+        $query = 'SELECT description  FROM #__categories as a WHERE a.id= '.$id ;
+
+        //$patron ="/{\d+}/i";
+        $patron = "{fieldsattach_".$fieldsid."}";
+         
+        //JError::raiseWarning( 100, "FIEL: ". $fieldsid." : ".$query  );
+        //JError::raiseWarning( 100, "patron;  ".$patron  );
+        $sustitucion = "";
+
+        $db->setQuery( $query );
+        $results = $db->loadObject();
+        if(!empty($results)){
+            $cadena = $results->description;
+
+            $cadena = $this->resetToDescription($id, $fieldsid,$results->description); 
              
-            //JError::raiseWarning( 100, "FIEL: ". $fieldsid." : ".$query  );
-            //JError::raiseWarning( 100, "patron;  ".$patron  );
-            $sustitucion = "";
-
-            $db->setQuery( $query );
-            $results = $db->loadObject();
-            if(!empty($results)){
-                $cadena = $results->description;
-
-                $cadena = $this->resetToDescription($id, $fieldsid,$results->description); 
-                 
-            }
-
-            if($visible==1) $cadena = $cadena . $patron;
-
-            //JError::raiseWarning( 100, "cadna: ".$cadena );
-
-            $query = 'UPDATE  #__categories SET description="'.$db->escape($cadena).'" WHERE id='.$id ;
-            $db->setQuery($query);
-             //JError::raiseWarning( 100, $patron  );
-            $db->query();
         }
+
+        if($visible==1) $cadena = $cadena . $patron;
+
+        //JError::raiseWarning( 100, "cadna: ".$cadena );
+
+        $query = 'UPDATE  #__categories SET description="'.$db->escape($cadena).'" WHERE id='.$id ;
+        $db->setQuery($query);
+         //JError::raiseWarning( 100, $patron  );
+        $db->query();
+    }
  
 
-        /**
-	* Save alls fields of article
+    /**
+	* Save alls fields of article - SAVE THE FIELDS VALUES
 	*
 	* @access	public
 	* @since	1.5
 	*/
 	public function onContentAfterSave($context, $article, $isNew)
 	{   
-            $app = JFactory::getApplication();
-            $user =& JFactory::getUser();
-            $option = JRequest::getVar("option","");
-            $layout = JRequest::getVar('layout',"");
-            $extension = JRequest::getVar('extension',"");
-            $view= JRequest::getVar('view',"");
+        $app = JFactory::getApplication();
+        $user =& JFactory::getUser();
+        $option = JRequest::getVar("option","");
+        $layout = JRequest::getVar('layout',"");
+        $extension = JRequest::getVar('extension',"");
+        $view= JRequest::getVar('view',"");
 
-            $sitepath = JPATH_BASE ;
-            $sitepath = str_replace ("administrator", "", $sitepath); 
-            $sitepath = JPATH_SITE;
-            $fontend = false;
-            if( $option=='com_content' && $user->get('id')>0 &&  $view == 'form' &&  $layout == 'edit'  ) $fontend = true;
-            if(JRequest::getVar("a_id")>0) $fontend = true;
+        $sitepath = JPATH_BASE ;
+        $sitepath = str_replace ("administrator", "", $sitepath); 
+        $sitepath = JPATH_SITE;
+        $fontend = false;
+        if( $option=='com_content' && $user->get('id')>0 &&  $view == 'form' &&  $layout == 'edit'  ) $fontend = true;
+        if(JRequest::getVar("a_id")>0) $fontend = true;
 
-             //CATEGORIES ==============================================================
-              if (($option=='com_categories' && $layout=="edit" && $extension=="com_content"  ))
-                 {
-                     $backendcategory = true;
-                     $backend=true;
-                    // JError::raiseWarning( 100,   " IDDDD CATEGORIES: "   );
-                     $this->onContentAfterSaveCategories($context, $article, $isNew);
-                     //$this->createDirectory($article->id); 
-                 }
-
-             //Crear directorio ==============================================================
-            /* if (($option=='com_content' && $view=="article"   )||($fontend))
+         //CATEGORIES ==============================================================
+          if (($option=='com_categories' && $layout=="edit" && $extension=="com_content"  ))
              {
-                 $this->createDirectory($article->id); 
-             }*/ 
-		     //============================================================================
-		    // JError::raiseWarning( 100, "ARTICLE ID: ".  $article->id  );
-            //COPY AND SAVE LIKE COPY
+                 $backendcategory = true;
+                 $backend=true;
+                // JError::raiseWarning( 100,   " IDDDD CATEGORIES: "   );
+                 $this->onContentAfterSaveCategories($context, $article, $isNew);
+                 //$this->createDirectory($article->id); 
+             }
+
+         //Crear directorio ==============================================================
+        /* if (($option=='com_content' && $view=="article"   )||($fontend))
+         {
+             $this->createDirectory($article->id); 
+         }*/ 
+	     //============================================================================
+	    // JError::raiseWarning( 100, "ARTICLE ID: ".  $article->id  );
+        //COPY AND SAVE LIKE COPY
 	    /*  if ( (JRequest::getVar("id") != $article->id) && (empty( $article->id) )   )  {
             
 		//  if( (JRequest::getVar("id") != $article->id && (!empty( $article->id))   && ($article->id>0) && (JRequest::getVar("id")>0))  ){
@@ -526,14 +528,14 @@ class plgSystemfieldsattachment extends JPlugin
             }*/
               
             
-            if (($option=='com_content' && $layout=="edit" ) || $fontend)
-                 {
-		$db	= & JFactory::getDBO();
-		$nameslst = fieldsattachHelper::getfields($article->id);
+        if (($option=='com_content' && $layout=="edit" ) || $fontend)
+       	{
+			$db	= & JFactory::getDBO();
+			$nameslst = fieldsattachHelper::getfields($article->id);
             
             
 
-           // JError::raiseWarning( 100, "NUMEROOO: ". count($nameslst) ." - ".$article->catid );
+            // JError::raiseWarning( 100, "NUMEROOO: ". count($nameslst) ." - ".$article->catid );
             //***********************************************************************************************
             //create array of fields  ****************  ****************  ****************
             //***********************************************************************************************
@@ -546,7 +548,8 @@ class plgSystemfieldsattachment extends JPlugin
             
             //Si existen fields relacionados se mira uno a uno si tiene valores
              
-            if(count($nameslst)>0){
+            if(count($nameslst)>0)
+            {
                 foreach($nameslst as $obj)
                 {
                     $query = 'SELECT a.id, b.required ,b.title, b.extras, b.type FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON a.fieldsid = b.id WHERE a.articleid='.$article->id .' AND a.fieldsid ='. $obj->id ;
@@ -555,115 +558,115 @@ class plgSystemfieldsattachment extends JPlugin
                     $db->setQuery($query);
                     $valueslst = $db->loadObject();
                     if(count($valueslst)==0)
+                    {
+                        //INSERT 
+                        //$valor = JRequest::getVar("field_". $obj->id, '', 'post', null, JREQUEST_ALLOWHTML);
+                         $valor = $_POST["field_". $obj->id]; 
+                        if(is_array($valor))
                         {
-                            //INSERT 
-                            //$valor = JRequest::getVar("field_". $obj->id, '', 'post', null, JREQUEST_ALLOWHTML);
-                             $valor = $_POST["field_". $obj->id]; 
-                            if(is_array($valor))
+                            $valortxt="";
+                            for($i = 0; $i < count($valor); $i++ )
                             {
+
+                                  $valortxt .=  $valor[$i].", ";
+                            }
+                            $valor = $valortxt;
+                        }
+                        
+                        //GET TYPE
+                        $query = 'SELECT type FROM  #__fieldsattach     WHERE  id ='. $obj->id ;
+                        $db->setQuery($query);
+                        $type = $db->loadResult();
+                        
+                        //remove vbad characters
+                        //$valor = preg_replace('/[^(\x20-\x7F)]*/','', $valor);
+                        
+                        if($type == "listunits"){
+                              
+                        }else{
+                             $valor = htmlspecialchars($valor);
+                        }
+                        
+                        //INSERT 
+                        $query = 'INSERT INTO #__fieldsattach_values(articleid,fieldsid,value) VALUES ('.$article->id.',\''.  $obj->id .'\',\''.$valor.'\' )     ';
+                        $db->setQuery($query);
+                        $db->query();
+
+                        //Select last id ----------------------------------
+                        //Cristian 23_09_2013
+                        $valueslst->id = $db->insertid();
+		    
+                      
+                        
+                    }else
+                    {
+                        //UPDATE 
+                        if(isset($_POST["field_". $obj->id]))
+                        { 
+                            $valor = $_POST["field_". $obj->id]; 
+                         
+                            if(is_array($valor))
+                            { 
                                 $valortxt="";
                                 for($i = 0; $i < count($valor); $i++ )
-                                {
-
-                                      $valortxt .=  $valor[$i].", ";
+                                { 
+                                    $valortxt .=  $valor[$i].", ";
                                 }
                                 $valor = $valortxt;
                             }
-                            
-                            //GET TYPE
-                            $query = 'SELECT type FROM  #__fieldsattach     WHERE  id ='. $obj->id ;
-                            $db->setQuery($query);
-                            $type = $db->loadResult();
-                            
+                        
                             //remove vbad characters
                             //$valor = preg_replace('/[^(\x20-\x7F)]*/','', $valor);
-                            
-                            if($type == "listunits"){
-                                  
+                        
+                            //$valor = str_replace('"','&quot;', $valor );
+                            //$valor = htmlspecialchars($valor);
+                            //Remove BAD characters ****
+                            $valor = preg_replace('/border="*"*/','', $valor);
+                        
+                            if($valueslst->type == "listunits"){
+                              
                             }else{
-                                 $valor = htmlspecialchars($valor);
+                                $valor = htmlspecialchars($valor);
                             }
-                            
-                            //INSERT 
-                            $query = 'INSERT INTO #__fieldsattach_values(articleid,fieldsid,value) VALUES ('.$article->id.',\''.  $obj->id .'\',\''.$valor.'\' )     ';
+                        
+                            $query = 'UPDATE  #__fieldsattach_values SET value="'.$valor.'" WHERE id='.$valueslst->id .' AND articleid='.$article->id ;
                             $db->setQuery($query);
-                            $db->query();
+                            //JError::raiseWarning( 100, $query  );
+                            $db->query(); 
+                    	} 
+                    }
 
-                            //Select last id ----------------------------------
-                            //Cristian 23_09_2013
-                            $valueslst->id = $db->insertid();
-			    
-                          
-                            
-                        }
-                        else{
-                            //UPDATE 
-                            if(isset($_POST["field_". $obj->id])){ 
-                                $valor = $_POST["field_". $obj->id]; 
-                             
-                                if(is_array($valor))
-                                { 
-                                    $valortxt="";
-                                    for($i = 0; $i < count($valor); $i++ )
-                                    { 
-                                        $valortxt .=  $valor[$i].", ";
-                                    }
-                                    $valor = $valortxt;
-                                }
-                            
-                                //remove vbad characters
-                                //$valor = preg_replace('/[^(\x20-\x7F)]*/','', $valor);
-                            
-                                //$valor = str_replace('"','&quot;', $valor );
-                                //$valor = htmlspecialchars($valor);
-                                //Remove BAD characters ****
-                                $valor = preg_replace('/border="*"*/','', $valor);
-                            
-                                if($valueslst->type == "listunits"){
-                                  
-                                }else{
-                                    $valor = htmlspecialchars($valor);
-                                }
-                            
-                                $query = 'UPDATE  #__fieldsattach_values SET value="'.$valor.'" WHERE id='.$valueslst->id .' AND articleid='.$article->id ;
-                                $db->setQuery($query);
-                                //JError::raiseWarning( 100, $query  );
-                                $db->query(); 
-                            }
-							
-							 
-						    
-                        }
-
-                        //Acción PLUGIN ========================================================
-                        JPluginHelper::importPlugin('fieldsattachment'); // very important 
-                        $query = 'SELECT *  FROM #__extensions as a WHERE a.element="'.$obj->type.'"  AND a.enabled= 1';
-                        // JError::raiseWarning( 100, $obj->type." --- ". $query   );
-                        $db->setQuery( $query );
-                        $results = $db->loadObject();
-                        if(!empty($results)){
-                            
-                            $function  = "plgfieldsattachment_".$obj->type."::action( ".$article->id.",".$obj->id.",".$valueslst->id.");";
-                           // JError::raiseWarning( 100,   $function   );
-                            eval($function);
-                        }
+                    //Acción PLUGIN ========================================================
+                    JPluginHelper::importPlugin('fieldsattachment'); // very important 
+                    $query = 'SELECT *  FROM #__extensions as a WHERE a.element="'.$obj->type.'"  AND a.enabled= 1';
+                    // JError::raiseWarning( 100, $obj->type." --- ". $query   );
+                    $db->setQuery( $query );
+                    $results = $db->loadObject();
+                    if(!empty($results))
+                    {
+                        
+                        $function  = "plgfieldsattachment_".$obj->type."::action( ".$article->id.",".$obj->id.",".$valueslst->id.");";
+                       // JError::raiseWarning( 100,   $function   );
+                        eval($function);
+                    }
 			
 			 
-			//COPY AND SAVE LIKE COPY
-			if ( (JRequest::getVar("id") != $article->id) && (!empty( $article->id) )   )  {
-		    
-			 	$oldid = JRequest::getVar("id")  ; 
-			
-				//JError::raiseWarning( 100, "ARTICLE ID: ".  $article->id  );
-				$this->copyArticle($article, $oldid); 
-			}
-			//END COPY
+					//COPY AND SAVE LIKE COPY
+					if ( (JRequest::getVar("id") != $article->id) && (!empty( $article->id) )   )  
+					{
+				    
+					 	$oldid = JRequest::getVar("id")  ; 
+					
+						//JError::raiseWarning( 100, "ARTICLE ID: ".  $article->id  );
+						$this->copyArticle($article, $oldid); 
+					}
+				//END COPY
                 }
-                } 
-            }
-
-	    return true;
+            } 
         }
+
+	return true;
+    }
 	
 	public function onBeforeCompileHead() {
  
@@ -671,7 +674,7 @@ class plgSystemfieldsattachment extends JPlugin
 		 
 	}
  
-        /**
+    /**
 	* Injects Insert Tags input box and drop down menu to adminForm
 	*
 	* @access	public
@@ -679,29 +682,30 @@ class plgSystemfieldsattachment extends JPlugin
 	*/
 	function onBeforeRender()
 	{
-		$id= JRequest::getVar('id');
+		$id= JRequest::getVar('id'); 
+		 
 
-		 //EDIT ARTICLE =====================================================================
-                if (!$id)
+		//EDIT ARTICLE =====================================================================
+        if (!$id)
 		{
-                        $cid = JRequest::getVar( 'cid' , array() , '' , 'array' );
-                        @$id = $cid[0];
+            $cid = JRequest::getVar( 'cid' , array() , '' , 'array' );
+            @$id = $cid[0];
 
-                        $view = JRequest::getVar('view');
-                        if ($view =='article') $path = '';
-                        else $path = '..'.DS;
+            $view = JRequest::getVar('view');
+            if ($view =='article') $path = '';
+            else $path = '..'.DS;
 		}
 		$task = JRequest::getVar('task');
 		$option= JRequest::getVar('option');
-                $id= JRequest::getVar('id', JRequest::getVar('a_id'));
+        $id= JRequest::getVar('id', JRequest::getVar('a_id'));
 		
-		 $user =& JFactory::getUser();
+		$user =& JFactory::getUser();
 		$task = JRequest::getVar('task');
 		$option= JRequest::getVar('option');
-                $id= JRequest::getVar('id', JRequest::getVar('a_id'));
+        $id= JRequest::getVar('id', JRequest::getVar('a_id'));
 
-                $view= JRequest::getVar('view');
-                $layout= JRequest::getVar('layout');
+        $view= JRequest::getVar('view');
+        $layout= JRequest::getVar('layout');
 		
 		$fontend = false; 
 		if( $option=='com_content' && $user->get('id')>0 &&  $view == 'form' &&  $layout == 'edit'  ) $fontend = true;
@@ -715,223 +719,243 @@ class plgSystemfieldsattachment extends JPlugin
 			$backendcategory = true;
 			$backend=true;
 		}
+
+		//GET ID IN FRONTEND v3.3 or upper **
+		if( $fontend ) $id=JRequest::getVar('a_id');
+
+
 		
-		if(!empty($id)){
-		
-		
-		 
-		if (($backend ) || ( $fontend )   )
-		{
-			
-			$fields = array();
-			
-			if($backendcategory)
+		if(!empty($id)){ 
+
+			if (($backend ) || ( $fontend )   )
 			{
-				if(!empty($id))
+				
+				$fields = array();
+
+				 
+				
+				if($backendcategory)
 				{
-				    $fields_tmp0 = fieldsattachHelper::getfieldsForAllCategory($id);
-				    $fields = fieldsattachHelper::getfieldsCategory($id);
-				    $fields = array_merge($fields_tmp0, $fields);
-				}
-			   
-			}else{
-			       
-				$fields_tmp0 = fieldsattachHelper::getfieldsForAll($id); 
-				$fields_tmp1 = fieldsattachHelper::getfields($id);
-				$fields_tmp1 = array_merge($fields_tmp0, $fields_tmp1);
-	    
-				
-				$fields_tmp2 = fieldsattachHelper::getfieldsForArticlesid($id, $fields_tmp1); 
-				$fields = array_merge($fields_tmp1, $fields_tmp2);
-				 
-			}
-			
-			//******
-			//INPUTS ================================================
-                 
-                $this->exist=false;
-		
-		$this->fields = $fields;
-		
-		
-		
-		//inputs RENDER ====================================================================
-		$idgroup=-1;
-		$titlegropu="";
-		$this->exist  = false;
-		$cont = -1;
-		$cuantos_en_str=0;
-		//$field->position=1;
-		$str="";
-		
-		//$('ul#list li:first').after('ul#list li:eq(1)')
-		//If J3.1 *******
-		if ( version_compare( JVERSION, '3.1', '>' ) == 1) {
-			if(count($fields)>0){ 
-			foreach($fields as $field)
-			{
-			    
-				//if($field->position == 1){
-				//JError::raiseNotice(500, "FIELD ".$field->id);
-				
-				if($field->idgroup != $idgroup){
-					$cont++;
-					//JError::raiseNotice(500, "FIELD ".$field->title);
-					if($idgroup > 0)
-					{ 
-					       
-						if($this->exist ==true) {
-							$str .= '</div> ';
-							//JError::raiseNotice(500, "Escribir content");
-							$myTabContent = JLayoutHelper::render('libraries.cms.html.bootstrap.starttabset', array('selector' => 'myTab'));
-							$document = JFactory::getDocument();
-							$content = $document->getBuffer('component');
-							$content = str_replace($myTabContent, $myTabContent.JHtml::_('bootstrap.addTab', 'myTab', 'tabID'.$idgroup, $titlegropu).$str.JHtml::_('bootstrap.endTab'), $content);
-							$document->setBuffer($content, array('type' => 'component', 'name' => '', 'title' => ''));
-							$str="";
-						      
-						}
-					} 
-					  
-					$this->exist =true;
-					$cuantos_en_str++;
-					 
-	  
-					$str .= '<div class="tab-panewww" id="fiedlsattachTab_'.$field->idgroup.'"  >';
-					if(!empty($field->descriptiongroup)) $str .= '<div class="desc">'.$field->descriptiongroup.'</div>';
-	
-				      
-				}
-				$idgroup = $field->idgroup;
-				$titlegropu = $field->titlegroup;
-				       
-				  
-				//NEW GET PLUGIN ********************************************************************
-				JPluginHelper::importPlugin('fieldsattachment'); // very important
-				//select
-				  
-				if(empty($this->array_fields)) $this->array_fields = fieldsattachHelper::get_extensions() ;
-			       
-				if(count($this->array_fields )>0){
-						foreach ($this->array_fields as $obj)
-						{
-						    
-						    $function  = "plgfieldsattachment_".$obj."::construct();";
-						    
-						    //$base = JPATH_BASE;
-						    //$base = str_replace("/administrator", "", $base);
-						    $base =  JPATH_SITE;
-						    $file = $base.'/plugins/fieldsattachment/'.$obj.'/'.$obj.'.php';
-						    
-						       if( JFile::exists($file))
-						       {
-								//file exist
-								eval($function);
-								$function  =  'plgfieldsattachment_'.$obj."::getName();";
-			  
-								eval("\$plugin_name =".  $function."");
-								//$str .= $field->type." == ".$plugin_name."<br />";
-								eval($function);
-			  
-			  
-								//JError::raiseNotice(500, "sssssdsf");
-									
-								if ($field->type ==  $plugin_name ) {
-									if($backendcategory){ 
-									    $value = JRequest::getVar("field_".$field->id, fieldsattachHelper::getfieldsvalueCategories(  $field->id, $id), 'post', 'string', JREQUEST_ALLOWHTML);
-									   // JError::raiseNotice(500, "sssssdsf");
-									     //$value = JRequest::getVar("field_".$field->id, $this->getfieldsvalueCategories(  $field->id, $id));
-			   
-									}else{
-									    // $value = JRequest::getVar("field_".$field->id,fieldsattachHelper::getfieldsvalue(  $field->id, $id), 'post', 'string', JREQUEST_ALLOWHTML);
-									    $value ="";
-									    if(isset($_POST["field_".$field->id]))
-										 $value = $_POST["field_".$field->id]; 
-									     else {
-										 $value = fieldsattachHelper::getfieldsvalue(  $field->id, $id);
-									     }
-									     //$value = JRequest::getVar("field_".$field->id, $this->getfieldsvalue(  $field->id, $id));
-									}
-								       $value = addslashes($value);
-														   
-									//SESSION VALUE
-									$session = JFactory::getSession(); 
-									$value_session = $session->get("field_".$field->id);  
-			  
-			  
-									if(!empty($value_session)&& (empty($value)) ) $value =$value_session;
-			  
-									//DELETE SESSION VALUE
-									$session->clear("field_".$field->id); 
-									
-														   
-									$function  =  'plgfieldsattachment_'.$obj.'::renderInput('.$id.','.$field->id.',"'.$value.'","'.$field->extras.'");';
-									//$function  =  "plgfieldsattachment_".$obj."::renderInput(".$id.",".$field->id.",'".$value."','".$field->extras."');";
-								       
-									   
-								      
-									eval("\$tmp=".  $function."");
-									 
-									$str .= '<div class="control-group"><label class="control-label"  for="field_'.$field->id.'">' . $field->title .'</label> '; 
-									if($field->required) {$str .= '<span>(*)</span>';}
-									$str .= '<div class="controls">'.$tmp.  '</div>';
-									$str .= '</div>';
-									//Reset field of category description =====================
-								       // fieldsattachHelper::resetToDescription($id, $field->id, &$body);
-								       //$this->resetToDescription($id, $field->id);
-								}
-							    
-		  
-							}
-						}
-					} 
-					//END inputs RENDER =========================================================
+					if(!empty($id))
+					{
+					    $fields_tmp0 = fieldsattachHelper::getfieldsForAllCategory($id);
+					    $fields = fieldsattachHelper::getfieldsCategory($id);
+					    $fields = array_merge($fields_tmp0, $fields);
 					}
-					$str .= '</div>';
-				 //END INPUT ============================================
-				}
-				
-				
-				//*******
-				//nav-tabs
-				if( $fontend ) {
-					/*$myTabContent = JLayoutHelper::render('libraries.cms.html.bootstrap.starttabset', array('selector' => 'myTab'));
-					$document = JFactory::getDocument();
-					$content = $document->getBuffer('component');
-					$content = str_replace($myTabContent, $myTabContent.JHtml::_('bootstrap.addTab', 'myTab', 'tabID'.$idgroup, $titlegropu).$str.JHtml::_('bootstrap.endTab'), $content);
-					$document->setBuffer($content, array('type' => 'component', 'name' => '', 'title' => ''));
-					*/
-				
+				   
 				}else{
-					$myTabContent = JLayoutHelper::render('libraries.cms.html.bootstrap.starttabset', array('selector' => 'myTab'));
-					$document = JFactory::getDocument();
-					$content = $document->getBuffer('component');
-					$content = str_replace($myTabContent, $myTabContent.JHtml::_('bootstrap.addTab', 'myTab', 'tabID'.$idgroup, $titlegropu).$str.JHtml::_('bootstrap.endTab'), $content);
-					$document->setBuffer($content, array('type' => 'component', 'name' => '', 'title' => ''));
+
+					 
+				       
+					$fields_tmp0 = fieldsattachHelper::getfieldsForAll($id);  
+					$fields_tmp1 = fieldsattachHelper::getfields($id); 
+					$fields_tmp1 = array_merge($fields_tmp0, $fields_tmp1);
+
+		    
+					
+					$fields_tmp2 = fieldsattachHelper::getfieldsForArticlesid($id, $fields_tmp1); 
+					$fields = array_merge($fields_tmp1, $fields_tmp2);
+
+					 
+					 
 				}
-			}
+				
+				//******
+				//INPUTS ================================================
+	                 
+	            $this->exist=false;
 			
-			//***************
-			//$('ul#list li:first').after('ul#list li:eq(1)')
-			 $document =& JFactory::getDocument();
-			//$(window).load()
-			//$document->addScript('/plugins/system/sjdinfinitescroll/jquery.infinitescroll.js');
-			$script = 'jQuery(window).load(function() { '; 
-			$script .= "tt = jQuery('#myTabTabs li:eq(1)').html();"; 
-			$script .= "num= jQuery('ul#myTabTabs li').length;"; 
-			for($i = 0; $i<=$cont; $i++)
-			{
-				 
-				$script .= "var lastli = jQuery('ul#myTabTabs li:eq('+(num-1)+')');"; 
-				$script .= "jQuery('ul#myTabTabs li:first').after(lastli);";
-				 
-			}
-		  
-			$script .=  '});';
-			$document->addScriptDeclaration($script);
-		
+				$this->fields = $fields;
 			
-		}
+			
+			
+				//inputs RENDER ====================================================================
+				$idgroup=-1;
+				$titlegropu="";
+				$this->exist  = false;
+				$cont = -1;
+				$cuantos_en_str=0;
+				//$field->position=1;
+				$str="";
+				
+				//$('ul#list li:first').after('ul#list li:eq(1)')
+				//If J3.1 *******
+				if ( version_compare( JVERSION, '3.1', '>' ) == 1) 
+				{
+					 
+
+					if(count($fields)>0)
+					{ 
+						foreach($fields as $field)
+						{
+					    
+							//if($field->position == 1){
+							//JError::raiseNotice(500, "FIELD ".$field->id);
+							
+							if($field->idgroup != $idgroup)
+							{
+								$cont++;
+								//JError::raiseNotice(500, "FIELD ".$field->title);
+								if($idgroup > 0)
+								{ 
+								       
+									if($this->exist ==true) 
+									{
+										$str .= '</div> ';
+										//JError::raiseNotice(500, "Escribir content");
+										$myTabContent = JLayoutHelper::render('libraries.cms.html.bootstrap.starttabset', array('selector' => 'myTab'));
+										$document = JFactory::getDocument();
+										$content = $document->getBuffer('component');
+										$content = str_replace($myTabContent, $myTabContent.JHtml::_('bootstrap.addTab', 'myTab', 'tabID'.$idgroup, $titlegropu).$str.JHtml::_('bootstrap.endTab'), $content);
+										$document->setBuffer($content, array('type' => 'component', 'name' => '', 'title' => ''));
+										$str="";
+									      
+									}
+								} 
+								  
+								$this->exist =true;
+								$cuantos_en_str++;
+								 
+				  
+								$str .= '<div class="tab-panewww" id="fiedlsattachTab_'.$field->idgroup.'"  >';
+								if(!empty($field->descriptiongroup)) $str .= '<div class="desc">'.$field->descriptiongroup.'</div>';
+				
+							      
+							}
+							$idgroup = $field->idgroup;
+							$titlegropu = $field->titlegroup;
+						       
+						  
+							//NEW GET PLUGIN ********************************************************************
+							JPluginHelper::importPlugin('fieldsattachment'); // very important
+							//select
+							  
+							if(empty($this->array_fields)) $this->array_fields = fieldsattachHelper::get_extensions() ;
+						       
+							if(count($this->array_fields )>0)
+							{
+								foreach ($this->array_fields as $obj)
+								{
+								    
+								    $function  = "plgfieldsattachment_".$obj."::construct();";
+								    
+								    //$base = JPATH_BASE;
+								    //$base = str_replace("/administrator", "", $base);
+								    $base =  JPATH_SITE;
+								    $file = $base.'/plugins/fieldsattachment/'.$obj.'/'.$obj.'.php';
+								    
+								       if( JFile::exists($file))
+								       {
+										//file exist
+										eval($function);
+										$function  =  'plgfieldsattachment_'.$obj."::getName();";
+					  
+										eval("\$plugin_name =".  $function."");
+										//$str .= $field->type." == ".$plugin_name."<br />";
+										eval($function);
+					  
+					  
+										//JError::raiseNotice(500, "sssssdsf");
+											
+										if ($field->type ==  $plugin_name ) {
+											if($backendcategory){ 
+											    $value = JRequest::getVar("field_".$field->id, fieldsattachHelper::getfieldsvalueCategories(  $field->id, $id), 'post', 'string', JREQUEST_ALLOWHTML);
+											   // JError::raiseNotice(500, "sssssdsf");
+											     //$value = JRequest::getVar("field_".$field->id, $this->getfieldsvalueCategories(  $field->id, $id));
+					   
+											}else{
+											    // $value = JRequest::getVar("field_".$field->id,fieldsattachHelper::getfieldsvalue(  $field->id, $id), 'post', 'string', JREQUEST_ALLOWHTML);
+											    $value ="";
+											    if(isset($_POST["field_".$field->id]))
+												 $value = $_POST["field_".$field->id]; 
+											     else {
+												 $value = fieldsattachHelper::getfieldsvalue(  $field->id, $id);
+											     }
+											     //$value = JRequest::getVar("field_".$field->id, $this->getfieldsvalue(  $field->id, $id));
+											}
+										       $value = addslashes($value);
+																   
+											//SESSION VALUE
+											$session = JFactory::getSession(); 
+											$value_session = $session->get("field_".$field->id);  
+					  
+					  
+											if(!empty($value_session)&& (empty($value)) ) $value =$value_session;
+					  
+											//DELETE SESSION VALUE
+											$session->clear("field_".$field->id); 
+											
+																   
+											$function  =  'plgfieldsattachment_'.$obj.'::renderInput('.$id.','.$field->id.',"'.$value.'","'.$field->extras.'");';
+											//$function  =  "plgfieldsattachment_".$obj."::renderInput(".$id.",".$field->id.",'".$value."','".$field->extras."');";
+										       
+											   
+										      
+											eval("\$tmp=".  $function."");
+											 
+											$str .= '<div class="control-group"><label class="control-label"  for="field_'.$field->id.'">' . $field->title .'</label> '; 
+											if($field->required) {$str .= '<span>(*)</span>';}
+											$str .= '<div class="controls">'.$tmp.  '</div>';
+											$str .= '</div>';
+											//Reset field of category description =====================
+										       // fieldsattachHelper::resetToDescription($id, $field->id, &$body);
+										       //$this->resetToDescription($id, $field->id);
+										}
+									    
+				  
+									}
+								}
+							} 
+							//END inputs RENDER =========================================================
+						}
+						$str .= '</div>';
+					 //END INPUT ============================================
+					}
+					
+					 
+					//*******
+					//nav-tabs
+					if( $fontend ) 
+					{
+
+						/*$myTabContent = JLayoutHelper::render('libraries.cms.html.bootstrap.starttabset', array('selector' => 'myTab'));
+						$document = JFactory::getDocument();
+						$content = $document->getBuffer('component');
+						$content = str_replace($myTabContent, $myTabContent.JHtml::_('bootstrap.addTab', 'myTab', 'tabID'.$idgroup, $titlegropu).$str.JHtml::_('bootstrap.endTab'), $content);
+						$document->setBuffer($content, array('type' => 'component', 'name' => '', 'title' => ''));
+						*/
+					
+					}else{
+
+						$myTabContent = JLayoutHelper::render('libraries.cms.html.bootstrap.starttabset', array('selector' => 'myTab'));
+						$document = JFactory::getDocument();
+						$content = $document->getBuffer('component');
+						$content = str_replace($myTabContent, $myTabContent.JHtml::_('bootstrap.addTab', 'myTab', 'tabID'.$idgroup, $titlegropu).$str.JHtml::_('bootstrap.endTab'), $content);
+						$document->setBuffer($content, array('type' => 'component', 'name' => '', 'title' => ''));
+					}
+				}
+				
+				//***************
+				//$('ul#list li:first').after('ul#list li:eq(1)')
+				$document =& JFactory::getDocument();
+				//$(window).load()
+				//$document->addScript('/plugins/system/sjdinfinitescroll/jquery.infinitescroll.js');
+				$script = 'jQuery(window).load(function() { '; 
+				$script .= "tt = jQuery('#myTabTabs li:eq(1)').html();"; 
+				$script .= "num= jQuery('ul#myTabTabs li').length;"; 
+				for($i = 0; $i<=$cont; $i++)
+				{
+					 
+					$script .= "var lastli = jQuery('ul#myTabTabs li:eq('+(num-1)+')');"; 
+					$script .= "jQuery('ul#myTabTabs li:first').after(lastli);";
+					 
+				}
+			  
+				$script .=  '});';
+				$document->addScriptDeclaration($script);
+			
+				
+			}
 		}//IF no empty ID
 		//ENND : If 3.1 *******
 	}
