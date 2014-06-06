@@ -989,10 +989,11 @@ class plgSystemfieldsattachment extends JPlugin
 	*/
 	function onAfterRender()
 	{  
+
                                 
-               //SELECT WHERE I AM ******
-               if ( !JFactory::getApplication()->isAdmin())
-	       {
+       //SELECT WHERE I AM ******
+       if ( !JFactory::getApplication()->isAdmin())
+	   {
                     $option = JRequest::getCmd('option', '');
                     $view = JRequest::getCmd('view', '');
 
@@ -1103,8 +1104,16 @@ class plgSystemfieldsattachment extends JPlugin
 						$id = $this->getlastId();
 						
 						JError::raiseWarning( 100, "CREAR DIR::: ". $id ." -- ". JRequest::getVar("id") );
+
+                        //$catid = $this->state->get('filter.category_id')
+                        //jform_catid
+
+
 						if(!empty($id)){
 							$url = JURI::base() ."index.php?option=com_content&task=article.edit&id=".$id;
+
+                           // $script = '<script>'
+                           // $script = '<//script>'
 							echo "<script>document.location.href='" .  ($url) . "';</script>\n";
 						}
 					}
@@ -1192,6 +1201,7 @@ class plgSystemfieldsattachment extends JPlugin
 				   
 				} 
 				
+               
 				//Javascript for reorder li *************
 				/*$script = '<script>jQuery(document).ready(function() { jQuery("#myTabTabs").append(jQuery("li.addtab"));
 					jQuery("#myTabTabs li:first").after( jQuery("li.addtab") );
@@ -1201,6 +1211,8 @@ class plgSystemfieldsattachment extends JPlugin
 				if ( version_compare( JVERSION, '3.1', '>' ) == 1) {
 					if( $fontend ) { 
 						$options = array('replace_entities' => TRUE, 'ignore_parser_warnings' => TRUE );
+
+
 						//Load Document
 						$doc = phpQuery::newDocument($body);
 						phpQuery::selectDocument($doc);
@@ -1229,6 +1241,7 @@ class plgSystemfieldsattachment extends JPlugin
 						$body = pq('')->htmlOuter();
 					}else{
 						//Go to beforeRender
+
 					}
 					
 					
@@ -1399,21 +1412,27 @@ class plgSystemfieldsattachment extends JPlugin
      
 		if(empty($id))
 		    { 
-		    //------------------
-		    //JController/getModel 
-		    $app = JFactory::getApplication();
-		    $filter_category_id = $app->getUserState('com_content.articles.filter.category_id');
-    
-		    if(empty($filter_category_id)){
-			$body = JResponse::getBody();
-			$tmp = explode('name="jform[catid]" value="',$body);
-			if(count($tmp)>1)
-			    {
-			    $tmp = explode('"',$tmp[1]);
-			    $filter_category_id = $tmp[0];
-			}
+    		    //------------------
+    		    //JController/getModel 
+    		    $app = JFactory::getApplication();
+    		    //$filter_category_id = $app->getUserState('com_content.articles.filter.category_id');
+
+                //CRISTIAN - UPDATE FOR J 3.3   - 6-06-2014
+                $filter_category_id = $app->getUserState('com_content.articles.filter')["category_id"];
+
+                
+        
+    		    if(empty($filter_category_id))
+                {
+        			$body = JResponse::getBody();
+        			$tmp = explode('name="jform[catid]" value="',$body);
+        			if(count($tmp)>1)
+        			{
+        			    $tmp = explode('"',$tmp[1]);
+        			    $filter_category_id = $tmp[0];
+        			}
 		       
-		    }
+		        }
     
 		  if(empty($filter_category_id)){$filter_category_id = 1;}
 		  
