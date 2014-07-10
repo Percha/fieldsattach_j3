@@ -1418,10 +1418,11 @@ class plgSystemfieldsattachment extends JPlugin
     		    //$filter_category_id = $app->getUserState('com_content.articles.filter.category_id');
 
                 //CRISTIAN - UPDATE FOR J 3.3   - 6-06-2014
-                $filter_category_id = $app->getUserState('com_content.articles.filter')["category_id"];
+                //$filter_category_id = $app->getUserState('com_content.articles.filter')["category_id"];
+		//DAN - UPDATE FOR COMPATIBILITY WITH PHP 5.3.10+ (Joomla 3.x minimum requirement) - 7-10-2014
+		$filter_category_id = $app->getUserState('com_content.articles.filter'); 
+		$filter_category_id["category_id"];
 
-                
-        
     		    if(empty($filter_category_id))
                 {
         			$body = JResponse::getBody();
