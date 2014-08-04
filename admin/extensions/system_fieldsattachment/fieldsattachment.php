@@ -1417,23 +1417,26 @@ class plgSystemfieldsattachment extends JPlugin
     		    $app = JFactory::getApplication();
     		    //$filter_category_id = $app->getUserState('com_content.articles.filter.category_id');
 
-                //CRISTIAN - UPDATE FOR J 3.3   - 6-06-2014
-                //$filter_category_id = $app->getUserState('com_content.articles.filter')["category_id"];
+        //CRISTIAN - UPDATE FOR J 3.3   - 6-06-2014
+        //$filter_category_id = $app->getUserState('com_content.articles.filter')["category_id"];
 		//DAN - UPDATE FOR COMPATIBILITY WITH PHP 5.3.10+ (Joomla 3.x minimum requirement) - 7-10-2014
 		$filter_category_id = $app->getUserState('com_content.articles.filter'); 
-		$filter_category_id["category_id"];
 
-    		    if(empty($filter_category_id))
-                {
-        			$body = JResponse::getBody();
-        			$tmp = explode('name="jform[catid]" value="',$body);
-        			if(count($tmp)>1)
-        			{
-        			    $tmp = explode('"',$tmp[1]);
-        			    $filter_category_id = $tmp[0];
-        			}
-		       
-		        }
+		$filter_category_id["category_id"];
+        $filter_category_id = $filter_category_id["category_id"];
+        
+
+		    if(empty($filter_category_id))
+            {
+    			$body = JResponse::getBody();
+    			$tmp = explode('name="jform[catid]" value="',$body);
+    			if(count($tmp)>1)
+    			{
+    			    $tmp = explode('"',$tmp[1]);
+    			    $filter_category_id = $tmp[0];
+    			}
+	       
+	        }
     
 		  if(empty($filter_category_id)){$filter_category_id = 1;}
 		  
@@ -1444,7 +1447,7 @@ class plgSystemfieldsattachment extends JPlugin
 			
 			//Insert content 
 			$valor = "";
-			$query = 'INSERT INTO #__content(title, catid, created_by, created, state, access) VALUES ("", '.$filter_category_id.', '.$user->get("id").',"'.$mysqldate.'", 1, "'.$access.'")     ';
+			$query = ' INSERT INTO #__content(title, catid, created_by, created, state, access) VALUES ("", '.$filter_category_id.', '.$user->get("id").',"'.$mysqldate.'", 1, "'.$access.'")     ';
 			$db->setQuery($query);
 	
 			$db->query(); 
