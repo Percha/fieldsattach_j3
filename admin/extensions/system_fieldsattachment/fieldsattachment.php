@@ -1452,7 +1452,8 @@ class plgSystemfieldsattachment extends JPlugin
 	
 			$db->query(); 
 			//-----------------------
-			$id =  $valueslst->id = $db->insertid();
+			//$id =  $valueslst->id = $db->insertid();
+            $id =   $db->insertid();
 			/*$query = 'SELECT  id  FROM #__content   ';
 			$query .= ' order by id DESC '; 
 			$db->setQuery( $query );
