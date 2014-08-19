@@ -52,7 +52,7 @@ $content .= "});";
 
 
 
-$doc =& JFactory::getDocument();
+$doc = JFactory::getDocument();
 $doc->addScriptDeclaration( $content );
 ?>
 
@@ -116,7 +116,7 @@ $doc->addScriptDeclaration( $content );
                     <div class="tab-pane"  id="extra">
                             <?php
 
-                            $db = &JFactory::getDBO(  );
+                            $db = JFactory::getDBO();
                             $query = 'SELECT *  FROM #__extensions as a WHERE a.folder = "fieldsattachment"  AND a.enabled= 1';
                             $db->setQuery( $query );
                             $results = $db->loadObjectList();
