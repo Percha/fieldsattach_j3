@@ -699,7 +699,7 @@ class plgSystemfieldsattachment extends JPlugin
 		$option= JRequest::getVar('option');
         $id= JRequest::getVar('id', JRequest::getVar('a_id'));
 		
-		$user =& JFactory::getUser();
+		$user = JFactory::getUser();
 		$task = JRequest::getVar('task');
 		$option= JRequest::getVar('option');
         $id= JRequest::getVar('id', JRequest::getVar('a_id'));
@@ -1023,7 +1023,7 @@ class plgSystemfieldsattachment extends JPlugin
                  $exist=false;
                  $exist_options=false;
                  $idgroup= 0; 
-                 $editor =& JFactory::getEditor();
+                 $editor = JFactory::getEditor();
 
                  $oneclicksave = $this->params->get('oneclicksave', 1);
 			 
@@ -1051,7 +1051,7 @@ class plgSystemfieldsattachment extends JPlugin
 				  
                 $pos = strrpos(JPATH_BASE, "administrator"); 
 
-                $user =& JFactory::getUser();
+                $user = JFactory::getUser();
                 //***********************************************************************************************
                 //Where we are  ****************  ****************  ****************
                 //***********************************************************************************************
