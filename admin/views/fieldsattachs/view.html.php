@@ -81,7 +81,7 @@ class fieldsattachViewfieldsattachs extends JViewLegacy
 			 });
 			 });';
 		 
-		$doc =& JFactory::getDocument();
+		$doc = JFactory::getDocument();
 		$doc->addScriptDeclaration( $script );
 	}
 
