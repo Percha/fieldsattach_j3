@@ -40,7 +40,7 @@ class fieldsattachController extends JControllerLegacy
 		$layout = JRequest::getCmd('layout', 'default'); 
 		$task	= JRequest::getVar('task', 'default');
                  
-		$session =& JFactory::getSession();
+		$session = JFactory::getSession();
 		$fieldsattachid =  JRequest::getVar('fieldsattachid', '');  
 		if(!empty($fieldsattachid)) $session->set('fieldsattachid',$fieldsattachid);
 		
