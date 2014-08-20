@@ -167,13 +167,16 @@ class fieldsattachModelfieldsattachgroup extends JModelAdmin
 
 	}
 
-        /**
-	 * Method to get the data that should be injected in the form.
-	 *
-	 * @return	mixed	The data for the form.
-	 * @since	1.6
-	 */
-	public function delete()
+	/**
+	* Method to delete one or more records.
+	*
+	* @param array &$pks An array of record primary keys.
+	*
+	* @return boolean True if successful, false if an error occurs.
+	*
+	* @since 12.2
+	*/
+	public function delete(&$pks)
         {
              $row = $this->getTable();
              $data           = JRequest::getVar('cid', array(), 'post', 'array');
