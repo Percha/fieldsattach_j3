@@ -52,7 +52,7 @@ $content .= "});";
 
 
 
-$doc =& JFactory::getDocument();
+$doc = JFactory::getDocument();
 $doc->addScriptDeclaration( $content );
 ?>
 
