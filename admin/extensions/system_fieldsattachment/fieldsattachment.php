@@ -413,7 +413,7 @@ class plgSystemfieldsattachment extends JPlugin
                     //JError::raiseWarning( 100,   " IDDDD CATEGORIES: ". $obj->id   ); 
                     //TODO Insert in category text 
                 	//COMMENTED FOR A POSIBLE ERROR IN DESCRIPTION - Cristian 04-09-2014
-                    //$this->insertinDescription($article->id, $obj->id, $valueslst->visible);
+                    $this->insertinDescription($article->id, $obj->id, $valueslst->visible);
             }
         } 
     return true;
@@ -472,7 +472,7 @@ class plgSystemfieldsattachment extends JPlugin
 
         //JError::raiseWarning( 100, "cadna: ".$cadena );
 
-        $query = 'UPDATE  #__categories SET description="'.$db->escape($cadena).'" WHERE id='.$id ;
+        $query = 'UPDATE  #__categories SET description="'.(addslashes($cadena)).'" WHERE id='.$id ;
         $db->setQuery($query);
          //JError::raiseWarning( 100, $patron  );
         $db->query();
