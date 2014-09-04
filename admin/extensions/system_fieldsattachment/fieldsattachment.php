@@ -410,9 +410,10 @@ class plgSystemfieldsattachment extends JPlugin
                         eval($function);
                     }
 
-                    //JError::raiseWarning( 100,   " IDDDD CATEGORIES: ". $obj->id   );
+                    //JError::raiseWarning( 100,   " IDDDD CATEGORIES: ". $obj->id   ); 
                     //TODO Insert in category text 
-                     $this->insertinDescription($article->id, $obj->id, $valueslst->visible);
+                	//COMMENTED FOR A POSIBLE ERROR IN DESCRIPTION - Cristian 04-09-2014
+                    //$this->insertinDescription($article->id, $obj->id, $valueslst->visible);
             }
         } 
     return true;
