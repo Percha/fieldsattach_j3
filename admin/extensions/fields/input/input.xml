@@ -7,7 +7,7 @@
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 	<authorEmail>cristiangrano@hotmail.com	</authorEmail>
 	<authorUrl>www.percha.com</authorUrl>
-	<version>1.3</version>
+	<version>1.4</version>
 	<description>Input Field</description>
 	<files>
 		<filename plugin="input">input.php</filename>

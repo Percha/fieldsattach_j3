@@ -45,13 +45,13 @@ window.addEvent('domready', function() {
     $('jform_params_field_selectable').value = selectable; 
     
     */
-     var html = $$('#fieldsattach-slider-file .content').get("html");
+     /*var html = $$('#fieldsattach-slider-file .content').get("html");
      html += '<div id="file_wrapper">';
       
      html += '</div>'
      //alert($$('#fieldsattach-slider-select .content'));
      $$('#fieldsattach-slider-file .content').set("html",  html);
-    setInterval('$("wrapperextrafield_file").ObjInput.revalue();', 500);
+    setInterval('$("wrapperextrafield_file").ObjInput.revalue();', 500);*/
   
     
 });

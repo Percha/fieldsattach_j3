@@ -14,6 +14,8 @@ function controler_percha_input()
         TT_input = new ObjInput("wrapperextrafield_input"); 
         //TT.init(extras.value);
         one_input=false;
+
+
     } 
    TT_input.init(extras.value); 
 }

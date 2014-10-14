@@ -23,7 +23,7 @@ class fieldsattachModelfieldsattachimage extends JModelAdmin
 {
 
 
-        public  $lastid;
+    public  $lastid;
 	/**
 	 * Method override to check if you can edit an existing record.
 	 *
@@ -153,7 +153,7 @@ class fieldsattachModelfieldsattachimage extends JModelAdmin
 	 * @return	mixed	The data for the form.
 	 * @since	1.6
 	 */
-	public function delete()
+	public function delete(&$pks)
         {
              $row = $this->getTable();
              $data  = JRequest::getVar('cid', array(), 'post', 'array');

@@ -76,10 +76,10 @@ class plgSystemfieldsattachment extends JPlugin
         //ADMIN *****
 		if ($mainframe->isAdmin()) 
 		{
- 			$document = &JFactory::getDocument();
+ 			$document = JFactory::getDocument();
                 	
            	$document->addStyleSheet(   JURI::base().'../plugins/system/fieldsattachment/js/style.css' );
-			$dispatcher =& JDispatcher::getInstance();
+			$dispatcher = JDispatcher::getInstance();
     
 			JPluginHelper::importPlugin('fieldsattachment'); // very important
 			 
@@ -88,15 +88,15 @@ class plgSystemfieldsattachment extends JPlugin
     
 			 foreach ($this->array_fields as $obj)
 			{
-			    $function  = "plgfieldsattachment_".$obj."::construct();";
+			    $function  = "plgfieldsattachment_".$obj."::construct1();";
 			    $base = JPATH_BASE;
 			    $base = str_replace("/administrator", "", $base);
 			    $base = JPATH_SITE;
 			    $file = $base.'/plugins/fieldsattachment/'.$obj.'/'.$obj.'.php';
 			    
 			    if( JFile::exists($file)){
-				//file exist
-				eval($function);
+    				//file exist
+    				eval($function);
 				}
                         
 			}
@@ -838,7 +838,7 @@ class plgSystemfieldsattachment extends JPlugin
 								foreach ($this->array_fields as $obj)
 								{
 								    
-								    $function  = "plgfieldsattachment_".$obj."::construct();";
+								    $function  = "plgfieldsattachment_".$obj."::construct1();";
 								    
 								    //$base = JPATH_BASE;
 								    //$base = str_replace("/administrator", "", $base);
@@ -870,7 +870,7 @@ class plgSystemfieldsattachment extends JPlugin
 											    if(isset($_POST["field_".$field->id]))
 												 $value = $_POST["field_".$field->id]; 
 											     else {
-												 $value = fieldsattachHelper::getfieldsvalue(  $field->id, $id);
+												 $value = fieldsattachHelper::getfieldsvalue($field->id, $id);
 											     }
 											     //$value = JRequest::getVar("field_".$field->id, $this->getfieldsvalue(  $field->id, $id));
 											}
@@ -938,7 +938,7 @@ class plgSystemfieldsattachment extends JPlugin
 				
 				//***************
 				//$('ul#list li:first').after('ul#list li:eq(1)')
-				$document =& JFactory::getDocument();
+				$document =  JFactory::getDocument();
 				//$(window).load()
 				//$document->addScript('/plugins/system/sjdinfinitescroll/jquery.infinitescroll.js');
 				$script = 'jQuery(window).load(function() { '; 
@@ -970,7 +970,7 @@ class plgSystemfieldsattachment extends JPlugin
                 if ($option == 'com_content') 
                         //if ($option == 'com_content' ) 
                 { 
-                        $db = &JFactory::getDBO(  );
+                        $db = JFactory::getDBO(  );
                         //$query = 'INSERT INTO #__content(title, catid, created_by, created, state) VALUES ("", '.$filter_category_id.', '.$user->get("id").',"'.$mysqldate.'", -2)     ';
                     //$query = 'DELETE FROM #__content WHERE title="" AND state= -2 ';
                                 $query = 'DELETE FROM #__content WHERE title=""';
@@ -996,7 +996,7 @@ class plgSystemfieldsattachment extends JPlugin
        if ( !JFactory::getApplication()->isAdmin())
 	   {
                     $option = JRequest::getCmd('option', '');
-                    $view = JRequest::getCmd('view', '');
+                    $view   = JRequest::getCmd('view', '');
 
                     if ($option == 'com_content'  && $view == 'category')
 		    {

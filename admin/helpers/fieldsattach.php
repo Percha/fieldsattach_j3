@@ -178,125 +178,137 @@ class fieldsattachHelper
 		return  $str;
 	}
 
-         /**
+    /**
 	 * Get Form XML for edit parameters and HELP	 *
 	 * @return	string	An array of JHtml FORM elements.
 	 * @since	1.6
-	 */
-        function getForm($name)
-        {
-            jimport( 'joomla.form.form' );
-            $doc = JFactory::getDocument();
-            
-            $return = "" ;
-            //Load XML FORM ==================================================
-            //$file = dirname(__FILE__) . DS . "form.xml";
-            $file = JPATH_PLUGINS.DS.'fieldsattachment'.DS.$name.DS.'form.xml';
-            // echo "FILEWWWW:".$file;
-            $form = $this->form->loadfile( $file ); // to load in our own version of login.xml
-            if($form){
-               
-                $form = $this->form->getFieldset("parametros_".$name);
-                //$return .= JHtml::_('sliders.panel', JText::_( "JGLOBAL_FIELDSET_HELP_AND_OPTIONS"), "percha_".$name.'-params');
-                $return .= '<div id="percha_'.$name.'-params" class="extraoptioninfo">';
-                $return .= '<fieldset id="wrapperextrafield_'.$name.'"  >';
-                 $return .=   '           <ul class="adminformlist" style="overflow:hidden;">';
-                // foreach ($this->param as $name => $fieldset){
-                foreach ($form as $field) {
-                    $return .=   "<li>".$field->label ." ". $field->input."</li>";
-                }
-                $return .='</ul>';
-                
-                if(count($form)>1){
-                $return .=  '<div><input class="updatebutton" type="button" value="'.JText::_("Update Config").'" onclick="controler_percha_'.$name.'()" /></div>';
-                }
-                $return .=  '</fieldset></div>';
-                //$return .=  '<script src="'. JURI::root().'plugins/fieldsattachment/'.$name.'/js/controler.js" type="text/javascript"></script> ';
-                
-                //Hide OPTIONS *********** JOOMLA 3
-                //$return .=  '<script type="text/javascript">window.addEvent("domready", function() {controler_percha_'.$name.'();});</script>';
-                
+	*/
+    static public function getForm($name)
+    {
+        jimport( 'joomla.form.form' );
+        $doc = JFactory::getDocument();
+        
+        $return = "" ;
+        //Load XML FORM ==================================================
+        //$file = dirname(__FILE__) . DS . "form.xml";
+        $file = JPATH_PLUGINS.DS.'fieldsattachment'.DS.$name.DS.'form.xml';
+        // echo "FILEWWWW:".$file;
+        //$form = $this->form->loadfile( $file ); // to load in our own version of login.xml
+        //$obj = new JForm();
+       
+       //  $form = JForm::getInstance($data, "string");
+        //$form = JForm::getInstance("form", $file,  true);
+        $options = array();
+        $cform = JForm::getInstance('com_fieldsattach', $file, array(), true, 'component');
+        $cform->loadFile($file, true,  false);
+        //$xml = $cform->getXml(); 
+       
+       
+        //$form = $obj->form->loadfile( $file , true, true); // to load in our own version of login.xml
+        if($cform){
+           
+            //$form = $this->form->getFieldset("parametros_".$name);
+            $form = $cform->getFieldset("parametros_".$name);
+            //$return .= JHtml::_('sliders.panel', JText::_( "JGLOBAL_FIELDSET_HELP_AND_OPTIONS"), "percha_".$name.'-params');
+            $return .= '<div id="percha_'.$name.'-params" class="extraoptioninfo">';
+            $return .= '<fieldset id="wrapperextrafield_'.$name.'"  >';
+             $return .=   '           <ul class="adminformlist" style="overflow:hidden;">';
+            // foreach ($this->param as $name => $fieldset){
+            foreach ($form as $field) {
+                $return .=   "<li>".$field->label ." ". $field->input."</li>";
             }
+            $return .='</ul>';
             
-            //LANGUAGE FILE
-            $lang   =&JFactory::getLanguage();
-            $lang->load( 'plg_fieldsattachment_'.$name  );
-            $lang = &JFactory::getLanguage(); ;
-            $lang_file="plg_fieldsattachment_".$name ;
-            $sitepath1 = JPATH_ROOT ;
-            //$sitepath1 = str_replace ("administrator", "", $sitepath1);
-            $path = $sitepath1."/administrator/language".DS . $lang->getTag() .DS.$lang->getTag().".".$lang_file.".ini";
-            
-            //LOAD JS
-            //$doc = new DOMDocument();
-            //$doc->loadXML($path);
-            //$doc = new SimpleXmlElement($data, LIBXML_NOCDATA);
-             
-             
-
-            
-            
-            //LOAD JS -- 25-09-2012
-            //$xml = JFactory::getXMLParser('Simple');
-            
-            $xmlfile = JPATH_PLUGINS.DS.'fieldsattachment'.DS.$name.DS.$name.'.xml'; 
-            //$xml->loadFile($xmlfile); 
-            //$xml = JFactory::getXMLParser('Simple');
-            //$xml = SimpleXMLElement($xmlfile);
-            //echo "FILE::".$xmlfile;
-            $dom = new DOMDocument(); 
-            $dom->load($xmlfile); 
-            $xml = $dom->getElementsByTagName('filename'); 
-            foreach($xml as $ph){ 
- 
-                $file = $ph->nodeValue; 
-                 
-                if(strrpos ( $file , ".js" )){
-                        if(strrpos ( $file , ".js.php" )){
-                            $doc->addScript(JURI::root().'/plugins/fieldsattachment/'.$name.'/'.$file."?dictionary=".$path);
-                        }else{
-                            $doc->addScript(JURI::root().'/plugins/fieldsattachment/'.$name.'/'.$file);
-                        }
-                    }
-                    
-                    if(strrpos ( $file , ".css" )){
-                    
-                    $doc->addStyleSheet(JURI::root().'/plugins/fieldsattachment/'.$name.'/'.$file);
-                    }
-
-            } 
-             
-
-            //$xml = new SimpleXMLElement($obj);
-            /*if ($xml->loadFile($xmlfile)) {
-            // We can now step through each element of the file 
-            foreach( $xml->document->files as $files ) {
-                 foreach( $files->filename as $filename ) {
-                    //$file = $filename->getElementByPath('filename'); 
-                    //$return .= "FILE: {$filename->data()}<br/>"; 
-                    $file = $filename->data();
-                    if(strrpos ( $file , ".js" )){
-                        if(strrpos ( $file , ".js.php" )){
-                            $doc->addScript(JURI::root().'/plugins/fieldsattachment/'.$name.'/'.$filename->data()."?dictionary=".$path);
-                        }else{
-                            $doc->addScript(JURI::root().'/plugins/fieldsattachment/'.$name.'/'.$filename->data());
-                        }
-                    }
-                    
-                    if(strrpos ( $file , ".css" )){
-                    
-                    $doc->addStyleSheet(JURI::root().'/plugins/fieldsattachment/'.$name.'/'.$filename->data());
-                    }
-
-                 }
+            if(count($form)>1){
+            $return .=  '<div><input class="updatebutton" type="button" value="'.JText::_("Update Config").'" onclick="controler_percha_'.$name.'()" /></div>';
             }
-            }
-            else {
-                
-            }*/
-
-            return $return;
+            $return .=  '</fieldset></div>';
+            //$return .=  '<script src="'. JURI::root().'plugins/fieldsattachment/'.$name.'/js/controler.js" type="text/javascript"></script> ';
+            
+            //Hide OPTIONS *********** JOOMLA 3
+            //$return .=  '<script type="text/javascript">window.addEvent("domready", function() {controler_percha_'.$name.'();});</script>';
+            
         }
+        
+        //LANGUAGE FILE
+        $lang   =JFactory::getLanguage();
+        $lang->load( 'plg_fieldsattachment_'.$name  );
+        $lang = JFactory::getLanguage(); ;
+        $lang_file="plg_fieldsattachment_".$name ;
+        $sitepath1 = JPATH_ROOT ;
+        //$sitepath1 = str_replace ("administrator", "", $sitepath1);
+        $path = $sitepath1."/administrator/language".DS . $lang->getTag() .DS.$lang->getTag().".".$lang_file.".ini";
+        
+        //LOAD JS
+        //$doc = new DOMDocument();
+        //$doc->loadXML($path);
+        //$doc = new SimpleXmlElement($data, LIBXML_NOCDATA);
+         
+         
+
+        
+        
+        //LOAD JS -- 25-09-2012
+        //$xml = JFactory::getXMLParser('Simple');
+        
+        $xmlfile = JPATH_PLUGINS.DS.'fieldsattachment'.DS.$name.DS.$name.'.xml'; 
+        //$xml->loadFile($xmlfile); 
+        //$xml = JFactory::getXMLParser('Simple');
+        //$xml = SimpleXMLElement($xmlfile);
+        //echo "FILE::".$xmlfile;
+        $dom = new DOMDocument(); 
+        $dom->load($xmlfile); 
+        $xml = $dom->getElementsByTagName('filename'); 
+        foreach($xml as $ph){ 
+
+            $file = $ph->nodeValue; 
+             
+            if(strrpos ( $file , ".js" )){
+                    if(strrpos ( $file , ".js.php" )){
+                        $doc->addScript(JURI::root().'/plugins/fieldsattachment/'.$name.'/'.$file."?dictionary=".$path);
+                    }else{
+                        $doc->addScript(JURI::root().'/plugins/fieldsattachment/'.$name.'/'.$file);
+                    }
+                }
+                
+                if(strrpos ( $file , ".css" )){
+                
+                $doc->addStyleSheet(JURI::root().'/plugins/fieldsattachment/'.$name.'/'.$file);
+                }
+
+        } 
+         
+
+        //$xml = new SimpleXMLElement($obj);
+        /*if ($xml->loadFile($xmlfile)) {
+        // We can now step through each element of the file 
+        foreach( $xml->document->files as $files ) {
+             foreach( $files->filename as $filename ) {
+                //$file = $filename->getElementByPath('filename'); 
+                //$return .= "FILE: {$filename->data()}<br/>"; 
+                $file = $filename->data();
+                if(strrpos ( $file , ".js" )){
+                    if(strrpos ( $file , ".js.php" )){
+                        $doc->addScript(JURI::root().'/plugins/fieldsattachment/'.$name.'/'.$filename->data()."?dictionary=".$path);
+                    }else{
+                        $doc->addScript(JURI::root().'/plugins/fieldsattachment/'.$name.'/'.$filename->data());
+                    }
+                }
+                
+                if(strrpos ( $file , ".css" )){
+                
+                $doc->addStyleSheet(JURI::root().'/plugins/fieldsattachment/'.$name.'/'.$filename->data());
+                }
+
+             }
+        }
+        }
+        else {
+            
+        }*/
+
+        return $return;
+    }
 
         /**
 	 * UPLOAD A FILE	 *
@@ -503,7 +515,7 @@ class fieldsattachHelper
         }
 
          //GET URL absolute
-        public function getabsoluteURL()
+        static public function getabsoluteURL()
         {
             $sitepath = JURI::base() ;
             $pos = strrpos($sitepath, "administrator");
@@ -531,15 +543,15 @@ class fieldsattachHelper
         }
 
         /**
-	* Arrauy    get fields for a id
-	*
-	* @access	public
-	* @since	1.5
-	*/
-        public function  getfieldsForAll($id)
+    	* Arrauy    get fields for a id
+    	*
+    	* @access	public
+    	* @since	1.5
+    	*/
+        static public function  getfieldsForAll($id)
         {
 
-            $db	= & JFactory::getDBO();
+            $db	=  JFactory::getDBO();
             $query = 'SELECT a.catid, a.language FROM #__content as a WHERE a.id='. $id  ;
 
             $db->setQuery( $query );
@@ -549,7 +561,7 @@ class fieldsattachHelper
             if(!empty($elid)){
                 $idioma = $elid->language; 
                
-                $db	= & JFactory::getDBO();
+                $db	= JFactory::getDBO();
                 $query = 'SELECT a.id as idgroup, a.title as titlegroup ,  a.description as descriptiongroup, a.position, a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
                 $query .= 'WHERE a.catid = 0 AND a.published=1 AND b.published = 1 AND a.group_for=0 ';
                 //echo $elid->language."Language: ".$idioma;
@@ -604,17 +616,17 @@ class fieldsattachHelper
         }
 
         /**
-	* Get list of fields to content
-	*
-	* @access	public
-	* @since	1.5
-	*/
-        public function getfields($id, $catid=null)
+    	* Get list of fields to content
+    	*
+    	* @access	public
+    	* @since	1.5
+    	*/
+        static public function getfields($id, $catid=null)
         {
             
             $result = array();
 
-            $db	= & JFactory::getDBO();
+            $db	= JFactory::getDBO();
 
             if(empty($catid)){
                 $query = 'SELECT a.catid, a.language FROM #__content as a WHERE a.id='. $id  ;
@@ -828,14 +840,14 @@ class fieldsattachHelper
 	* @access	public
 	* @since	1.5
 	*/
-        public function recursivecat($catid, $idscats = "")
+        static public function recursivecat($catid, $idscats = "")
         {
         	global $retorno_recursive;
              //JError::raiseNotice(500, "CATID:: ".$catid." - ".$idscats);
              if(!empty($catid)){
                 if(!empty($idscats)) $idscats .=  ",";
                 $idscats .= $catid ;
-                $db	= & JFactory::getDBO();
+                $db	=  JFactory::getDBO();
                 $query = 'SELECT parent_id FROM #__categories as a WHERE a.id='.$catid   ;
 				//echo "<br>SQL:: ".$query."<br>";
                 $db->setQuery( $query );
@@ -855,15 +867,15 @@ class fieldsattachHelper
 		
 	 
         /**
-	* Array  HTML get fields for a id
-	*
-	* @access	public
-	* @since	1.5
-	*/
-        public function getfieldsForArticlesid($id, $fields = null)
+    	* Array  HTML get fields for a id
+    	*
+    	* @access	public
+    	* @since	1.5
+    	*/
+        static public function getfieldsForArticlesid($id, $fields = null)
         {
 
-            $db	= & JFactory::getDBO();
+            $db	=  JFactory::getDBO();
             $query = 'SELECT a.catid, a.language FROM #__content as a WHERE a.id='. $id  ;
 
             $db->setQuery( $query );
@@ -874,7 +886,7 @@ class fieldsattachHelper
 
 	   
             //$id = ",".$id.",";
-            $db	= & JFactory::getDBO();
+            $db	= JFactory::getDBO();
 
             $query = 'SELECT a.id as idgroup, a.title as titlegroup ,  a.description as descriptiongroup ,a.position, a.catid, a.language, a.recursive, b.*, a.articlesid FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
             //$query .= 'WHERE (a.articlesid LIKE "%,'. $id .',%" )  AND a.published=1 AND b.published = 1 ';
@@ -890,7 +902,7 @@ class fieldsattachHelper
             $results = $db->loadObjectList();
 
             //echo "<br>count: " . count($results);
-            $cont =0;
+            $cont = 0;
             if($results)
             {
                 foreach($results as $result)
@@ -1052,7 +1064,7 @@ class fieldsattachHelper
 			      foreach ($this->array_fields as $obj)
 			      {
 				  
-				  $function  = "plgfieldsattachment_".$obj."::construct();";
+				  $function  = "plgfieldsattachment_".$obj."::construct1();";
 				  
 				  //$base = JPATH_BASE;
 				  //$base = str_replace("/administrator", "", $base);
@@ -1142,20 +1154,20 @@ class fieldsattachHelper
 	* @access	public
 	* @since	1.5
 	*/ 
-        public function get_extensions()
-        {
-            $array_fields  = array();
-            $db = &JFactory::getDBO(  );
-            $query = 'SELECT *  FROM #__extensions as a WHERE a.folder = "fieldsattachment"  AND a.enabled= 1';
-            $db->setQuery( $query );
+    static public function get_extensions()
+    {
+        $array_fields  = array();
+        $db = JFactory::getDBO(  );
+        $query = 'SELECT *  FROM #__extensions as a WHERE a.folder = "fieldsattachment"  AND a.enabled= 1';
+        $db->setQuery( $query );
 
-            $results = $db->loadObjectList();
-            foreach ($results as $obj)
-            {
-                $array_fields[count($array_fields)] = $obj->element;
-            }
-            return $array_fields;
+        $results = $db->loadObjectList();
+        foreach ($results as $obj)
+        {
+            $array_fields[count($array_fields)] = $obj->element;
         }
+        return $array_fields;
+    }
 
          /**
 	* Get value of one field content
@@ -1163,10 +1175,10 @@ class fieldsattachHelper
 	* @access	public
 	* @since	1.5
 	*/
-        public function getfieldsvalue($fieldsid, $articleid)
+        static public function getfieldsvalue($fieldsid, $articleid)
         {
             $result ="";
-            $db	= & JFactory::getDBO();
+            $db	= JFactory::getDBO();
             $query = 'SELECT a.value FROM #__fieldsattach_values as a WHERE a.fieldsid='. $fieldsid.' AND a.articleid='.$articleid  ;
             //echo $query;
             $db->setQuery( $query );
@@ -1185,7 +1197,7 @@ class fieldsattachHelper
         public function getfieldsvalueCategories($fieldsid, $catid)
         {
             $result ="";
-            $db	= & JFactory::getDBO();
+            $db	=  JFactory::getDBO();
             $query = 'SELECT a.value FROM #__fieldsattach_categories_values as a WHERE a.fieldsid='. $fieldsid.' AND a.catid='.$catid  ;
             //echo $query;
             $db->setQuery( $query );

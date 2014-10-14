@@ -7,7 +7,7 @@
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 	<authorEmail>cristiangrano@hotmail.com	</authorEmail>
 	<authorUrl>www.percha.com</authorUrl>
-	<version>1.8</version>
+	<version>1.9</version>
 	<description>Image Field</description>
 	<files>
 		<filename plugin="image">image.php</filename> 

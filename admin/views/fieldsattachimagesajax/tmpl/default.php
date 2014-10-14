@@ -18,7 +18,7 @@ JHtml::_('behavior.tooltip');
 
 JPluginHelper::importPlugin('fieldsattachment'); // very important
 //renderInput
-plgfieldsattachment_imagegallery::construct();
+plgfieldsattachment_imagegallery::construct1();
 //$articleid, $fieldsid, $value, $extras=null
 $articleid = JRequest::getVar("catid");
 $fieldsid = JRequest::getVar("fieldsid");

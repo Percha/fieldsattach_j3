@@ -24,8 +24,8 @@ include_once $sitepath.'/administrator/components/com_fieldsattach/helpers/extra
 
 class plgfieldsattachment_input extends extrafield
 {
-        protected $name;
-        /**
+    protected $name;
+   /**
 	 * Constructor
 	 *
 	 * For php4 compatability we must not use the __constructor as a constructor for plugins
@@ -37,17 +37,22 @@ class plgfieldsattachment_input extends extrafield
 	 * @param 	array   $config  An array that holds the plugin configuration
 	 * @since	1.0
 	 */
-        function plgfieldsattachment_input(& $subject, $config)
+  function plgfieldsattachment_input( $subject, $config)
 	{
-		parent::__construct($subject, $config);
-                 
-        }
-	function construct( )
+		parent::__construct($subject, $config); 
+  }
+
+	static public function construct1( )
 	{
-		$name = "input";
-		$this->name = $name; 
-		parent::getLanguage($name); 
+		 parent::getLanguage(plgfieldsattachment_input::getName());   
 	}
+
+  static public function getName()
+  {  
+
+      return "input";
+         // return  $this->name;
+  }
 	  
          
         function renderHelpConfig(  )
@@ -72,7 +77,7 @@ class plgfieldsattachment_input extends extrafield
 
 
 
-        function renderInput($articleid, $fieldsid, $value , $extras = null)
+        static function renderInput($articleid, $fieldsid, $value , $extras = null)
         {
             
             $required="";
@@ -126,7 +131,7 @@ class plgfieldsattachment_input extends extrafield
         }
  
 
-        function getHTML($articleid, $fieldid, $category = false, $write=false)
+        static function getHTML($articleid, $fieldid, $category = false, $write=false)
         { 
             global $globalreturn;
           //$str = fieldattach::getInput($articleid, $fieldid, $category); 
@@ -176,7 +181,7 @@ class plgfieldsattachment_input extends extrafield
 	 * @return  	html of field
 	 * @since	1.0
 	 */
-        function getTemplate($fieldsids, $file="input")
+        static function getTemplate($fieldsids, $file="input")
         {
              //Search field template GENERIC *****************************************************************
               $templateDir =  dirname(__FILE__).'/tmpl/'.$file.'.tpl.php'; 
@@ -206,7 +211,7 @@ class plgfieldsattachment_input extends extrafield
         
          
 
-        function action()
+        function action( $articleid, $fieldsid, $fieldsvalueid )
         {
 
         }

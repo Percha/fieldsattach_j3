@@ -33,7 +33,7 @@ class fieldsattachModelfieldsattachimagesajax extends JModelList
 
 
 
-                $session =& JFactory::getSession();
+                $session = JFactory::getSession();
 
                 if(JRequest::getVar("reset")==1){
                     $session->set('articleid',"");

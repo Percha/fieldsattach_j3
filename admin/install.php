@@ -57,7 +57,7 @@ class com_fieldsattachInstallerScript
 		'textarea.zip'=>'Plugin fieldsattachment <strong>textarea</strong>',
 	  	'content_fieldsattachment.zip'=>'Plugin Content FieldsAttachment',
 		'system_fieldsattachment.zip'=>'Plugin System FieldsAttachment',
-		'search_fieldsattachment.zip'=>'Plugin Advanced Search FieldsAttachment',
+		'advancedsearch_fieldsattachment.zip'=>'Plugin Advanced Search FieldsAttachment',
                 'filterarticles.zip'=>'Plugin Advanced FILTER FieldsAttachment'
 		
              );

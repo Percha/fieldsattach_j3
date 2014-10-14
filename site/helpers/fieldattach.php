@@ -29,9 +29,9 @@ class fieldattach
 	 * @return	value to field.
 	 * @since	1.6
 	 */
-	public function getName($articleid, $fieldsids, $category  = false)
+	static public function getName($articleid, $fieldsids, $category  = false)
 	{
-	    $db = &JFactory::getDBO(  );
+	    $db = JFactory::getDBO(  );
             if(!$category){
                 $query = 'SELECT  b.title  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsids.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.articleid= '.$articleid;
 	    }else{
@@ -53,9 +53,9 @@ class fieldattach
 	 * @return	value to field.
 	 * @since	1.6
 	 */
-	public function getValue($articleid, $fieldsids, $category = false )
+	static  public function getValue($articleid, $fieldsids, $category = false )
 	{
-	    $db = &JFactory::getDBO(  );
+	    $db = JFactory::getDBO(  );
 
 	    $query = 'SELECT  a.value  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsids.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.articleid= '.$articleid;
 
@@ -81,13 +81,13 @@ class fieldattach
 	 * @since	1.6
 	 */
 	//public function getValueSelect($articleid, $fieldsids, $category = false )
-        public function getValueSelect( $fieldsids, $valor,  $category = false )
+        static public function getValueSelect( $fieldsids, $valor,  $category = false )
 	
 	{
             //$valor = fieldattach::getValue($articleid, $fieldsids, $category );
             $valortmp = explode(",", $valor);
             
-	    $db = &JFactory::getDBO(  );
+	    $db = JFactory::getDBO(  );
 
 	    $query = 'SELECT  a.extras  FROM #__fieldsattach  as a WHERE a.id = '.$fieldsids;
  
@@ -583,9 +583,9 @@ class fieldattach
 	 * @return	html of table
 	 * @since	1.6
 	 */
-        public function getExtra($fieldsids)
+  static public function getExtra($fieldsids)
 	{
-            $db = &JFactory::getDBO(  );
+            $db = JFactory::getDBO(  );
 	    $query = 'SELECT a.* FROM #__fieldsattach as a  WHERE a.id = '.$fieldsids;
 
 
@@ -604,19 +604,17 @@ class fieldattach
 	 * @return	html of table
 	 * @since	1.6
 	 */
-        public function getShowTitle($fieldsids)
-	{
-            $db = &JFactory::getDBO(  );
-	    $query = 'SELECT a.* FROM #__fieldsattach as a  WHERE a.id = '.$fieldsids;
+    static public function getShowTitle($fieldsids)
+	  {
+        $db = JFactory::getDBO(  );
+	      $query = 'SELECT a.* FROM #__fieldsattach as a  WHERE a.id = '.$fieldsids; 
+        $db->setQuery( $query );
+	      $result  = $db->loadObject();
 
+        return $result->showtitle;
+    }
 
-            $db->setQuery( $query );
-	    $result  = $db->loadObject();
-
-            return $result->showtitle;
-        }
-
-       /**
+  /**
 	 * Return a table HTML with a list of units
 	 *
 	 * @param	$id	 id of article
@@ -780,10 +778,10 @@ class fieldattach
         }
         
         
-        function isRequired($fieldsids)
+        static public function isRequired($fieldsids)
         {
             
-            $db = &JFactory::getDBO(  );
+            $db = JFactory::getDBO(  );
 	    $query = 'SELECT a.required FROM #__fieldsattach as a  WHERE a.id = '.$fieldsids;
 
 

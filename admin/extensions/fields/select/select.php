@@ -23,165 +23,156 @@ include_once $sitepath.'/administrator/components/com_fieldsattach/helpers/extra
 
 class plgfieldsattachment_select extends extrafield
 {
-        protected $name;
-        /**
-	 * Constructor
-	 *
-	 * For php4 compatability we must not use the __constructor as a constructor for plugins
-	 * because func_get_args ( void ) returns a copy of all passed arguments NOT references.
-	 * This causes problems with cross-referencing necessary for the observer design pattern.
-	 *
-	 * @access	protected
-	 * @param	object	$subject The object to observe
-	 * @param 	array   $config  An array that holds the plugin configuration
-	 * @since	1.0
-	 */
+    protected $name;
+     
          
-	function construct( )
+	static function construct1( )
 	{
-            $name = "select";
-            $this->name = $name;
-             
-	    parent::getLanguage($name); 
-            
-            
+        parent::getLanguage(plgfieldsattachment_select::getName());    
 	}
+
+    static public function getName()
+    {  
+
+          return "select";
+             // return  $this->name;
+    }
 	   
 
-        function renderInput($articleid, $fieldsid, $value, $extras=null )
+    static function renderInput($articleid, $fieldsid, $value, $extras=null )
+    {
+        $required="";
+        
+        global $sitepath; 
+        JLoader::register('fieldattach',  $sitepath.DS.'components/com_fieldsattach/helpers/fieldattach.php');
+      
+        $boolrequired = fieldattach::isRequired($fieldsid);
+        if($boolrequired) $required="required";
+        
+        $tmp = $extras;
+        //$str .= "<br> resultado1: ".$tmp;
+        $lineas = explode(chr(13),  $tmp);
+        //$str .= "<br> resultado2: ".$lineas[0];
+        //Add CSS ***********************
+        // $str =  '<link rel="stylesheet" href="'.JURI::root() .'plugins/fieldsattachment/select/select.css" type="text/css" />'; 
+        $app = JFactory::getApplication();
+        // $templateDir = JURI::base() . 'templates/' . $app->getTemplate(); 
+        
+        //FIND SELECT ****************
+        $cont = 0;
+        $default = -1;
+        $selected = -1;
+        foreach ($lineas as $linea)
         {
-            $required="";
-            
-            global $sitepath; 
-            JLoader::register('fieldattach',  $sitepath.DS.'components/com_fieldsattach/helpers/fieldattach.php');
-          
-            $boolrequired = fieldattach::isRequired($fieldsid);
-            if($boolrequired) $required="required";
-            
-            $tmp = $extras;
-            //$str .= "<br> resultado1: ".$tmp;
-            $lineas = explode(chr(13),  $tmp);
-            //$str .= "<br> resultado2: ".$lineas[0];
-            //Add CSS ***********************
-            // $str =  '<link rel="stylesheet" href="'.JURI::root() .'plugins/fieldsattachment/select/select.css" type="text/css" />'; 
-            $app = JFactory::getApplication();
-            // $templateDir = JURI::base() . 'templates/' . $app->getTemplate(); 
-            
-            //FIND SELECT ****************
-            $cont = 0;
-            $default = -1;
-            $selected = -1;
-            foreach ($lineas as $linea)
-            {
-                $tmp = explode('|',  $linea);   
-                 if(count($tmp)>=2){ 
-                    $tmpdefault = -1;
-                    if(count($tmp)>=2) $valor = $tmp[1];
-                    if(count($tmp)>=3) $tmpdefault = $tmp[2];
-                     
-                    
-                    if($value == $valor){
-                        $selected  = $cont; 
-                        break;
-                    }
-
-                    if($tmpdefault == "true"){$default  = $cont; }
-
-                    $cont++;
-                 }
-                 
-            }
-             
-            //RENDER SELECT **************** 
-            $cont = 0; 
-            $option_selected = $default;
-            if($selected >= 0) {$option_selected = $selected;}
-             
-            $str="";
-            $str  .= '<select name="field_'.$fieldsid.'" class="customfields '.$required.'">';
-            $str .= '<option value="">'.JText::_("PLG_SELECT_OPTIONS").'</option> '; 
-            foreach ($lineas as $linea)
-            {
-
-                $tmp = explode('|',  $linea);
-                $title = $tmp[0];
+            $tmp = explode('|',  $linea);   
+             if(count($tmp)>=2){ 
+                $tmpdefault = -1;
                 if(count($tmp)>=2) $valor = $tmp[1];
-				else $valor=$title;
-                $str .= '<option value="'.stripslashes($valor).'" ';
-                //if($value == $valor) $str .= 'selected="selected"'; 
-                if(($option_selected) == $cont)  $str .= 'selected="selected"'; 
-                    
-                $str .= ' >';
-                $str .= stripslashes($title);
-                $str .= '</option>';
-                $cont++;
-            }
-            $str .= '</select>';
-            return  $str;
-        }
- 
-        function getHTML($articleid, $fieldsid, $category = false, $write=false)
-        {
-            global $globalreturn;
-            //$str  = fieldattach::getSelect($articleid, $fieldsid);
-            
-              $valor = fieldattach::getValue( $articleid,  $fieldsid, $category  );
-              $title = fieldattach::getName( $articleid,  $fieldsid , $category );
-              $published = plgfieldsattachment_select::getPublished( $fieldsid  );
-
-              $html="";
+                if(count($tmp)>=3) $tmpdefault = $tmp[2];
+                 
                 
-              if(!empty($valor) && $published)
-              {
-                  $isNull= plgfieldsattachment_select::isNull( $fieldsid , $valor, $category );
-                  //echo "<br />ISNULL:".$isNull."---<br/>";
-                  if(!$isNull){
-                        $valorselects = fieldattach::getValueSelect( $fieldsid , $valor );
-                        
-                        $html = plgfieldsattachment_select::getTemplate($fieldsid, "select");
-              
-                        /*
-                            Templating Laouyt *****************************
+                if($value == $valor){
+                    $selected  = $cont; 
+                    break;
+                }
 
-                            [TITLE] - Title of field
-                            [FIELD_ID] - Field id 
-                            [VALUE] - Value of input
-                            [ARTICLE_ID] - Article id
+                if($tmpdefault == "true"){$default  = $cont; }
 
-                        */
-			
-			 
-
-                        if(fieldattach::getShowTitle(   $fieldsid  )) $html = str_replace("[TITLE]", $title, $html); 
-                        else $html = str_replace("[TITLE]", "", $html); 
-
-                        $html = str_replace("[VALUE]", stripslashes($valorselects), $html);
-                        $html = str_replace("[FIELD_ID]", $fieldsid, $html);
-                        $html = str_replace("[ARTICLE_ID]", $articleid, $html);
- 
-                  }else{
-                      $html="";
-                  }
-              }
-           
-           //WRITE THE RESULT
-           if($write)
-           {
-                echo $html;
-           }else{
-                $globalreturn = $html;
-                return $html; 
-           }
+                $cont++;
+             }
+             
         }
          
-
-
-        function action()
+        //RENDER SELECT **************** 
+        $cont = 0; 
+        $option_selected = $default;
+        if($selected >= 0) {$option_selected = $selected;}
+         
+        $str="";
+        $str  .= '<select name="field_'.$fieldsid.'" class="customfields '.$required.'">';
+        $str .= '<option value="">'.JText::_("PLG_SELECT_OPTIONS").'</option> '; 
+        foreach ($lineas as $linea)
         {
 
+            $tmp = explode('|',  $linea);
+            $title = $tmp[0];
+            if(count($tmp)>=2) $valor = $tmp[1];
+			else $valor=$title;
+            $str .= '<option value="'.stripslashes($valor).'" ';
+            //if($value == $valor) $str .= 'selected="selected"'; 
+            if(($option_selected) == $cont)  $str .= 'selected="selected"'; 
+                
+            $str .= ' >';
+            $str .= stripslashes($title);
+            $str .= '</option>';
+            $cont++;
         }
+        $str .= '</select>';
+        return  $str;
+    }
+
+    static function getHTML($articleid, $fieldsid, $category = false, $write=false)
+    {
+        global $globalreturn;
+        //$str  = fieldattach::getSelect($articleid, $fieldsid);
         
-        /**
+          $valor = fieldattach::getValue( $articleid,  $fieldsid, $category  );
+          $title = fieldattach::getName( $articleid,  $fieldsid , $category );
+          $published = plgfieldsattachment_select::getPublished( $fieldsid  );
+
+          $html="";
+            
+          if(!empty($valor) && $published)
+          {
+              $isNull= plgfieldsattachment_select::isNull( $fieldsid , $valor, $category );
+              //echo "<br />ISNULL:".$isNull."---<br/>";
+              if(!$isNull){
+                    $valorselects = fieldattach::getValueSelect( $fieldsid , $valor );
+                    
+                    $html = plgfieldsattachment_select::getTemplate($fieldsid, "select");
+          
+                    /*
+                        Templating Laouyt *****************************
+
+                        [TITLE] - Title of field
+                        [FIELD_ID] - Field id 
+                        [VALUE] - Value of input
+                        [ARTICLE_ID] - Article id
+
+                    */
+		
+		 
+
+                    if(fieldattach::getShowTitle(   $fieldsid  )) $html = str_replace("[TITLE]", $title, $html); 
+                    else $html = str_replace("[TITLE]", "", $html); 
+
+                    $html = str_replace("[VALUE]", stripslashes($valorselects), $html);
+                    $html = str_replace("[FIELD_ID]", $fieldsid, $html);
+                    $html = str_replace("[ARTICLE_ID]", $articleid, $html);
+
+              }else{
+                  $html="";
+              }
+          }
+       
+       //WRITE THE RESULT
+       if($write)
+       {
+            echo $html;
+       }else{
+            $globalreturn = $html;
+            return $html; 
+       }
+    }
+     
+
+
+    function action( $articleid, $fieldsid, $fieldsvalueid)
+    {
+
+    }
+        
+    /**
 	 * Return the value of selectfield
 	 *
 	 * @param	$id	 id of article
@@ -191,13 +182,13 @@ class plgfieldsattachment_select extends extrafield
 	 * @since	1.6
 	 */
 	//public function getValueSelect($articleid, $fieldsids, $category = false )
-        public function isNull( $fieldsids, $valor,  $category = false )
+    static public function isNull( $fieldsids, $valor,  $category = false )
 	
 	{
             //$valor = fieldattach::getValue($articleid, $fieldsids, $category );
             $valortmp = explode(",", $valor);
             
-	    $db = &JFactory::getDBO(  );
+	    $db = JFactory::getDBO(  );
 
 	    $query = 'SELECT  a.extras  FROM #__fieldsattach  as a WHERE a.id = '.$fieldsids;
  

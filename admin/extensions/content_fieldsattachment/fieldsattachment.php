@@ -66,10 +66,10 @@ class plgContentfieldsattachment extends JPlugin
 	 * @return	string
 	 * @since	1.6
 	 */
-	public function onContentBeforeDisplay($context, &$article, &$params)
+	public function onContentBeforeDisplay($context, $article, $params)
 	{
 		$app = JFactory::getApplication();
-                $db = &JFactory::getDBO(  );
+                $db = JFactory::getDBO(  );
 
                 $this->url=  'images'.DS.'documents';
                 $this->path=   JPATH_BASE .DS.'images'.DS.'documents';
@@ -90,10 +90,10 @@ class plgContentfieldsattachment extends JPlugin
 		 
 	}
 
-        private function getAll(&$article)
+        private function getAll( $article )
         {
             if(!empty($article->id) && (JRequest::getVar("view")=="article")){
-            $db = &JFactory::getDBO(  );
+            $db = JFactory::getDBO(  );
             $query = 'SELECT *  FROM #__extensions as a WHERE a.folder = "fieldsattachment"  AND a.enabled= 1';
             $db->setQuery( $query );
             $results_plugins = $db->loadObjectList();
@@ -128,13 +128,14 @@ class plgContentfieldsattachment extends JPlugin
                                 //select  
                                 foreach ($results_plugins as $obj)
                                 {
-                                    $function  = "plgfieldsattachment_".$obj->element."::construct();";
+                                    $function  = "plgfieldsattachment_".$obj->element."::construct1();";
                                                     //NEW PACTH CRISTIAN 10_04_2012 =======================
-										$base = JPATH_SITE;
+										                                $base = JPATH_SITE;
                                                     $file = $base.'/plugins/fieldsattachment/'.$obj->element.'/'.$obj->element.'.php';
                                                     //echo "<br>".$file;
                                                     if( JFile::exists($file)){
                                                         //file exist
+                                                        //echo "FFFF:".$function;
                                                         eval($function);
                                                                                     // eval($function);
                                                         $i = count($this->array_fields);

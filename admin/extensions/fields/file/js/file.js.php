@@ -1,35 +1,4 @@
 <?php header("Content-type: application/x-javascript");?>
-<?php
-$option1 = "Select";  
-//JSON *************** 
-if(isset($_GET["dictionary"])) 
-{
-  
-   $langfile = $_GET["dictionary"]; 
-   if(file_exists($langfile))
-   { 
-       $strlang = file_get_contents($langfile); 
-       $strlang = str_replace('=', '":', $strlang);
-       $tmp = array();
-       
-       $strlang = explode("\n", $strlang);
-       foreach ($strlang as $line)
-       {
-            
-           $pos = strpos($line, ";");
-
-           if(!empty($line) && ($pos === false)) $tmp[count($tmp)] = '"'.$line;
-       }
-       $strlang = implode( $tmp ,",");
-       
-       $strlang = "{".$strlang."}";
-       $obj = json_decode($strlang);
-       if(isset($obj->{'COM_FIELDSATTACH_SELECTABLE'})) $option1 =  $obj->{'COM_FIELDSATTACH_SELECTABLE'}; //   n
-        
-       
-   }  
-}
-?>
 /*
 Copyright (c) 2007 John Dyer (http://percha.com)
 MIT style license
@@ -37,11 +6,7 @@ MIT style license
 /*
 if (!window.Refresh) Refresh = {};
 if (!Refresh.Web) Refresh.Web = {};
- */
-
-
-
-
+ */ 
 ObjFile = new Class({
 	_bar: null,
         
@@ -81,13 +46,11 @@ ObjFile = new Class({
              
         },
         revalue: function(){
-            var str ="";
-	    
-	    
-            
+            var str =""; 
             el = $(this.id);
 
-            option1 = el.getElement("select#jform_params_field_selectable").get("value"); 
+            if($('jform_params_field_selectable') == null)  option1 = el.getElement("select#params_field_selectable").get("value"); 
+            else option1 = el.getElement("select#jform_params_field_selectable").get("value"); 
             
             str = option1; 
   
@@ -99,22 +62,18 @@ ObjFile = new Class({
         },
         setunit:function(option1)
         { 
-            $$("#fieldsattach-slider-file select#jform_params_field_selectable").set("value", option1); 
+           if($('jform_params_field_selectable') == null) $$("#fieldsattach-slider-file select#params_field_selectable").set("value", option1);
+           else  $$("#fieldsattach-slider-file select#jform_params_field_selectable").set("value", option1);
         },
         eventinput:function(obj){
             
             /*CHANGE INOUT ****************************************/ 
             $$("#"+this.id+" select").removeEvent('change', function() {});
             $$("#"+this.id+" select").addEvent('change', function(event){
-            event.stop(); //Prevents the browser from following the link.
-            
-            $("wrapperextrafield_file").ObjInput.revalue();
-            });
-	    
-	   
-            
-	    
-	    
+            event.stop(); //Prevents the browser from following the link. 
+             
+            TT_file.revalue();
+            }); 
            
         } 
 	

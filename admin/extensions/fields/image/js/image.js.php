@@ -62,7 +62,7 @@ ObjImage = new Class({
 	initialize: function(id, options) {
 	
 		this.id = id;
-                this.setOptions(options);
+    this.setOptions(options);
  
 
 		// hook up controls
@@ -97,11 +97,19 @@ ObjImage = new Class({
             
             el = $(this.id);
 
-            opt1= el.getElement("input#jform_params_field_width").get("value"); 
-            opt2= el.getElement("input#jform_params_field_height").get("value"); 
-            opt3= el.getElement("select#jform_params_field_filter").get("value"); 
-            opt4= el.getElement("select#jform_params_field_selectable2").get("value");
-	    
+            if($('jform_params_field_selectable2') == null)   
+            {
+              opt1= el.getElement("input#params_field_width").get("value"); 
+              opt2= el.getElement("input#params_field_height").get("value"); 
+              opt3= el.getElement("select#params_field_filter").get("value"); 
+              opt4= el.getElement("select#params_field_selectable2").get("value");
+            }else{
+
+              opt1= el.getElement("input#jform_params_field_width").get("value"); 
+              opt2= el.getElement("input#jform_params_field_height").get("value"); 
+              opt3= el.getElement("select#jform_params_field_filter").get("value"); 
+              opt4= el.getElement("select#jform_params_field_selectable2").get("value");
+            } 
 	   
 
             str += opt1;
@@ -122,12 +130,19 @@ ObjImage = new Class({
         },
         setunit:function(opt1, opt2, opt3, opt4)
         {
-	    
-            $$("#wrapperextrafield_image select#jform_params_field_selectable2").set("value", opt4); 
-            $$("#wrapperextrafield_image input#jform_params_field_width").set("value", opt1);
-            $$("#wrapperextrafield_image input#jform_params_field_height").set("value", opt2);
-            $$("#wrapperextrafield_image select#jform_params_field_filter").set("value", opt3);
-	    
+	         if($('jform_params_field_selectable2') == null)   $$("#wrapperextrafield_image select#params_field_selectable2").set("value", opt4); 
+           else  $$("#wrapperextrafield_image select#jform_params_field_selectable2").set("value", opt4); 
+
+           if($('jform_params_field_width') == null)  $$("#wrapperextrafield_image input#params_field_width").set("value", opt1);
+           else  $$("#wrapperextrafield_image input#jform_params_field_width").set("value", opt1); 
+
+           if($('jform_params_field_height') == null)   $$("#wrapperextrafield_image input#params_field_height").set("value", opt2);
+           else   $$("#wrapperextrafield_image input#jform_params_field_height").set("value", opt2);
+
+           if($('jform_params_field_filter') == null)  $$("#wrapperextrafield_image select#params_field_filter").set("value", opt3);
+           else   $$("#wrapperextrafield_image select#jform_params_field_filter").set("value", opt3);
+   
+            
         },
         eventinput:function(obj){
              

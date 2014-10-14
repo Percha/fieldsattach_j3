@@ -41,27 +41,19 @@ class plgfieldsattachment_image extends extrafield
 	* @since	1.0
 	*/
          
-	function construct( ) {
-	
-		$name = "image";
-		$this->name = $name;
-		$sitepath  =  fieldsattachHelper::getabsoluteURL();
-		$this->path1 = $sitepath .'images'.DS.'documents' ;
-		$documentpath  =  fieldsattachHelper::getabsolutePATH(); 
-		
-		if ((JRequest::getVar('option')=='com_categories' && JRequest::getVar('layout')=="edit"   )) { 
-			$this->documentpath =  $documentpath.DS.'images'.DS.'documentscategories'    ;
-		}
-            
- 
-		//LOAD LANGUAGE --------------------------------------------------------------
-		parent::getLanguage($name); 
-		//-----------------------------------------------------------------------------
-              
+	static function construct1( ) { 
+		 parent::getLanguage(plgfieldsattachment_image::getName());   
 	}
+
+	static public function getName()
+    {  
+
+          return "image";
+             // return  $this->name;
+    }
 	  
 	 
-	function renderInput($articleid, $fieldsid, $value, $extras = null ) {
+	static function renderInput($articleid, $fieldsid, $value, $extras = null ) {
 	
 		$required="";
 		
@@ -113,7 +105,8 @@ class plgfieldsattachment_image extends extrafield
 			$str .=  '</div>';
 		} 
 		
-		$path = $this->path1;
+		//$path = $this->path1;
+		$path = $sitepath .'images'.DS.'documents';
 	              
 	            
 		$documentpath  = JURI::root();
@@ -190,7 +183,7 @@ class plgfieldsattachment_image extends extrafield
         }
  
 
-        function getHTML($articleid, $fieldsid, $category = false, $write=false)
+        static function getHTML($articleid, $fieldsid, $category = false, $write=false)
         {
              
            // $str  ='<div id="cel_'.$articleid.'" class="field_'.$fieldsid.'">'.fieldattach::getImg($articleid, $fieldsid,"", $category).'</div>';
@@ -208,8 +201,8 @@ class plgfieldsattachment_image extends extrafield
            }
             
             
-            $db = &JFactory::getDBO(  );
-	    $query = 'SELECT  a.value  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsid.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*") AND a.articleid= '.$articleid;
+            $db = JFactory::getDBO(  );
+	    	$query = 'SELECT  a.value  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsid.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*") AND a.articleid= '.$articleid;
             if($category) {
                  $query = 'SELECT  a.value  FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsid.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*") AND a.catid= '.$articleid;
                 $directorio = 'documentscategories' ;

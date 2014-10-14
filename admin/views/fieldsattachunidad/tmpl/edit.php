@@ -96,10 +96,11 @@ $doc->addScriptDeclaration( $content );
 					                        //echo "<br>".$file;
 					                        if( JFile::exists($file)){
 					                            //file exist
-					                            $function  = "plgfieldsattachment_".$obj->element."::construct();";
-											
-	                                            eval('echo '. $function.';');
-	                                            $function  = "plgfieldsattachment_".$obj->element."::getoptionConfig('".$field->value."');";
+					                            //$function  = "plgfieldsattachment_".$obj->element."::construct();";
+											    //$name  = "plgfieldsattachment_".$obj->element."::getName();";
+	                                            //eval('echo '. $function.';');
+	                                            //$function  = "plgfieldsattachment_".$obj->element."::getoptionConfig('".$field->value."');";
+                                                $function  = "plgfieldsattachment_".$obj->element."::getoptionConfig('".$field->value."','".$obj->element."');";
 	                                            eval('echo '. $function.';');
 					                        }
                                              

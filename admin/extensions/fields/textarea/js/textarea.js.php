@@ -1,40 +1,4 @@
 <?php header("Content-type: application/x-javascript");?>
-<?php
-$size = "Size";
-$max_size = "Max size"; 
-//JSON *************** 
-if(isset($_GET["dictionary"])) 
-{
-  
-   $langfile = $_GET["dictionary"]; 
-   if(file_exists($langfile))
-   { 
-       $strlang = file_get_contents($langfile); 
-       $strlang = str_replace('=', '":', $strlang);
-       $tmp = array();
-       
-       $strlang = explode("\n", $strlang);
-       foreach ($strlang as $line)
-       {
-            
-           $pos = strpos($line, ";");
-
-           if(!empty($line) && ($pos === false)) $tmp[count($tmp)] = '"'.$line;
-       }
-       $strlang = implode( $tmp ,",");
-       
-       $strlang = "{".$strlang."}";
-       $obj = json_decode($strlang);
-       if(isset($obj->{'COM_FIELDSATTACH_SIZE'})) $size =  $obj->{'COM_FIELDSATTACH_SIZE'}; // 
-       if(isset($obj->{'COM_FIELDSATTACH_MAXWIDTH'})) $max_size =  $obj->{'COM_FIELDSATTACH_MAXWIDTH'}; // 
-        
-       
-   }  
-}
-
-//if(isset($_GET["size"])) { $size = $_GET["size"]; }
-//if(isset($_GET["max_size"])) { $max_size = $_GET["max_size"]; } 
-?>
 /*
 Copyright (c) 2007 John Dyer (http://percha.com)
 MIT style license
@@ -92,11 +56,11 @@ ObjTextArea = new Class({
             
             el = $(this.id);
 
-            opt1 = el.getElement("select#jform_params_field_textarea").get("value"); 
+             
+            if($('jform_params_field_textarea') == null)  opt1 = el.getElement("select#params_field_textarea").get("value"); 
+            else  opt1 = el.getElement("select#jform_params_field_textarea").get("value");  
 
-            str += opt1;  
- 
-                      
+            str += opt1;   
             
             $("jform_extras").set("value", str);
              
@@ -106,7 +70,9 @@ ObjTextArea = new Class({
         },
         setunit:function(opt1)
         { 
-            $('jform_params_field_textarea').set("value", opt1); 
+            if($('jform_params_field_textarea') == null) $('params_field_textarea').set("value", opt1); 
+            else $('jform_params_field_textarea').set("value", opt1); 
+
         },
 	timerevent:function(obj){
              

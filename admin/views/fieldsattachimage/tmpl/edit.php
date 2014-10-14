@@ -26,7 +26,7 @@ JLoader::register('fieldattach',  $sitepath.DS.'components/com_fieldsattach/help
 
 
 
-$session =& JFactory::getSession();
+$session = JFactory::getSession();
 $articleid =  $session->get('articleid'); 
 $catid =  $session->get('catid');
 $direct =  JRequest::getVar('direct',false);

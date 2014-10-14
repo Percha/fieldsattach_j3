@@ -1,4 +1,5 @@
 <?php header("Content-type: application/x-javascript");?>
+
 /*
 Copyright (c) 2007 John Dyer (http://percha.com)
 MIT style license
@@ -57,9 +58,19 @@ ObjImagegallery = new Class({
             
             el = $(this.id);
 
-            opt1 = el.getElement("select#jform_params_galleryimage2").get("value"); 
-            opt2 = el.getElement("select#jform_params_galleryimage3").get("value");  
-            opt3 = el.getElement("select#jform_params_gallerydescription").get("value"); 
+            
+            console.log("revalue")
+            if($('select#jform_params_galleryimage2') == null)   
+            {  
+                opt1 = el.getElement("select#params_galleryimage2").get("value"); 
+                opt2 = el.getElement("select#params_galleryimage3").get("value");  
+                opt3 = el.getElement("select#params_gallerydescription").get("value"); 
+            }else{ 
+                opt1 = el.getElement("select#jform_params_galleryimage2").get("value"); 
+                opt2 = el.getElement("select#jform_params_galleryimage3").get("value");  
+                opt3 = el.getElement("select#jform_params_gallerydescription").get("value"); 
+            } 
+       
 
 
             str += opt1; 
@@ -78,9 +89,19 @@ ObjImagegallery = new Class({
         },
         setunit:function(opt1,opt2,opt3)
         { 
-            $('jform_params_galleryimage2').set("value", opt1); 
-            $('jform_params_galleryimage3').set("value", opt2); 
-            $('jform_params_gallerydescription').set("value", opt3); 
+            alert('setunit'+ opt1);
+            if($('select#jform_params_galleryimage2') == null)   
+            {
+
+                $('params_galleryimage2').set("value", opt1); 
+                $('params_galleryimage3').set("value", opt2); 
+                $('params_gallerydescription').set("value", opt3); 
+            }else{
+                $('jform_params_galleryimage2').set("value", opt1); 
+                $('jform_params_galleryimage3').set("value", opt2); 
+                $('jform_params_gallerydescription').set("value", opt3); 
+            }
+           
         },
 	timerevent:function(obj){
              

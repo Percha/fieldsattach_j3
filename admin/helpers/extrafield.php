@@ -22,7 +22,7 @@ JLoader::register('fieldattach',  $sitepath.DS.'components/com_fieldsattach/help
 
 class extrafield extends JPlugin
 {
-        protected $name;
+  protected $name;
 	
 	
 	public function construct( )
@@ -30,64 +30,68 @@ class extrafield extends JPlugin
               
              
 	}
-        
-	public function getLanguage($name)
-	{
-	    //LOAD LANGUAGE --------------------------------------------------------------
-            $lang   =&JFactory::getLanguage();
-            $lang->load( 'plg_fieldsattachment_'.$name  );
-            $lang = &JFactory::getLanguage(); ;
-            $lang_file="plg_fieldsattachment_".$name ;
-            $sitepath1 = JPATH_BASE ;
-            $sitepath1 = str_replace ("administrator", "", $sitepath1);
-            $path = $sitepath1."languages/". $lang->getTag()."/".$lang->getTag().".".$lang_file.".php.ini";
+
+  static public function construct1( )
+  {
+              
              
-            if(JFile::exists($path)){ 
-               JPlugin::loadLanguage( 'plg_fieldsattachment_'.$name );
-            }else{
-		$path = $sitepath1."languages/en-GB/en-GB.".$lang_file.".php.ini";
-		 
-		if(JFile::exists($path)){
-			echo "SSI".$path;
-			JPlugin::loadLanguage( 'plg_fieldsattachment_'.$name );
-		}
-	    }
+  }
+
+  
+        
+	static public function getLanguage($name)
+	{
+     //JSON LANGUAGE*************** 
+      $lang = JFactory::getLanguage();
+      $extension = 'plg_fieldsattachment_'.$name;
+      $base_dir = JPATH_ADMINISTRATOR;
+      //$language_tag = 'en-GB';
+      $language_tag = JFactory::getLanguage();
+      $lang = JFactory::getLanguage(); 
+      $languages = JLanguageHelper::getLanguages('lang_code'); 
+      $language_tag = $languages[ $lang->getTag() ]->sef; 
+
+      $reload = true;
+      $lang->load($extension, $base_dir, $language_tag, $reload);  
 	    
 	    
 	}
 	
 	  
-        public function getName()
-        {  
-                return  $this->name;
-        }
+  static public function getName()
+  {  
 
-        public function renderHelpConfig(  )
-        { 
-             
-            
-            return  $return;
-        }
+      return "input";
+         // return  $this->name;
+  }
+
+   public function renderHelpConfig(  )
+  { 
+       
+      
+      return  $return;
+  }
 
 
 
-        function renderInput($articleid, $fieldsid, $value , $extras = null)
-        {
-        }
+  static function renderInput($articleid, $fieldsid, $value , $extras = null)
+  {
+  }
 
-        function getoptionConfig($valor, $name)
-        {
-             $name = $this->name;
-             $return ='<option value="'.$name.'" ';
-             if($name == $valor)   $return .= 'selected="selected"';
-             $return .= '>'.$name.'</option>';
-             return $return ;
-        }
+  static function getoptionConfig($valor, $name)
+  {
+        //eval("$name =".$name."::getName()");
+       $return ='<option value="'.$name.'" ';
+       if($name == $valor)   $return .= 'selected="selected"';
+       $return .= '>'.$name.'</option>';
+       return $return ;
+  }
 
-        function getHTML($articleid, $fieldid, $category = false, $write=false)
-        { 
-            
-        }
+   
+  static function getHTML($articleid, $fieldid, $category = false, $write=false)
+  { 
+      
+  }
         
         /**
 	 * getPublish
@@ -98,26 +102,26 @@ class extrafield extends JPlugin
 	 * @since	1.0
 	 */
         
-        function getPublished( $fieldsids  )
-        { 
-             
-            
-	    $db = &JFactory::getDBO(  );
+    static function getPublished( $fieldsids  )
+    { 
+         
+        
+  $db = JFactory::getDBO(  );
 
-	    $query = 'SELECT  a.published  FROM #__fieldsattach  as a WHERE a.id = '.$fieldsids;
-            $return="true|true";
-            
-            $db->setQuery( $query );
-	    $published = $db->loadResult();  
-            
-            return $published;
-        }
-	
+  $query = 'SELECT  a.published  FROM #__fieldsattach  as a WHERE a.id = '.$fieldsids;
+        $return="true|true";
+        
+        $db->setQuery( $query );
+  $published = $db->loadResult();  
+        
+        return $published;
+    }
 
-        function action()
-        {
 
-        }
+    function action( $articleid, $fieldsid, $fieldsvalueid )
+    {
+
+    }
 	
 	/**
 	 * getTemplate
@@ -126,12 +130,12 @@ class extrafield extends JPlugin
 	 * @return  	html of field
 	 * @since	1.0
 	 */
-        function getTemplate($fieldsids,$name="")
+        static function getTemplate($fieldsids,$name="")
         {
 	      if(empty($name)) $name="input";
              //Search field template GENERIC *****************************************************************
               //$templateDir =  dirname(__FILE__).'/tmpl/'.$this->name.'.tpl.php';
-	      $templateDir =  JPATH_ROOT.'/plugins/fieldsattachment/'.$name.'/tmpl/'.$name.'.tpl.php';
+	            $templateDir =  JPATH_ROOT.'/plugins/fieldsattachment/'.$name.'/tmpl/'.$name.'.tpl.php';
 	       
               $html = file_get_contents ($templateDir);
 	      
