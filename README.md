@@ -1,7 +1,7 @@
 <h1 style="color:#f00">VERY VERY IMPORTANT</h1>
 
 Last VERSION, THIS VERSION!!! WITHOUT Non-adherence to Strict Standards with PHP 5.4.
-Before update it, make atest in a local server, <br />
+Before update it, make a test in a local server, <br />
 
 <h3>NOT DIRECT IN LIVE SERVER</h3>.<br />
 The package have a lote of changes and modification and could be error with old EXTRAFIELDS. 
