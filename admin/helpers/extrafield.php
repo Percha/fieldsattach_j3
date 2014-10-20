@@ -49,7 +49,7 @@ class extrafield extends JPlugin
       $language_tag = JFactory::getLanguage();
       $lang = JFactory::getLanguage(); 
       $languages = JLanguageHelper::getLanguages('lang_code'); 
-      $language_tag = $languages[ $lang->getTag() ]->sef; 
+      $language_tag = (isset($languages[$lang->getTag()])) ? $languages[ $lang->getTag() ]->sef : null;
 
       $reload = true;
       $lang->load($extension, $base_dir, $language_tag, $reload);  
