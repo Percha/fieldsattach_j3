@@ -51,11 +51,7 @@
 			<option value="">Select one please</option>
 		</field>
 
-        <field name="language" type="contentlanguage" label="JFIELD_LANGUAGE_LABEL"
-			description="COM_CONTENT_FIELD_LANGUAGE_DESC" class="inputbox"
-		>
-			<option value="*">JALL</option>
-		</field>
+      
         
         <field
 			name="type"
@@ -70,6 +66,13 @@
                     <option value="">Select one please</option>
                      
 		</field>
+		 
+		<field name="language" type="contentlanguage" label="JFIELD_LANGUAGE_LABEL"
+			description="COM_CONTENT_FIELD_LANGUAGE_DESC" class="inputbox"
+		>
+			<option value="*">JALL</option>
+		</field>
+
         <field
 			name="published"
 			type="list"
