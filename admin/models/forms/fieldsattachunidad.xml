@@ -106,7 +106,7 @@
         </field>
         <field
 			name="extras"
-			type="hidden"
+			type="textarea"
 			label="COM_FIELDSATTACH_FIELDSATTACH_FIELD_SHOW_EXTRAS_LABEL"
 			description="COM_FIELDSATTACH_FIELDSATTACH_FIELD_SHOW_EXTRAS_DESC"
 			default=""
