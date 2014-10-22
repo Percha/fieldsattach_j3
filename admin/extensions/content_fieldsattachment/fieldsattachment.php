@@ -25,13 +25,9 @@ JLoader::register('fieldsattachHelper',    'administrator/components/com_fieldsa
  */
 class plgContentfieldsattachment extends JPlugin
 {
-         private $path;
-         private $array_fields;
-        /* public function __construct(&$subject, $config = array())
-	{
-             echo "aaaaaaaaaaaaaaaaaaa";
-             parent::__construct($subject);
-         }*/
+   private $path;
+   private $array_fields;
+        
 	/**
 	 * Handle extension uninstall
 	 *
@@ -102,9 +98,8 @@ class plgContentfieldsattachment extends JPlugin
             $tmp_fields = fieldsattachHelper::getfieldsForAll($article->id);
             
             $fields[]=array();
-           // $fields = $this->getfields($article->id);
+           
             $fields =fieldsattachHelper::getfields($article->id);
-
 
             $fields = array_merge($tmp_fields, $fields );
 
@@ -112,9 +107,7 @@ class plgContentfieldsattachment extends JPlugin
             $fields_tmp2 = fieldsattachHelper::getfieldsForArticlesid($article->id, $fields);
 
             $fields = array_merge($fields, $fields_tmp2 );
-                
 
-            
             if(count($fields)>0){
                         //$body = str_replace('</head>', $header_code.'</head>', $body); 
                           $idgroup =  $fields[0]->idgroup;
@@ -129,74 +122,39 @@ class plgContentfieldsattachment extends JPlugin
                                 foreach ($results_plugins as $obj)
                                 {
                                     $function  = "plgfieldsattachment_".$obj->element."::construct1();";
-                                                    //NEW PACTH CRISTIAN 10_04_2012 =======================
-										                                $base = JPATH_SITE;
-                                                    $file = $base.'/plugins/fieldsattachment/'.$obj->element.'/'.$obj->element.'.php';
-                                                    //echo "<br>".$file;
-                                                    if( JFile::exists($file)){
-                                                        //file exist
-                                                        //echo "FFFF:".$function;
-                                                        eval($function);
-                                                                                    // eval($function);
-                                                        $i = count($this->array_fields);
-                                                        $this->array_fields[$i] = $obj->element;
-                                                        //$str .= "<br> ".$field->type." == ".$obj->element;
-                                                        if (($field->type == $obj->element)&&($field->visible ))
-                                                        {
-                                                            $function  = "plgfieldsattachment_".$obj->element."::getHTML(".$article->id.",". $field->id.");";
-                                                            //$str .= "<br> ".$function ;
-                                                            if($field->positionarticle==1){
-                                                               
-                                                                eval("\$str_before .=".  $function.""); 
-                                                            }else
-                                                            {
-                                                                 eval("\$str .=".  $function.""); 
-                                                            }
-                                                            // $str .= $function;  	
-                                                        }
-                                                    }
-									//=====================================================
-                                    
+                                    //NEW PACTH CRISTIAN 10_04_2012 =======================
+		                                $base = JPATH_SITE;
+                                    $file = $base.'/plugins/fieldsattachment/'.$obj->element.'/'.$obj->element.'.php';
+                                    //echo "<br>".$file;
+                                    if( JFile::exists($file)){
+                                        //file exist 
+                                        eval($function);
+                                                                    // eval($function);
+                                        $i = count($this->array_fields);
+                                        $this->array_fields[$i] = $obj->element;
+                                        //$str .= "<br> ".$field->type." == ".$obj->element;
+                                        if (($field->type == $obj->element)&&($field->visible ))
+                                        {
+                                            $function  = "plgfieldsattachment_".$obj->element."::getHTML(".$article->id.",". $field->id.");";
+                                            //$str .= "<br> ".$function ;
+                                            if($field->positionarticle==1){
+                                               
+                                                eval("\$str_before .=".  $function.""); 
+                                            }else
+                                            {
+                                                 eval("\$str .=".  $function.""); 
+                                            }
+                                            // $str .= $function;  	
+                                        }
+                                    }
+									                  //===================================================== 
                                 }
 
-                              /*
-
-                              //EXTRA INFORMATION
-                              $width = '400';
-                              $height = '400';
-                              $filter = '';
-                              if(!empty($field->extras))
-                                {
-                                    //$lineas = explode('":"',  $field->params);
-                                    //$tmp = substr($lineas[1], 0, strlen($lineas[1])-2);
-                                    $tmp = $field->extras;
-                                    //$str .= "<br> resultado1: ".$tmp;
-                                    $lineas = explode(chr(13),  $tmp);
-                                    //$str .= "<br> resultado2: ".$lineas[0];
-
-                                    foreach ($lineas as $linea)
-                                    {
-                                        $tmp = explode('|',  $linea);
-                                        if (!empty($tmp[0])) $width = $tmp[0];
-                                        if (!empty($tmp[1])) $height = $tmp[1];
-                                        if (!empty($tmp[2])) $filter = $tmp[2];
-                                    }
-
-                                }  
-                                //************************************************************************
-                                //**************************** multiple select **********************
-                                //***********************************************************************
-                                  if (($field->type == "select_multiple")&&($field->visible ))
-                                    {
-                                       $str .= fieldattach::getSelectmultiple($article->id, $field->id);
-                                    }
-                                
-
-                               */
+                              
                                //************************************************************************
                               //**************************** titulo campos **********************
                               //***********************************************************************
-                             //&& (!empty( $fields[$cont+1] )) 
+                              
                               if(($cont+1)< count($fields) ){
                                   if(($idgroup != $fields[$cont+1]->idgroup) &&(!empty($str)))
                                   {
@@ -216,93 +174,6 @@ class plgContentfieldsattachment extends JPlugin
             }
 
           
-        }
-/*
-        private function getfields($id)
-        {
-            jimport('joomla.language.helper');
-            $result ="";
-            $languages	= JLanguageHelper::getLanguages();
-            $app	= JFactory::getApplication();
-            $db	= & JFactory::getDBO();
-            $query = 'SELECT  a.catid,a.language FROM #__content as a WHERE a.id='. $id  ;
-
-            $db->setQuery( $query );
-            $elid = $db->loadObject(); 
-            $this->recursivecat($elid->catid, "");
-           //  echo "<br>".$query." ".$elid->catid." ->  ".$this->str;
-            //echo "<br>recursivecat : ".$this->str;
-            //echo $db->loadObject();
-            if(!empty($elid->catid)){
-                $db	= & JFactory::getDBO();
-
-                $query = 'SELECT a.id as idgroup, a.title as titlegroup, a.showtitle as shortitlegroup, a.catid, a.recursive, b.* , b.showtitle  FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
-                $query .= ' WHERE a.catid IN ('. $this->str .') AND a.published=1 AND b.published = 1';
-                //echo "Language: ".$elid->language;
-                if ($app->getLanguageFilter() && (JRequest::getVar("language") == $elid->language ) ) {
-                     $query .= ' AND (a.language="'.$elid->language.'" OR a.language="*" ) AND (b.language="'.$elid->language.'" OR b.language="*") ' ;
-                    // echo "filter::". $app->getLanguageFilter();
-                    // echo "filter::". JRequest::getVar("language");
-                }
-                $query .= ' ORDER BY a.ordering, a.title,b.ordering';
-                $db->setQuery( $query );
-                $result = $db->loadObjectList();
-
-      //echo $query;
-
-                //***********************************************************************************************
-                //Mirar cual de los grupos es RECURSIVO  ****************  ****************  ****************
-                //***********************************************************************************************
-                $cont = 0;
-                foreach ($result as $field)
-                {
-                    
-                    if( $field->catid != $elid->catid )
-                    {
-                        //Mirar si recursivamente si
-                        if(!$field->recursive)
-                            {
-                                //echo "ELIMINO DE LA LISTA " ;
-                                unset($result[$cont]);
-                            }
-                    }
-                    $cont++;
-                } 
-                 
-            }
-
-            return $result;
-        }
-
-        private function getfieldsvalue($fieldsid, $articleid)
-        {
-            $result ="";
-            $db	= & JFactory::getDBO();
-            $query = 'SELECT a.value FROM #__fieldsattach_values as a WHERE a.fieldsid='. $fieldsid.' AND a.articleid='.$articleid  ;
-            // echo "<br>GET VALUE:: ".$query;
-            $db->setQuery( $query );
-            $elid = $db->loadObject();
-            $return ="";
-            if(!empty($elid))  $return =$elid->value;
-            return $return ;
-        }
- 
-
-        function recursivecat($catid)
-        { 
-                if(!empty($this->str)) $this->str .=  ",";
-                $this->str .= $catid ;
-                //echo "SUMO:".$str."<br>";
-                $db	= & JFactory::getDBO();
-                $query = 'SELECT parent_id FROM #__categories as a WHERE a.id='.$catid   ;
-                //echo $query."<br>";
-                $db->setQuery( $query );
-                $tmp = $db->loadObject();
-
-                if($tmp->parent_id>0) $this->recursivecat($tmp->parent_id);
-
-
-
-        } */
+        } 
 
 } 
