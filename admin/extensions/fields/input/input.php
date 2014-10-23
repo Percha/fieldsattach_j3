@@ -133,32 +133,12 @@ class plgfieldsattachment_input extends extrafield
 
         static function getHTML($articleid, $fieldid, $category = false, $write=false)
         { 
-          global $globalreturn;
-
+            global $globalreturn;
           //$str = fieldattach::getInput($articleid, $fieldid, $category); 
           $html ='';
-          
-         
-
-          //if(function_exists( 'fieldattach::getFieldValues' )) 
-          if(method_exists ( 'fieldattach' , 'getFieldValues' ))
-          {
-            $jsonValues       = fieldattach::getFieldValues( $articleid,  $fieldid , $category   );
-            $jsonValuesArray  = json_decode($jsonValues); 
-
-
-            $valor      = $jsonValuesArray->value;
-            $title      = $jsonValuesArray->title;
-            $published  = $jsonValuesArray->published;
-
-          }
-          else
-          {
-            $valor = fieldattach::getValue( $articleid,  $fieldid , $category   );
-            $title = fieldattach::getName( $articleid,  $fieldid , $category  );
-            $published = plgfieldsattachment_input::getPublished( $fieldid  );
-
-          } 
+          $valor = fieldattach::getValue( $articleid,  $fieldid , $category   );
+          $title = fieldattach::getName( $articleid,  $fieldid , $category  );
+          $published = plgfieldsattachment_input::getPublished( $fieldid  );
 
 
           if(!empty($valor) && $published)

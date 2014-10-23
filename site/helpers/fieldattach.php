@@ -19,41 +19,8 @@ JLoader::register('fieldsattachHelper',  JPATH_INSTALLATION.DS.'..'.DS.'administ
 
 class fieldattach
 {
-  /**
-   * Return the value and Title in a json
-   *
-   * @param $id  id of article
-            *  $fieldsids  id of field
-   *
-   * @return  value to field.
-   * @since 1.6
-   */
 
-  static public function getFieldValues($articleid, $fieldsids, $category  = false)
-  {
-      $db = JFactory::getDBO(  );
-      /*if(!$category){
-                $query = 'SELECT  b.*  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsids.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.articleid= '.$articleid;
-      }else{
-                $query = 'SELECT  b.*  FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsids.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.catid= '.$articleid;
-      }*/
-      $query = 'SELECT  b.title , a.value, b.published  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsids.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.articleid= '.$articleid;
-
-      if($category)  $query = 'SELECT  b.title , a.value, b.published   FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsids.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.catid= '.$articleid;
-
-
-
-      //echo $query."<br>";
-      $db->setQuery( $query );
-      
-      $result = $db->loadObject();
-
-      //var_dump($result) ;
-
-      return json_encode($result);
-  }
-
-   /**
+        /**
 	 * Return the value of field
 	 *
 	 * @param	$id	 id of article
@@ -65,19 +32,19 @@ class fieldattach
 	static public function getName($articleid, $fieldsids, $category  = false)
 	{
 	    $db = JFactory::getDBO(  );
-      if(!$category){
+            if(!$category){
                 $query = 'SELECT  b.title  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsids.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.articleid= '.$articleid;
 	    }else{
                 $query = 'SELECT  b.title  FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsids.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.catid= '.$articleid;
 	    }
 	    //echo $query."<br>";
-      $db->setQuery( $query );
-      $result = $db->loadResult();
-      $str = "";
-      if(!empty($result)) $str = $result;
-	    return $str;
+            $db->setQuery( $query );
+	    $result = $db->loadResult();
+            $str = "";
+            if(!empty($result)) $str = $result;
+	     return $str;
 	}
-  /**
+        /**
 	 * Return the value of field
 	 *
 	 * @param	$id	 id of article
@@ -120,13 +87,13 @@ class fieldattach
             //$valor = fieldattach::getValue($articleid, $fieldsids, $category );
             $valortmp = explode(",", $valor);
             
-	           $db = JFactory::getDBO(  );
+	    $db = JFactory::getDBO(  );
 
-	           $query = 'SELECT  a.extras  FROM #__fieldsattach  as a WHERE a.id = '.$fieldsids;
+	    $query = 'SELECT  a.extras  FROM #__fieldsattach  as a WHERE a.id = '.$fieldsids;
  
             //echo "<br/>  ".$query."<br/>";
             $db->setQuery( $query );
-	          $extras = $db->loadResult(); 
+	    $extras = $db->loadResult(); 
             $str = "";
             $tmp  = array();
             if(!empty($extras)) {

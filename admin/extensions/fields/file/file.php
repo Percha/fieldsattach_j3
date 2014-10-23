@@ -279,25 +279,9 @@ class plgfieldsattachment_file extends extrafield
         }
          
         //GET Values ***************************
-        
-        if(method_exists ( 'fieldattach' , 'getFieldValues' ))
-        {
-            $jsonValues       = fieldattach::getFieldValues( $articleid,  $fieldsid , $category   );
-            $jsonValuesArray  = json_decode($jsonValues); 
-
-
-            $valor      = $jsonValuesArray->value;
-            $title      = $jsonValuesArray->title;
-            $published  = $jsonValuesArray->published;
-
-        }
-        else
-        {
-            $valor = fieldattach::getValue( $articleid,  $fieldsids, $category  );
-            $title = fieldattach::getName($articleid,  $fieldsids);
-            $published = plgfieldsattachment_file::getPublished( $fieldsid  );
-
-        }  
+        $valor = fieldattach::getValue( $articleid,  $fieldsids, $category  );
+        $title = fieldattach::getName($articleid,  $fieldsids);
+        $published = plgfieldsattachment_file::getPublished( $fieldsid  );
           
         $directorio ="documents";
         
