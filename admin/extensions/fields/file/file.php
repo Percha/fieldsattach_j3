@@ -289,6 +289,7 @@ class plgfieldsattachment_file extends extrafield
             $valor      = $jsonValuesArray->value;
             $title      = $jsonValuesArray->title;
             $published  = $jsonValuesArray->published;
+             $showTitle  = $jsonValuesArray->showtitle;
 
         }
         else
@@ -296,6 +297,7 @@ class plgfieldsattachment_file extends extrafield
             $valor = fieldattach::getValue( $articleid,  $fieldsids, $category  );
             $title = fieldattach::getName($articleid,  $fieldsids);
             $published = plgfieldsattachment_file::getPublished( $fieldsid  );
+            $showTitle  = fieldattach::getShowTitle(   $fieldid  );
 
         }  
           
@@ -324,7 +326,7 @@ class plgfieldsattachment_file extends extrafield
         
         
         if(!empty($valor) && $published){
-            $title = fieldattach::getName($articleid, $fieldsid, $category);
+            //$title = fieldattach::getName($articleid, $fieldsid, $category);
             $html = plgfieldsattachment_file::getTemplate($fieldsid, "file");
             
             
@@ -339,7 +341,7 @@ class plgfieldsattachment_file extends extrafield
 
             */ 
 
-            if(fieldattach::getShowTitle(   $fieldsid  )) $html = str_replace("[TITLE]", $title, $html); 
+            if($showTitle) $html = str_replace("[TITLE]", $title, $html); 
             else $html = str_replace("[TITLE]", "", $html); 
 
             $html = str_replace("[FIELD_ID]", $fieldsid, $html);
