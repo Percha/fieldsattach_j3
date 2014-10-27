@@ -116,18 +116,39 @@ class plgfieldsattachment_select extends extrafield
         global $globalreturn;
         //$str  = fieldattach::getSelect($articleid, $fieldsid);
         
-          $valor = fieldattach::getValue( $articleid,  $fieldsid, $category  );
-          $title = fieldattach::getName( $articleid,  $fieldsid , $category );
-          $published = plgfieldsattachment_select::getPublished( $fieldsid  );
+          //$valor = fieldattach::getValue( $articleid,  $fieldsid, $category  );
+          //$title = fieldattach::getName( $articleid,  $fieldsid , $category );
+          //$published = plgfieldsattachment_select::getPublished( $fieldsid  );
+
+          if(method_exists ( 'fieldattach' , 'getFieldValues' ))
+          {
+            $jsonValues       = fieldattach::getFieldValues( $articleid,  $fieldsid , $category   );
+            $jsonValuesArray  = json_decode($jsonValues); 
+
+
+            $valor      = $jsonValuesArray->value;
+            $title      = $jsonValuesArray->title;
+            $published  = $jsonValuesArray->published;
+
+          }
+          else
+          {
+            $valor = fieldattach::getValue( $articleid,  $fieldsid, $category  );
+            $title = fieldattach::getName( $articleid,  $fieldsid , $category );
+            $published = plgfieldsattachment_select::getPublished( $fieldsid  );
+
+          } 
 
           $html="";
             
           if(!empty($valor) && $published)
           {
-              $isNull= plgfieldsattachment_select::isNull( $fieldsid , $valor, $category );
+              //$isNull= plgfieldsattachment_select::isNull( $fieldsid , $valor, $category );
+              $valorselects = fieldattach::getValueSelect( $fieldsid , $valor );
               //echo "<br />ISNULL:".$isNull."---<br/>";
-              if(!$isNull){
-                    $valorselects = fieldattach::getValueSelect( $fieldsid , $valor );
+              //if(!$isNull){
+              if(!empty($valorselects)){
+                    
                     
                     $html = plgfieldsattachment_select::getTemplate($fieldsid, "select");
           
@@ -192,7 +213,7 @@ class plgfieldsattachment_select extends extrafield
 
 	    $query = 'SELECT  a.extras  FROM #__fieldsattach  as a WHERE a.id = '.$fieldsids;
  
-            //echo "<br/>  ".$query."<br/>";
+            echo "<br/>  qqq".$query."<br/>";
             $db->setQuery( $query );
 	    $extras = $db->loadResult();  
             $retorno = false;
