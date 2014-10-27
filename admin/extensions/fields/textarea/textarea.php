@@ -82,12 +82,27 @@ class plgfieldsattachment_textarea extends extrafield
     static function getHTML($articleid, $fieldsid, $category = false, $write=false )
     {
         global $globalreturn;
+
+        if(method_exists ( 'fieldattach' , 'getFieldValues' ))
+          {
+            $jsonValues       = fieldattach::getFieldValues( $articleid,  $fieldsid , $category   );
+            $jsonValuesArray  = json_decode($jsonValues); 
+
+
+            $valor      = $jsonValuesArray->value;
+            $title      = $jsonValuesArray->title;
+            $published  = $jsonValuesArray->published;
+
+          }
+          else
+          {
+            $valor = fieldattach::getValue($articleid, $fieldsid, $category);
+            $title = fieldattach::getName( $articleid,  $fieldsid , $category  );
+            $published = plgfieldsattachment_textarea::getPublished( $fieldsid  );
+
+          }  
         
-        $valor = fieldattach::getValue($articleid, $fieldsid, $category);
-        $title = fieldattach::getName( $articleid,  $fieldsid , $category  );
-        
-        $html ="";
-        $published = plgfieldsattachment_textarea::getPublished( $fieldsid  );
+        $html =""; 
         if(!empty($valor) && $published){ 
             $html = plgfieldsattachment_textarea::getTemplate($fieldsid, "textarea");
 
