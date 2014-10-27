@@ -194,48 +194,71 @@ class plgfieldsattachment_image extends extrafield
              
 
            //Categories ============================================================================
-           if (($category ))
+           if ($category )
            { 
                  $directorio=  'documentscategories';
                 
            }
+
+           if(method_exists ( 'fieldattach' , 'getFieldValues' ))
+          {
+            $jsonValues       = fieldattach::getFieldValues( $articleid,  $fieldsid , $category   );
+            $jsonValuesArray  = json_decode($jsonValues); 
+
+
+            $valor      = $jsonValuesArray->value;
+            $title      = $jsonValuesArray->title;
+            $published  = $jsonValuesArray->published;
+            $showTitle  = $jsonValuesArray->showtitle;
+
+          }
+          else
+          {
+            $valor = fieldattach::getValue( $articleid,  $fieldsid, $category  );
+            $title = fieldattach::getName( $articleid,  $fieldsid , $category );
+            $published = plgfieldsattachment_select::getPublished( $fieldsid  );
+            $showTitle  = fieldattach::getShowTitle(   $fieldid  );
+
+          } 
+
+
+
             
-            
+            /*
             $db = JFactory::getDBO(  );
 	    	$query = 'SELECT  a.value  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsid.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*") AND a.articleid= '.$articleid;
+            
+
             if($category) {
-                 $query = 'SELECT  a.value  FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsid.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*") AND a.catid= '.$articleid;
+                $query = 'SELECT  a.value  FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsid.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*") AND a.catid= '.$articleid;
                 $directorio = 'documentscategories' ;
 
             }
 
             $db->setQuery( $query );
 	        $result = $db->loadResult();
-            $file="";
+	        */
+            $file=""; 
             
-            $title="";
-            
-            $published = plgfieldsattachment_image::getPublished( $fieldsid  );
+            //$published = plgfieldsattachment_image::getPublished( $fieldsid  );
               
 
-            if(!empty($result) && $published) {
+            if(!empty($valor) && $published) {
                 
-                $file = $result;
-                
-                
-                
+                $file = $valor;
+                 
                 
                 if (JFile::exists( JPATH_ROOT .DS."images".DS.$directorio.DS. $articleid .DS. $file)  )
                 {
                        // $html .=  '<img src="images/'.$directorio.'/'.$articleid.'/'.$result.'" title = "'.$title.'" alt="'.$title.'" />' ;
                         $html = plgfieldsattachment_image::getTemplate($fieldsid, "image");
-                        $url = 'images/'.$directorio.'/'.$articleid.'/'.$result ;
+                        $url = 'images/'.$directorio.'/'.$articleid.'/'.$valor ;
                         
                 }else{
-                    if (JFile::exists( JPATH_ROOT .DS.$result)  ){
+                    if (JFile::exists( JPATH_ROOT .DS.$valor)  ){
                         //$html .=  '<img src="'.$result.'" title = "'.$title.'" alt="'.$title.'" />' ;
                         $html = plgfieldsattachment_image::getTemplate($fieldsid, "image");
-                        $url = $result;
+                        $url = $valor;
                     }
                 }
 		
@@ -252,7 +275,7 @@ class plgfieldsattachment_image extends extrafield
                
                 */ 
                 
-                if(fieldattach::getShowTitle(   $fieldsid  )) $html = str_replace("[TITLE]", $title, $html); 
+                if($showTitle) $html = str_replace("[TITLE]", $title, $html); 
                 else $html = str_replace("[TITLE]", "", $html); 
                 
               
