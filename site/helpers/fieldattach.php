@@ -39,7 +39,7 @@ class fieldattach
       }*/
       $query = 'SELECT  b.title , a.value, b.published  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsids.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.articleid= '.$articleid;
 
-      if($category)  $query = 'SELECT  b.title , a.value, b.published   FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsids.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.catid= '.$articleid;
+      if($category)  $query = 'SELECT  b.title , a.value, b.published, b.showtitle   FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsids.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.catid= '.$articleid;
 
 
 
@@ -47,6 +47,8 @@ class fieldattach
       $db->setQuery( $query );
       
       $result = $db->loadObject();
+
+      //$result->value = base64_encode( $result->value );
 
       //var_dump($result) ;
 
