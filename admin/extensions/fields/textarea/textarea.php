@@ -86,12 +86,13 @@ class plgfieldsattachment_textarea extends extrafield
         if(method_exists ( 'fieldattach' , 'getFieldValues' ))
           {
             $jsonValues       = fieldattach::getFieldValues( $articleid,  $fieldsid , $category   );
-            $jsonValuesArray  = json_decode($jsonValues); 
+            $jsonValuesArray  = (json_decode($jsonValues)); 
 
-
-            $valor      = $jsonValuesArray->value;
+          
+            $valor      = html_entity_decode($jsonValuesArray->value);
             $title      = $jsonValuesArray->title;
             $published  = $jsonValuesArray->published;
+            $showTitle  = $jsonValuesArray->showtitle;
 
           }
           else
@@ -99,6 +100,7 @@ class plgfieldsattachment_textarea extends extrafield
             $valor = fieldattach::getValue($articleid, $fieldsid, $category);
             $title = fieldattach::getName( $articleid,  $fieldsid , $category  );
             $published = plgfieldsattachment_textarea::getPublished( $fieldsid  );
+            $showTitle  = fieldattach::getShowTitle(   $fieldsid  );
 
           }  
         
@@ -115,7 +117,7 @@ class plgfieldsattachment_textarea extends extrafield
 
             */ 
 
-            if(fieldattach::getShowTitle(   $fieldsid  )) $html = str_replace("[TITLE]", $title, $html); 
+            if($showTitle) $html = str_replace("[TITLE]", $title, $html); 
             else $html = str_replace("[TITLE]", "", $html); 
 
             $html = str_replace("[VALUE]", $valor, $html);

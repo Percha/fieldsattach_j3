@@ -126,9 +126,10 @@ class plgfieldsattachment_select extends extrafield
             $jsonValuesArray  = json_decode($jsonValues); 
 
 
-            $valor      = $jsonValuesArray->value;
+            $valor      = html_entity_decode($jsonValuesArray->value);
             $title      = $jsonValuesArray->title;
             $published  = $jsonValuesArray->published;
+            $showTitle  = $jsonValuesArray->showtitle;
 
           }
           else
@@ -136,6 +137,7 @@ class plgfieldsattachment_select extends extrafield
             $valor = fieldattach::getValue( $articleid,  $fieldsid, $category  );
             $title = fieldattach::getName( $articleid,  $fieldsid , $category );
             $published = plgfieldsattachment_select::getPublished( $fieldsid  );
+            $showTitle  = fieldattach::getShowTitle(   $fieldid  );
 
           } 
 
@@ -164,7 +166,7 @@ class plgfieldsattachment_select extends extrafield
 		
 		 
 
-                    if(fieldattach::getShowTitle(   $fieldsid  )) $html = str_replace("[TITLE]", $title, $html); 
+                    if($showTitle) $html = str_replace("[TITLE]", $title, $html); 
                     else $html = str_replace("[TITLE]", "", $html); 
 
                     $html = str_replace("[VALUE]", stripslashes($valorselects), $html);

@@ -147,16 +147,18 @@ class plgfieldsattachment_input extends extrafield
             $jsonValuesArray  = json_decode($jsonValues); 
 
 
-            $valor      = $jsonValuesArray->value;
+            $valor      = html_entity_decode($jsonValuesArray->value);
             $title      = $jsonValuesArray->title;
             $published  = $jsonValuesArray->published;
+            $showTitle  = $jsonValuesArray->showtitle;
 
           }
           else
           {
-            $valor = fieldattach::getValue( $articleid,  $fieldid , $category   );
-            $title = fieldattach::getName( $articleid,  $fieldid , $category  );
-            $published = plgfieldsattachment_input::getPublished( $fieldid  );
+            $valor      = fieldattach::getValue( $articleid,  $fieldid , $category   );
+            $title      = fieldattach::getName( $articleid,  $fieldid , $category  );
+            $published  = plgfieldsattachment_input::getPublished( $fieldid  );
+            $showTitle  = fieldattach::getShowTitle(   $fieldid  );
 
           } 
 
@@ -176,7 +178,7 @@ class plgfieldsattachment_input extends extrafield
                
               */ 
               
-              if(fieldattach::getShowTitle(   $fieldid  )) $html = str_replace("[TITLE]", $title, $html); 
+              if($showTitle) $html = str_replace("[TITLE]", $title, $html); 
               else $html = str_replace("[TITLE]", "", $html); 
               
               $html = str_replace("[VALUE]", $valor, $html);
