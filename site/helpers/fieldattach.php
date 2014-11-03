@@ -711,7 +711,7 @@ class fieldattach
 	 */
         public function creteButtonImage($id, $fieldsids, $width, $height)
         {
-            $db = &JFactory::getDBO(  );
+            $db = JFactory::getDBO(  );
             $path=  'images'.DS.'documents';
 
             $query = 'SELECT  a.value  FROM #__fieldsattach_values as a WHERE fieldsid='.$fieldsids.' AND articleid= '.$id;
@@ -844,7 +844,7 @@ class fieldattach
             $value = fieldattach::getValue($articleid, $fieldsids,$category);
             
             
-            $db = &JFactory::getDBO(  );
+            $db = JFactory::getDBO(  );
 
 	    $query = 'SELECT  a.extras  FROM #__fieldsattach  as a WHERE a.id = '.$fieldsids;
   
@@ -929,19 +929,20 @@ class fieldattach
 	 * @return	value to link.
 	 * @since	1.6
 	 */
-        function getFieldValue($articleid, $fieldid, $category  = false)
+        static function getFieldValue($articleid, $fieldid, $category  = false)
         { 
             
-            $db = &JFactory::getDBO(  );
+            $db = JFactory::getDBO(  );
             if(!$category){
                 $query = 'SELECT  b.type  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE b.published= true AND  a.fieldsid IN ('.$fieldid.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.articleid= '.$articleid;
-	    }else{
+      	    }else{
                 $query = 'SELECT  b.type  FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE b.published= true AND a.fieldsid IN ('.$fieldid.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.catid= '.$articleid;
-	    } 
+      	    } 
+ 
              
             
             $db->setQuery( $query );
-	    $type = $db->loadResult();
+	          $type = $db->loadResult();
             $str = "";
               
               
@@ -951,7 +952,7 @@ class fieldattach
 
             //$this->array_fields = fieldsattachHelper::get_extensions() ;
  
-            $function  = "plgfieldsattachment_".$type."::getHTML( $articleid, $fieldid, false, true );";
+            $function  = "plgfieldsattachment_".$type."::getHTML( $articleid, $fieldid, $category , true );";
             $base = JPATH_BASE;
             $base = str_replace("/administrator", "", $base);
             $base = JPATH_SITE;
