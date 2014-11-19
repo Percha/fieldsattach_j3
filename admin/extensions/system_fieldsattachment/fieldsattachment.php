@@ -586,10 +586,9 @@ class plgSystemfieldsattachment extends JPlugin
                               
                         }else{
                              $valor = htmlspecialchars($valor);
-                        }
-                        
+                        } 
                         //INSERT 
-                        $query = 'INSERT INTO #__fieldsattach_values(articleid,fieldsid,value) VALUES ('.$article->id.',\''.  $obj->id .'\',\''.$valor.'\' )     ';
+                        $query = 'INSERT INTO #__fieldsattach_values(articleid,fieldsid,value) VALUES ('.$article->id.',\''.  $obj->id .'\','.$db->quote($valor).' )     ';
                         $db->setQuery($query);
                         $db->query();
 
