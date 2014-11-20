@@ -52,8 +52,7 @@ class fieldattach
 
       //var_dump($result) ;
 
-      //return json_encode($result);
-      return $result->value;
+      return json_encode($result);
   }
 
    /**
