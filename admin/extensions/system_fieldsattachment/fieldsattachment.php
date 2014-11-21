@@ -180,10 +180,10 @@ class plgSystemfieldsattachment extends JPlugin
 		//create array of fields  ****************  ****************  ****************
 		//***********************************************************************************************
 		//CATEGORIES ==============================================================
-		$user =& JFactory::getUser();
+		$user 	= JFactory::getUser();
 		$option = JRequest::getVar("option","");
 		$layout = JRequest::getVar('layout',""); 
-		$view= JRequest::getVar('view',"");
+		$view 	= JRequest::getVar('view',"");
 		$fontend = false; 
 		if( $option=='com_content' && $user->get('id')>0 &&  $view == 'form' &&  $layout == 'edit'  ) $fontend = true;
 		            
@@ -250,8 +250,8 @@ class plgSystemfieldsattachment extends JPlugin
 					
 			//IF TITLE THEN ACTIVE CONTENT =========================================================================================
 		
-			$db	=& JFactory::getDBO();
-			$user 	=& JFactory::getUser(); 
+			$db		= JFactory::getDBO();
+			$user 	= JFactory::getUser(); 
 				     
 				    
 	    
@@ -487,8 +487,8 @@ class plgSystemfieldsattachment extends JPlugin
 	*/
 	public function onContentAfterSave($context, $article, $isNew)
 	{   
-        $app = JFactory::getApplication();
-        $user =& JFactory::getUser();
+        $app 	= JFactory::getApplication();
+        $user 	= JFactory::getUser();
         $option = JRequest::getVar("option","");
         $layout = JRequest::getVar('layout',"");
         $extension = JRequest::getVar('extension',"");
@@ -531,7 +531,7 @@ class plgSystemfieldsattachment extends JPlugin
             
         if (($option=='com_content' && $layout=="edit" ) || $fontend)
        	{
-			$db	= & JFactory::getDBO();
+			$db	= JFactory::getDBO();
 			$nameslst = fieldsattachHelper::getfields($article->id);
             
             
@@ -1399,8 +1399,8 @@ class plgSystemfieldsattachment extends JPlugin
         	
 		$this->cleandatabase(); 
 			
-		$db	= & JFactory::getDBO();
-		$user =& JFactory::getUser();
+		$db		= JFactory::getDBO();
+		$user 	= JFactory::getUser();
 		$mysqldate = date( 'Y-m-d H:i:s' );
 		
 		//-----------------------
