@@ -79,24 +79,24 @@ class com_fieldsattachInstallerScript
                 
                 //ACTIVE THE PLUGINS *******************************************************************************
 
-                $db =& JFactory::getDBO();
+                $db = JFactory::getDBO();
                 $sql =  "UPDATE #__extensions  SET enabled = 1 WHERE  element = 'fieldsattachment'";
                 $db->setQuery($sql);
                 $db->query(); 
 
-                $db =& JFactory::getDBO();
+                $db = JFactory::getDBO();
                 $sql =  "UPDATE #__extensions  SET enabled = 1 WHERE  element = 'fieldsattachmentadvanced'";
                 $db->setQuery($sql);
                 $db->query(); 
 
-                $db =& JFactory::getDBO();
+                $db = JFactory::getDBO();
                 $sql =  "UPDATE #__extensions  SET enabled = 1 WHERE  folder = 'fieldsattachment'";
                 $db->setQuery($sql);
                 $db->query();
 
 
                 //DESACTIVE OLD SEARCH
-                $db =& JFactory::getDBO();
+                $db = JFactory::getDBO();
                 $sql =  "UPDATE #__extensions  SET enabled = 0 WHERE  element = 'fieldsattachment' AND folder='search'";
                 $db->setQuery($sql);
                 $db->query();
@@ -136,23 +136,23 @@ class com_fieldsattachInstallerScript
                 $msgtext .= 'Component uninstall FieldsAttach success';
                 $msgtext .= '</div>';
 
-                $db =& JFactory::getDBO();
+                $db = JFactory::getDBO();
                 $sql =  "UPDATE #__extensions  SET enabled = 0 WHERE  folder = 'fieldsattachment'";
                 $db->setQuery($sql);
                 $db->query();
 
-                $db =& JFactory::getDBO();
+                $db = JFactory::getDBO();
                 $sql =  "UPDATE #__extensions  SET enabled = 0 WHERE  element = 'fieldsattachment'";
                 $db->setQuery($sql);
                 $db->query(); 
 
-                $db =& JFactory::getDBO();
+                $db = JFactory::getDBO();
                 $sql =  "UPDATE #__extensions  SET enabled = 0 WHERE  element = 'fieldsattachmentadvanced'";
                 $db->setQuery($sql);
                 $db->query(); 
 
 
-                $db =& JFactory::getDBO();
+                $db = JFactory::getDBO();
 
                 $db->setQuery("select extension_id , name  from #__extensions where folder = 'fieldsattachment'");
                 $plugins = $db->loadObjectList();
