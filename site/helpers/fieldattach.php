@@ -931,6 +931,7 @@ class fieldattach
 	 */
         static function getFieldValue($articleid, $fieldid, $category  = false)
         { 
+            global $globalreturn ;
             
             $db = JFactory::getDBO(  );
             if(!$category){
@@ -940,32 +941,27 @@ class fieldattach
       	    } 
  
              
-            
+             
             $db->setQuery( $query );
 	          $type = $db->loadResult();
-            $str = "";
-              
-              
-              
-            JPluginHelper::importPlugin('fieldsattachment'); // very important
-                    //select
+            $str = ""; 
 
-            //$this->array_fields = fieldsattachHelper::get_extensions() ;
- 
-            $function  = "plgfieldsattachment_".$type."::getHTML( $articleid, $fieldid, $category , true );";
-            $base = JPATH_BASE;
-            $base = str_replace("/administrator", "", $base);
-            $base = JPATH_SITE;
-            $file = $base.'/plugins/fieldsattachment/'.$type.'/'.$type.'.php'; 
+            JPluginHelper::importPlugin('fieldsattachment'); // very important
+             
+            $function  = "plgfieldsattachment_".$type."::getHTML( ".$articleid.", ".$fieldid.", ".$category." , true );";
+              
+            $base = JPATH_SITE; 
+
+            $file = $base.'/plugins/fieldsattachment/'.$type.'/'.$type.'.php';  
             
             $html=""; 
             
             if( JFile::exists($file)){
-                //file exist
-                $html = eval($function);
+                //file exist 
+                eval($function);
             }
               
-            return $html; 
+            return $globalreturn ; 
         }
         
         
