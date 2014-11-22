@@ -1,4 +1,5 @@
 window.addEvent('domready', function() {
+
         var extras = $('jform_extras');
 
 
@@ -11,11 +12,11 @@ window.addEvent('domready', function() {
         var nom = 'percha_'+$('jform_type').value+'-params'; 
         open_actual(nom);
 	
-	//Event of tab for change propieties
-	var tabmenu = $$('#fieldsattach-form li a');
-	tabmenu.addEvents({
+    	//Event of tab for change propieties
+    	var tabmenu = $$('#fieldsattach-form li a');
+    	tabmenu.addEvents({
 		'click':function(){
-			 
+			             
                         hide_all();
                         var name_type = $("jform_type").get('value');
 			 
@@ -30,11 +31,31 @@ window.addEvent('domready', function() {
                     }
         });
 
+
+        //Modify the visible hidden field
+        $('jform_positionarticle0').addEvents({
+            'change':function(){
+                $('jform_visible').set('value', 1);
+            } 
+        });
+
+        $('jform_positionarticle1').addEvents({
+            'change':function(){
+                $('jform_visible').set('value', 1);
+            } 
+        });
+
+         $('jform_positionarticle2').addEvents({
+            'change':function(){
+                $('jform_visible').set('value', 0);
+            } 
+        });
+
  
-        var imagetype = $('jform_params_field_selectable');
+        /*var imagetype = $('jform_params_field_selectable');
         imagetype.addEvents({
 		'change':function(){
-                        
+                         alert('LALAALAL clickclickclick');
                          if(imagetype.get('value')=="selectable")
                          {
                             $("jform_params_field_width-lbl").setStyle('display','none');
@@ -53,7 +74,7 @@ window.addEvent('domready', function() {
                          }
                           
                     }
-        });
+        });*/
 
 
 
