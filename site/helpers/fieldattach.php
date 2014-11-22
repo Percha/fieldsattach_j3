@@ -947,6 +947,8 @@ class fieldattach
             $str = ""; 
 
             JPluginHelper::importPlugin('fieldsattachment'); // very important
+
+	    if(empty($category)) $category = true;
              
             $function  = "plgfieldsattachment_".$type."::getHTML( ".$articleid.", ".$fieldid.", ".$category." , true );";
               
