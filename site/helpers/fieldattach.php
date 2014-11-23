@@ -940,7 +940,7 @@ class fieldattach
                 $query = 'SELECT  b.type  FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE b.published= true AND a.fieldsid IN ('.$fieldid.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.catid= '.$articleid;
       	    } 
  
-             
+            
              
             $db->setQuery( $query );
 	          $type = $db->loadResult();
@@ -948,10 +948,12 @@ class fieldattach
 
             JPluginHelper::importPlugin('fieldsattachment'); // very important
 
-	    if(empty($category)) $category = true;
+	          if(empty($category)) $category = 0;
              
-            $function  = "plgfieldsattachment_".$type."::getHTML( ".$articleid.", ".$fieldid.", ".$category." , true );";
-              
+            $function  = "plgfieldsattachment_".$type."::getHTML( ".$articleid.", ".$fieldid.", ".$category." );";
+            
+
+
             $base = JPATH_SITE; 
 
             $file = $base.'/plugins/fieldsattachment/'.$type.'/'.$type.'.php';  
@@ -959,6 +961,7 @@ class fieldattach
             $html=""; 
             
             if( JFile::exists($file)){
+              
                 //file exist 
                 eval($function);
             }
