@@ -929,7 +929,7 @@ class fieldattach
 	 * @return	value to link.
 	 * @since	1.6
 	 */
-        static function getFieldValue($articleid, $fieldid, $category  = false)
+        static function getFieldValue($articleid, $fieldid, $category  = false, , $write = true))
         { 
             global $globalreturn ;
             
@@ -966,8 +966,11 @@ class fieldattach
                 eval($function);
             }
               
-            return $globalreturn ; 
-        }
+             if($write)
+              echo $globalreturn ; 
+            else
+              return $globalreturn;        
+	}
         
         
          /**
