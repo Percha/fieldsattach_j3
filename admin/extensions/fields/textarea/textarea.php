@@ -88,11 +88,14 @@ class plgfieldsattachment_textarea extends extrafield
             $jsonValues       = fieldattach::getFieldValues( $articleid,  $fieldsid , $category   );
             $jsonValuesArray  = (json_decode($jsonValues)); 
 
-          
-            $valor      = html_entity_decode($jsonValuesArray->value);
-            $title      = $jsonValuesArray->title;
-            $published  = $jsonValuesArray->published;
-            $showTitle  = $jsonValuesArray->showtitle;
+
+	    if(count( $jsonValuesArray )>0)
+            { 
+            	$valor      = html_entity_decode($jsonValuesArray->value);
+            	$title      = $jsonValuesArray->title;
+            	$published  = $jsonValuesArray->published;
+            	$showTitle  = $jsonValuesArray->showtitle;
+	    }
 
           }
           else
