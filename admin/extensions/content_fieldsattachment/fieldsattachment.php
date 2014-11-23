@@ -167,7 +167,10 @@ class plgContentfieldsattachment extends JPlugin
                                        $str ='';
                                   }
                                   $idgroup = $fields[$cont+1]->idgroup;
-                                }else{$article->text =$str_before.$article->text.$str;}
+                                }else{
+				    $article->text    = $str_before.$article->text.$str;
+                                    $article->fulltext= $str_before.$article->fulltext.$str;
+				}
                              $cont++;
                             }
                  }
