@@ -93,7 +93,7 @@
 			name="required"
 			type="list"
 			class="inputbox"
-			default=“0”
+			default="0"
 			size="1"
 			label="COM_FIELDSATTACH_FIELDSATTACH_REQUIRED"
 			description="COM_FIELDSATTACH_FIELDSATTACH_REQUIRED_DESC">
