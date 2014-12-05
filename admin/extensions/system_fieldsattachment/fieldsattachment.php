@@ -141,7 +141,7 @@ class plgSystemfieldsattachment extends JPlugin
     public function deleteFields()
     {
         $app = JFactory::getApplication();
-        $db	= & JFactory::getDBO();
+        $db	=  JFactory::getDBO();
         $arrays = JRequest::getVar("cid");
         $ids = "";
         foreach ($arrays as $obj)
