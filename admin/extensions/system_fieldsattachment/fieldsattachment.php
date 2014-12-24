@@ -725,7 +725,7 @@ class plgSystemfieldsattachment extends JPlugin
             //$script .= 'var elvalor = String( jQuery( this ).text() ).replace(/^\s+|\s+$/gm,"")'; 
             
             $script .='console.log( elvalor );';
-            $script .='if(elvalor.indexOf("106")>-1){ jQuery( this ).parent().parent().hide();}';
+            $script .='if(elvalor.indexOf("[title]")>-1){ jQuery( this ).parent().parent().parent().hide();}';
             //$script .= 'if( elvalor == "106"){ console.log("encontrado ID"); }';    
             $script .= '});';
 
