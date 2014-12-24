@@ -685,7 +685,7 @@ class plgSystemfieldsattachment extends JPlugin
 
         $db = JFactory::getDBO();
 
-		$id= JRequest::getVar('id'); 
+		$id = JRequest::getVar('id'); 
 
         $view = "articles";
         $layout = "";
@@ -710,11 +710,42 @@ class plgSystemfieldsattachment extends JPlugin
                 exit(); //optional
 
             }
+        }
+
+        if( ($option  == "com_content") && ($view == 'articles') && ($layout == 'modal'))
+        { 
+             
+            $document =  JFactory::getDocument();
+            $script = 'jQuery(window).load(function() { ';  
+
+            $script .= 'jQuery( "td surfmarktag" ).each(function( index ) {';
+            $script .='var elvalor = jQuery( this ).text();';
+           
+            $script .= 'elvalor = elvalor. replace(/ /g,"");'; 
+            //$script .= 'var elvalor = String( jQuery( this ).text() ).replace(/^\s+|\s+$/gm,"")'; 
+            
+            $script .='console.log( elvalor );';
+            $script .='if(elvalor.indexOf("106")>-1){ jQuery( this ).parent().parent().hide();}';
+            //$script .= 'if( elvalor == "106"){ console.log("encontrado ID"); }';    
+            $script .= '});';
+
+            /*$script .= "num= jQuery('ul#myTabTabs li').length;"; 
+            for($i = 0; $i<=$cont; $i++)
+            {
+                 
+                $script .= "var lastli = jQuery('ul#myTabTabs li:eq('+(num-1)+')');"; 
+                $script .= "jQuery('ul#myTabTabs li:first').after(lastli);";
+                 
+            } */
+           
+            $script .=  '});';
+            $document->addScriptDeclaration($script);
+
+
+        }
 
 
            
-
-        } 
 		 
 
 		//EDIT ARTICLE =====================================================================
@@ -982,8 +1013,10 @@ class plgSystemfieldsattachment extends JPlugin
 					$script .= "jQuery('ul#myTabTabs li:first').after(lastli);";
 					 
 				} 
-                $script .= 'if(jQuery("#jform_title").val() == "[title]") jQuery("#jform_title").val("")';
-				$script .=  '});';
+                $script .= 'if(jQuery("#jform_title").val() == "[title]") jQuery("#jform_title").val("");';
+				
+               
+                $script .=  '});';
 				$document->addScriptDeclaration($script);
 			
 				
