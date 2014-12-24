@@ -188,9 +188,9 @@ class plgSystemfieldsattachment extends JPlugin
 		if( $option=='com_content' && $user->get('id')>0 &&  $view == 'form' &&  $layout == 'edit'  ) $fontend = true;
 		            
 		if (($option=='com_content' ))
-       	{
-			$app = JFactory::getApplication();
-			$db	= & JFactory::getDBO();
+       		{
+			$app 	= JFactory::getApplication();
+			$db	= JFactory::getDBO();
 			$nameslst = fieldsattachHelper::getfields($article->id);
 	 
 		    
@@ -1115,6 +1115,7 @@ class plgSystemfieldsattachment extends JPlugin
                            // $script = '<script>'
                            // $script = '<//script>'
 							echo "<script>document.location.href='" .  ($url) . "';</script>\n";
+                            exit();
 						}
 					}
 
