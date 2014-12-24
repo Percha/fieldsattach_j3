@@ -52,7 +52,7 @@ class plgSystemfieldsattachment extends JPlugin
 	 * @param 	array   $config  An array that holds the plugin configuration
 	 * @since	1.0
 	 */
-	function plgSystemfieldsattachment(& $subject, $config)
+	function plgSystemfieldsattachment( $subject, $config)
 	{
              
              
@@ -682,7 +682,39 @@ class plgSystemfieldsattachment extends JPlugin
 	*/
 	function onBeforeRender()
 	{
+
+        $db = JFactory::getDBO();
+
 		$id= JRequest::getVar('id'); 
+
+        $view = "articles";
+        $layout = "";
+        $layout  = JRequest::getVar('layout'); 
+        $option = JRequest::getVar('option'); 
+        $view   = JRequest::getVar('view', ''); 
+
+        if( ($option  == "com_content") && ($view == 'articles') && ($layout != 'modal'))
+        { 
+            $query = 'SELECT *  FROM #__content as a WHERE title= "[title]"'; 
+            $db->setQuery( $query );
+            $results = $db->loadObjectList();
+            if(count($results)>0)
+            {
+                 $query = 'DELETE FROM  #__content WHERE title= "[title]"' ;
+                $db->setQuery($query);
+                $db->query();
+
+                //REDIRECT
+
+                header('Location: '.$_SERVER['PHP_SELF'].'?option=com_content');
+                exit(); //optional
+
+            }
+
+
+           
+
+        } 
 		 
 
 		//EDIT ARTICLE =====================================================================
@@ -949,8 +981,8 @@ class plgSystemfieldsattachment extends JPlugin
 					$script .= "var lastli = jQuery('ul#myTabTabs li:eq('+(num-1)+')');"; 
 					$script .= "jQuery('ul#myTabTabs li:first').after(lastli);";
 					 
-				}
-			  
+				} 
+                $script .= 'if(jQuery("#jform_title").val() == "[title]") jQuery("#jform_title").val("")';
 				$script .=  '});';
 				$document->addScriptDeclaration($script);
 			
@@ -1448,7 +1480,7 @@ class plgSystemfieldsattachment extends JPlugin
 			
 			//Insert content 
 			$valor = "";
-			$query = ' INSERT INTO #__content(title, catid, created_by, created, state, access) VALUES ("", '.$filter_category_id.', '.$user->get("id").',"'.$mysqldate.'", 1, "'.$access.'")     ';
+			$query = ' INSERT INTO #__content(title, catid, created_by, created, state, access) VALUES ("[title]", '.$filter_category_id.', '.$user->get("id").',"'.$mysqldate.'", 1, "'.$access.'")     ';
 			$db->setQuery($query);
 	
 			$db->query(); 
