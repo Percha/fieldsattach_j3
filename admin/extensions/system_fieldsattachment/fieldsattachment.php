@@ -718,14 +718,14 @@ class plgSystemfieldsattachment extends JPlugin
             $document =  JFactory::getDocument();
             $script = 'jQuery(window).load(function() { ';  
 
-            $script .= 'jQuery( "td surfmarktag" ).each(function( index ) {';
+            $script .= 'jQuery( ".table-condensed td" ).each(function( index ) {';
             $script .='var elvalor = jQuery( this ).text();';
            
             $script .= 'elvalor = elvalor. replace(/ /g,"");'; 
             //$script .= 'var elvalor = String( jQuery( this ).text() ).replace(/^\s+|\s+$/gm,"")'; 
             
-            $script .='console.log( elvalor );';
-            $script .='if(elvalor.indexOf("[title]")>-1){ jQuery( this ).parent().parent().parent().hide();}';
+           // $script .='alert( elvalor );';
+            $script .='if(elvalor.indexOf("[title]")>-1){ jQuery( this ).parent().hide();}';
             //$script .= 'if( elvalor == "106"){ console.log("encontrado ID"); }';    
             $script .= '});';
 
