@@ -1,4 +1,4 @@
-onContentSearch<?php
+<?php
 /**
 * @package		perchagoglemaps
 * @copyright            Cristian Grañó

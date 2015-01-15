@@ -152,7 +152,7 @@ class plgContentfieldsattachment extends JPlugin
 
                               
                                //************************************************************************
-                              //**************************** titulo campos **********************
+                              //**************************** Title campos **********************
                               //***********************************************************************
                               
                               if(($cont+1)< count($fields) ){
@@ -168,9 +168,9 @@ class plgContentfieldsattachment extends JPlugin
                                   }
                                   $idgroup = $fields[$cont+1]->idgroup;
                                 }else{
-				    $article->text    = $str_before.$article->text.$str;
+				                            $article->text    = $str_before.$article->text.$str;
                                     $article->fulltext= $str_before.$article->fulltext.$str;
-				}
+				                      }
                              $cont++;
                             }
                  }
