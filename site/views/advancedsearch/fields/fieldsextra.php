@@ -72,6 +72,7 @@ class JFormFieldFieldsextra extends JFormField
           $fields=array();
 
           // set up first element of the array as all articles
+ 	  $fields[0] = new stdClass();
           $fields[0]->id = '';
           $fields[0]->title = JText::_("ALLARTICLES");
           
