@@ -257,6 +257,10 @@ class fieldsattachHelper
         //$xml = SimpleXMLElement($xmlfile);
         //echo "FILE::".$xmlfile;
         $dom = new DOMDocument(); 
+        
+        // return, if file does not exists, to avoid errors when loading XML File. RH, 16.01.2015
+		if (!file_exists($xmlfile)) return $return;
+        
         $dom->load($xmlfile); 
         $xml = $dom->getElementsByTagName('filename'); 
         foreach($xml as $ph){ 
