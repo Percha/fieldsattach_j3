@@ -1937,117 +1937,50 @@ class plgSystemfieldsattachment extends JPlugin
                 //COPY AND SAVE LIKE COPY   
                 $newid = $article->id;
 		
-		if(!empty($oldid)){
+		if(!empty($oldid)) {
                 
-			$db	= & JFactory::getDBO();
+			$db	= JFactory::getDBO();
+			
 			//COPY __fieldsattach_values VALUES TABLE
-			$query = 'SELECT * FROM #__fieldsattach_values as a  WHERE a.articleid = '. $oldid ;
+			$query = 'INSERT INTO #__fieldsattach_values (articleid, fieldsid, value) SELECT ' . $newid . ', fieldsid, value FROM #__fieldsattach_values WHERE articleid = '. $oldid;
+			$db->setQuery( $query );
+			$db->query(); 
 			 
 			//Log
 			plgSystemfieldsattachment::writeLog("function copyArticle log1: ".$query);
 			
+			$query = 'INSERT into #__fieldsattach_images (articleid, fieldsattachid, title,  image1, image2, image3, description, ordering, published)'.
+				' SELECT ' . $newid .', fieldsattachid, title,  image1, image2, image3, description, ordering, published FROM #__fieldsattach_images WHERE articleid = '. $oldid ;      
 			$db->setQuery( $query );
-			$results= $db->loadObjectList();
-			if($results){
-			    foreach ($results as $result)
-			    {
-				$query = 'SELECT * FROM #__fieldsattach_values as a  WHERE a.articleid = '. $newid.' AND a.fieldsid='.$result->fieldsid ;
-				$db->setQuery( $query );
-				 
-				$obj= $db->loadObject(); 
-				if(!empty($obj))
-				{
-				     //update
-				     //$query = 'UPDATE  #__fieldsattach_values SET value="'.$result->valor.'" WHERE id='.$result->id ;
-				     //$db->setQuery($query);
-				     //echo "<br>".$query;
-				     //$db->query();
-								 
-				    
-				}else{
-				    //insert
-				     $query = 'INSERT INTO #__fieldsattach_values(articleid,fieldsid,value) VALUES ('.$newid.',\''.  $result->fieldsid .'\',\''.$result->value.'\' )     ';
-				     $db->setQuery($query);
-				     
-				    
-				     $db->query();
-				}
-				
-			    }
-			}
-	 
-	
-			//COPY  fieldsattach_images GALLERIES-----------------------------
-			$query = 'SELECT * FROM #__fieldsattach_images as a  WHERE a.articleid = '. $oldid ;
-			
-			$db->setQuery( $query );
-			$results= $db->loadObjectList(); 
-			if(count($results)>0){ 
-			    foreach ($results as $result)
-			    {
-				//JError::raiseWarning( 100, "QUERY1.2: ".  $result->fieldsattachid  );
-				if(isset($result->fieldsattachid)){
-				    $query = 'SELECT * FROM #__fieldsattach_images as a  WHERE a.articleid = '. $newid.' AND a.fieldsattachid='.$result->fieldsattachid ;
-				    $db->setQuery( $query );
-				    $obj= $db->loadObject();
-				     
-				    if($obj)
-				    {
-					//update
-					$query = 'UPDATE  #__fieldsattach_images SET image1="'.$result->title.'", image1="'.$result->image1.'", image2="'.$result->image2.'", image3="'.$result->image3.'", description="'.$result->description.'", ordering="'.$result->ordering.'", published="'.$result->published.'"  WHERE id='.$result->id ;
-					$db->setQuery($query);
-					$db->query();
-					 
-	
-				    }else{
-					//insert
-					$query = 'INSERT INTO #__fieldsattach_images(articleid,fieldsattachid,title,  image1, image2, image3, description, ordering, published) VALUES ('.$newid.',\''.  $result->fieldsattachid .'\',\''.$result->title.'\',\''.$result->image1.'\',\''.$result->image2.'\',\''.$result->image3.'\',\''.$result->description.'\',\''.$result->ordering.'\',\''.$result->published.'\' )     ';
-					$db->setQuery($query);
-					$db->query();
-					 
-				    }
-				}
-			    }
-			}
-	
+			$db->query();
 			
 			//copy documents and images
-			$sitepath = JPATH_BASE ;
-			$sitepath = str_replace ("administrator", "", $sitepath); 
 			$sitepath = JPATH_SITE;
 			//COPY  FOLDER -----------------------------
-			$path= '..'.DS.'images'.DS.'documents';
-			if ((JRequest::getVar('option')=='com_categories' && JRequest::getVar('layout')=="edit" && JRequest::getVar('extension')=="com_content"  )){
-			     $path= '..'.DS.'images'.DS.'documentscategories';
+			$path= '/images/documents';
+			if ((JRequest::getVar('option')=='com_categories' && JRequest::getVar('layout')=="edit" && JRequest::getVar('extension')=="com_content"  )) {
+			     $path= '/images/documentscategories';
 			} 
 			
-			$path = str_replace ("../", DS, $path);
-			$source = $sitepath . $path .DS.  $oldid.DS;
-			$dest = $sitepath.  $path .DS.  $newid.DS;
-			//JFolder::copy($source, $dest);
-			if(!JFolder::exists($dest))
-			{
-			    JFolder::create($dest);
-			}
-			
-			$files =  JFolder::files($source);
-			
-			foreach ($files as $file)
-			{ 
-			    if(Jfile::copy($source.$file, $dest.$file)) $app->enqueueMessage( JTEXT::_("Copy file ok:") . $file )   ;
-			    else JError::raiseWarning( 100, "Cannot copy the file: ".  $source.$file." to ".$dest.$file );
+			$source = $sitepath . $path . '/' .  $oldid . '/';
+			$dest = $sitepath .  $path . '/' .  $newid . '/';
+			// progress only if source dir exists
+			if(JFolder::exists($source)) {
+				if(!JFolder::exists($dest))
+				{
+					JFolder::create($dest);
+				}
+				$files =  JFolder::files($source);
+  			
+				foreach ($files as $file)
+				{ 
+					if(Jfile::copy($source.$file, $dest.$file)) $app->enqueueMessage( JTEXT::_("Copy file ok:") . $file );
+					else JError::raiseWarning( 100, "Cannot copy the file: ".  $source.$file." to ".$dest.$file );
+				}
 			}
 		}
-		
-		
-		//$app->enqueueMessage( JText::_("EXTRA FIELDS ADDED"), 'info'   )   ;
-		
-             
-            //END COPY AND SAVE============================================================================
-
         }
         
-         
        /* public function batch()
         {
             // Initialise variables.
