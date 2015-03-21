@@ -1938,6 +1938,7 @@ class plgSystemfieldsattachment extends JPlugin
         $app = JFactory::getApplication(); 
                 //COPY AND SAVE LIKE COPY   
                 $newid = $article->id;
+<<<<<<< HEAD
         
         if(!empty($oldid)) {
                 
@@ -1981,6 +1982,51 @@ class plgSystemfieldsattachment extends JPlugin
                 }
             }
         }
+=======
+		
+		if(!empty($oldid)) {
+                
+			$db	= JFactory::getDBO();
+			
+			//COPY __fieldsattach_values VALUES TABLE
+			$query = 'INSERT INTO #__fieldsattach_values (articleid, fieldsid, value) SELECT ' . $newid . ', fieldsid, value FROM #__fieldsattach_values WHERE articleid = '. $oldid;
+			$db->setQuery( $query );
+			$db->query(); 
+			 
+			//Log
+			plgSystemfieldsattachment::writeLog("function copyArticle log1: ".$query);
+			
+			$query = 'INSERT into #__fieldsattach_images (articleid, fieldsattachid, title,  image1, image2, image3, description, ordering, published)'.
+				' SELECT ' . $newid .', fieldsattachid, title,  image1, image2, image3, description, ordering, published FROM #__fieldsattach_images WHERE articleid = '. $oldid ;      
+			$db->setQuery( $query );
+			$db->query();
+			
+			//copy documents and images
+			$sitepath = JPATH_SITE;
+			//COPY  FOLDER -----------------------------
+			$path= '/images/documents';
+			if ((JRequest::getVar('option')=='com_categories' && JRequest::getVar('layout')=="edit" && JRequest::getVar('extension')=="com_content"  )) {
+			     $path= '/images/documentscategories';
+			} 
+			
+			$source = $sitepath . $path . '/' .  $oldid . '/';
+			$dest = $sitepath .  $path . '/' .  $newid . '/';
+			// progress only if source dir exists
+			if(JFolder::exists($source)) {
+				if(!JFolder::exists($dest))
+				{
+					JFolder::create($dest);
+				}
+				$files =  JFolder::files($source);
+  			
+				foreach ($files as $file)
+				{ 
+					if(Jfile::copy($source.$file, $dest.$file)) $app->enqueueMessage( JTEXT::_("Copy file ok:") . $file );
+					else JError::raiseWarning( 100, "Cannot copy the file: ".  $source.$file." to ".$dest.$file );
+				}
+			}
+		}
+>>>>>>> origin/master
         }
         
        /* public function batch()

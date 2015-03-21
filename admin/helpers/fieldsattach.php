@@ -257,6 +257,10 @@ class fieldsattachHelper
         //$xml = SimpleXMLElement($xmlfile);
         //echo "FILE::".$xmlfile;
         $dom = new DOMDocument(); 
+        
+        // return, if file does not exists, to avoid errors when loading XML File. RH, 16.01.2015
+		if (!file_exists($xmlfile)) return $return;
+        
         $dom->load($xmlfile); 
         $xml = $dom->getElementsByTagName('filename'); 
         foreach($xml as $ph){ 
@@ -1121,7 +1125,8 @@ class fieldsattachHelper
 						 eval("\$tmp=".  $function."");
 						  
 						 $str .= '<div class="control-group"><label class="control-label" for="field_'.$field->id.'">' . $field->title; 
-						 if($field->required) {$str .= '  </label><span>(*)</span>';}
+						 if($field->required) {$str .= '  <span>(*)</span>';}
+                                                 $str .= '</label>';
 						 $str .= '<div class="controls">'.$tmp.  '</div>';
 						 $str .= '</div>';
 						 //Reset field of category description =====================
