@@ -30,6 +30,15 @@
                                 rows="15"
                                 cols="30"
 			/>
+
+			 <field
+				name="field_defaultvalue"
+				type="input"
+				label="COM_FIELDSATTACH_DEFAULTVALUE"
+				default=""
+                                rows="15"
+                                cols="30"
+			/>
                          
 		</fieldset>
 	 </fields>

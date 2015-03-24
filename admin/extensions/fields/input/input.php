@@ -203,40 +203,40 @@ class plgfieldsattachment_input extends extrafield
 	 * @return  	html of field
 	 * @since	1.0
 	 */
-        static function getTemplate($fieldsids, $file="input")
-        {
-             //Search field template GENERIC *****************************************************************
-              $templateDir =  dirname(__FILE__).'/tmpl/'.$file.'.tpl.php'; 
+    static function getTemplate($fieldsids, $file="input")
+    {
+         //Search field template GENERIC *****************************************************************
+          $templateDir =  dirname(__FILE__).'/tmpl/'.$file.'.tpl.php'; 
+          $html = file_get_contents ($templateDir);
+          
+          //Search field template in joomla Template  ******************************************************  
+          $app = JFactory::getApplication();
+          $templateDir =  JPATH_BASE . '/templates/' . $app->getTemplate().'/html/com_fieldsattach/fields/'.$file.'.tpl.php';
+          
+          if(file_exists($templateDir))
+          {
+               
               $html = file_get_contents ($templateDir);
-              
-              //Search field template in joomla Template  ******************************************************  
-              $app = JFactory::getApplication();
-              $templateDir =  JPATH_BASE . '/templates/' . $app->getTemplate().'/html/com_fieldsattach/fields/'.$file.'.tpl.php';
-              
-              if(file_exists($templateDir))
-              {
-                   
-                  $html = file_get_contents ($templateDir);
-              }
-              
-              //Search a specific field template in joomla Template  *********************************************  
-              $app = JFactory::getApplication();
-              $templateDir =  JPATH_BASE . '/templates/' . $app->getTemplate().'/html/com_fieldsattach/fields/'.$fieldsids.'_'.$file.'.tpl.php';
-              
-              if(file_exists($templateDir))
-              { 
-                  $html = file_get_contents ($templateDir);
-              }
-              
-              return $html;
-        }
-        
-         
+          }
+          
+          //Search a specific field template in joomla Template  *********************************************  
+          $app = JFactory::getApplication();
+          $templateDir =  JPATH_BASE . '/templates/' . $app->getTemplate().'/html/com_fieldsattach/fields/'.$fieldsids.'_'.$file.'.tpl.php';
+          
+          if(file_exists($templateDir))
+          { 
+              $html = file_get_contents ($templateDir);
+          }
+          
+          return $html;
+    }
+    
+     
 
-        function action( $articleid, $fieldsid, $fieldsvalueid )
-        {
+    function action( $articleid, $fieldsid, $fieldsvalueid )
+    {
 
-        }
+    }
 	
 	public function searchinput($fieldsid, $value, $extras)
 	{
