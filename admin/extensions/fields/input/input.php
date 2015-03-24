@@ -93,6 +93,7 @@ class plgfieldsattachment_input extends extrafield
             
             $maxlenght="";
             $size=30;
+            $defaultvalue="";
             
              //Add CSS ***********************
             $str =  '<link rel="stylesheet" href="'.JURI::root() .'plugins/fieldsattachment/input/input.css" type="text/css" />'; 
@@ -114,12 +115,15 @@ class plgfieldsattachment_input extends extrafield
                     $tmp = explode('|',  $linea);
                     if(!empty( $tmp[0])) $size = $tmp[0];
                     if(count($tmp)>=1) if(!empty( $tmp[1])) $maxlenght = $tmp[1];
+                    if(count($tmp)>=2) if(!empty( $tmp[2])) $defaultvalue = $tmp[2];
                      
                     
                 }
             }
             
             $value = str_replace ('"', '&quot;', $value); 
+
+            if(empty($value)) $value = $defaultvalue;
             
             $str .= '<div class="file"><input  name="field_'.$fieldsid.'" id="field_'.$fieldsid.'" type="text"  value="'.$value.'" class="customfields '.$required.'" size="'.$size.'" maxlength="'.$maxlenght.'" /></div> ';
                
