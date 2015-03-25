@@ -18,6 +18,7 @@ If the installation is new, no problem.<br /><br />
 
 Froum - http://www.fieldsattach.com <br />
 Modules, plugins, and more extras - http://www.fieldsattach.com
+WIKI, https://github.com/Percha/fieldsattach_j3/wiki
 
 Contact - http://www.fieldsattach.com <br />
 
