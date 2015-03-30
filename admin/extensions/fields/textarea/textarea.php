@@ -68,7 +68,7 @@ class plgfieldsattachment_textarea extends extrafield
         if($lineas[0] == "RichText")
         {
             $editor = JFactory::getEditor();
-            $str .=  $editor->display('field_'.$fieldsid.'', $value , '100%', ''.$height.'', '60', '20', true);
+            $str .=  $editor->display('field_'.$fieldsid.'', $value , '100%', ''.$height.'', '60', '20', false);
 
         }else{
              $str .= '<textarea style="width:100%; height:'.$height.'px;" name="field_'.$fieldsid.'" >'.$value.'</textarea>';
