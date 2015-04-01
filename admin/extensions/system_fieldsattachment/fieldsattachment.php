@@ -34,9 +34,9 @@ JLoader::register('fieldsattachHelper',   $sitepath.DS.'administrator/components
 
 class plgSystemfieldsattachment extends JPlugin
 {
-        private $str ;
-        private $path;
-        public $array_fields  = array();
+    private $str ;
+    private $path;
+    public $array_fields  = array();
     public $fields  = array();
     
      
@@ -256,13 +256,16 @@ class plgSystemfieldsattachment extends JPlugin
                     
         
             //-----------------------
-            $query = 'SELECT  id  FROM #__content WHERE created_by='.$user->get('id').' AND title IS NOT NULL AND state  = -2 AND id='.$article->id;
-            $db->setQuery( $query );
-            $id = $db->loadResult(); 
+             
+           
             
             if(!empty($id))
             {   
-                 $article->state = 1;
+                $query = 'SELECT  id  FROM #__content WHERE created_by='.$user->get('id').' AND title IS NOT NULL AND state  = -2 AND id='.$article->id;
+                $db->setQuery( $query );
+                $id = $db->loadResult(); 
+                
+                $article->state = 1;
             } 
         }
         
@@ -532,20 +535,24 @@ class plgSystemfieldsattachment extends JPlugin
         if (($option=='com_content' && $layout=="edit" ) || $fontend)
         {
             $db = JFactory::getDBO();
-            $nameslst = fieldsattachHelper::getfields($article->id);
+            $nameslst = array();
+            if(!empty($article->id))
+            {
+                $nameslst = fieldsattachHelper::getfields($article->id);
             
             
 
-            // JError::raiseWarning( 100, "NUMEROOO: ". count($nameslst) ." - ".$article->catid );
-            //***********************************************************************************************
-            //create array of fields  ****************  ****************  ****************
-            //***********************************************************************************************
-            $fields_tmp0 = fieldsattachHelper::getfieldsForAll($article->id);
-            $nameslst = array_merge($fields_tmp0, $nameslst );
+                // JError::raiseWarning( 100, "NUMEROOO: ". count($nameslst) ." - ".$article->catid );
+                //***********************************************************************************************
+                //create array of fields  ****************  ****************  ****************
+                //***********************************************************************************************
+                $fields_tmp0 = fieldsattachHelper::getfieldsForAll($article->id);
+                $nameslst = array_merge($fields_tmp0, $nameslst );
 
-            $fields_tmp2 = fieldsattachHelper::getfieldsForArticlesid($article->id, $nameslst);
+                $fields_tmp2 = fieldsattachHelper::getfieldsForArticlesid($article->id, $nameslst);
 
-            $nameslst = array_merge( $nameslst, $fields_tmp2 );
+                $nameslst = array_merge( $nameslst, $fields_tmp2 );
+            }
             
             //Si existen fields relacionados se mira uno a uno si tiene valores
              
@@ -809,15 +816,17 @@ class plgSystemfieldsattachment extends JPlugin
                 }else{
 
                      
-                       
-                    $fields_tmp0 = fieldsattachHelper::getfieldsForAll($id);  
-                    $fields_tmp1 = fieldsattachHelper::getfields($id); 
-                    $fields_tmp1 = array_merge($fields_tmp0, $fields_tmp1);
+                    if(!empty($id))
+                    {   
+                        $fields_tmp0 = fieldsattachHelper::getfieldsForAll($id);  
+                        $fields_tmp1 = fieldsattachHelper::getfields($id); 
+                        $fields_tmp1 = array_merge($fields_tmp0, $fields_tmp1);
 
-            
-                    
-                    $fields_tmp2 = fieldsattachHelper::getfieldsForArticlesid($id, $fields_tmp1); 
-                    $fields = array_merge($fields_tmp1, $fields_tmp2);
+                
+                        
+                        $fields_tmp2 = fieldsattachHelper::getfieldsForArticlesid($id, $fields_tmp1); 
+                        $fields = array_merge($fields_tmp1, $fields_tmp2);
+                    }
 
                      
                      
@@ -828,9 +837,7 @@ class plgSystemfieldsattachment extends JPlugin
                      
                 $this->exist=false;
             
-                $this->fields = $fields;
-            
-            
+                $this->fields = $fields; 
             
                 //inputs RENDER ====================================================================
                 $idgroup=-1;
@@ -1746,7 +1753,7 @@ class plgSystemfieldsattachment extends JPlugin
         private function getfieldsvaluearray($fieldsid, $articleid, $value)
         {
             $result ="";
-            $db = & JFactory::getDBO();
+            $db = JFactory::getDBO();
             $query = 'SELECT a.value FROM #__fieldsattach_values as a WHERE a.fieldsid='. $fieldsid.' AND a.articleid='.$articleid  ;
             //echo "<br>";
             $db->setQuery( $query );
@@ -1938,7 +1945,6 @@ class plgSystemfieldsattachment extends JPlugin
         $app = JFactory::getApplication(); 
                 //COPY AND SAVE LIKE COPY   
                 $newid = $article->id;
-<<<<<<< HEAD
         
         if(!empty($oldid)) {
                 
@@ -1982,51 +1988,6 @@ class plgSystemfieldsattachment extends JPlugin
                 }
             }
         }
-=======
-		
-		if(!empty($oldid)) {
-                
-			$db	= JFactory::getDBO();
-			
-			//COPY __fieldsattach_values VALUES TABLE
-			$query = 'INSERT INTO #__fieldsattach_values (articleid, fieldsid, value) SELECT ' . $newid . ', fieldsid, value FROM #__fieldsattach_values WHERE articleid = '. $oldid;
-			$db->setQuery( $query );
-			$db->query(); 
-			 
-			//Log
-			plgSystemfieldsattachment::writeLog("function copyArticle log1: ".$query);
-			
-			$query = 'INSERT into #__fieldsattach_images (articleid, fieldsattachid, title,  image1, image2, image3, description, ordering, published)'.
-				' SELECT ' . $newid .', fieldsattachid, title,  image1, image2, image3, description, ordering, published FROM #__fieldsattach_images WHERE articleid = '. $oldid ;      
-			$db->setQuery( $query );
-			$db->query();
-			
-			//copy documents and images
-			$sitepath = JPATH_SITE;
-			//COPY  FOLDER -----------------------------
-			$path= '/images/documents';
-			if ((JRequest::getVar('option')=='com_categories' && JRequest::getVar('layout')=="edit" && JRequest::getVar('extension')=="com_content"  )) {
-			     $path= '/images/documentscategories';
-			} 
-			
-			$source = $sitepath . $path . '/' .  $oldid . '/';
-			$dest = $sitepath .  $path . '/' .  $newid . '/';
-			// progress only if source dir exists
-			if(JFolder::exists($source)) {
-				if(!JFolder::exists($dest))
-				{
-					JFolder::create($dest);
-				}
-				$files =  JFolder::files($source);
-  			
-				foreach ($files as $file)
-				{ 
-					if(Jfile::copy($source.$file, $dest.$file)) $app->enqueueMessage( JTEXT::_("Copy file ok:") . $file );
-					else JError::raiseWarning( 100, "Cannot copy the file: ".  $source.$file." to ".$dest.$file );
-				}
-			}
-		}
->>>>>>> origin/master
         }
         
        /* public function batch()
