@@ -556,28 +556,34 @@ class fieldsattachHelper
         {
 
             $db	=  JFactory::getDBO();
-            $query = 'SELECT a.catid, a.language FROM #__content as a WHERE a.id='. $id  ;
-
-            $db->setQuery( $query );
-            $elid = $db->loadObject();
             $empty = array();
             $result = array();
-            if(!empty($elid)){
-                $idioma = $elid->language; 
-               
-                $db	= JFactory::getDBO();
-                $query = 'SELECT a.id as idgroup, a.title as titlegroup ,  a.description as descriptiongroup, a.position, a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
-                $query .= 'WHERE a.catid = 0 AND a.published=1 AND b.published = 1 AND a.group_for=0 ';
-                //echo $elid->language."Language: ".$idioma;
-                if($elid->language != "*") $query .= ' AND (a.language="'.$elid->language.'" OR a.language="*" ) AND (b.language="'.$elid->language.'" OR b.language="*") ' ;
-                      // echo "filter::". $app->getLanguageFilter();
-                      // echo "filter::". JRequest::getVar("language");
 
-                $query .='ORDER BY a.ordering, a.title, b.ordering';
-                 
+            if(!empty($id))
+            {
+                $query = 'SELECT a.catid, a.language FROM #__content as a WHERE a.id='. $id  ;
+
                 $db->setQuery( $query );
-                $result = $db->loadObjectList();
+                $elid = $db->loadObject();
+                
+                if(!empty($elid)){
+                    $idioma = $elid->language; 
+                   
+                    $db = JFactory::getDBO();
+                    $query = 'SELECT a.id as idgroup, a.title as titlegroup ,  a.description as descriptiongroup, a.position, a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
+                    $query .= 'WHERE a.catid = 0 AND a.published=1 AND b.published = 1 AND a.group_for=0 ';
+                    //echo $elid->language."Language: ".$idioma;
+                    if($elid->language != "*") $query .= ' AND (a.language="'.$elid->language.'" OR a.language="*" ) AND (b.language="'.$elid->language.'" OR b.language="*") ' ;
+                          // echo "filter::". $app->getLanguageFilter();
+                          // echo "filter::". JRequest::getVar("language");
+
+                    $query .='ORDER BY a.ordering, a.title, b.ordering';
+                     
+                    $db->setQuery( $query );
+                    $result = $db->loadObjectList();
+                }
             }
+            
             if($result) return $result;
             else return $empty  ;
         }
@@ -880,71 +886,79 @@ class fieldsattachHelper
         {
 
             $db	=  JFactory::getDBO();
-            $query = 'SELECT a.catid, a.language FROM #__content as a WHERE a.id='. $id  ;
-
-            $db->setQuery( $query );
-            $elid = $db->loadObject();
             $empty = array();
-            if(!empty($elid)){
-            $idioma = $elid->language;
+            $result = array();
 
-	   
-            //$id = ",".$id.",";
-            $db	= JFactory::getDBO();
-
-            $query = 'SELECT a.id as idgroup, a.title as titlegroup ,  a.description as descriptiongroup ,a.position, a.catid, a.language, a.recursive, b.*, a.articlesid FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
-            //$query .= 'WHERE (a.articlesid LIKE "%,'. $id .',%" )  AND a.published=1 AND b.published = 1 ';
-            $query .= 'WHERE  a.published=1 AND b.published = 1 ';
-
-            if($elid->language != "*")  $query .= ' AND (a.language="'.$elid->language.'" OR a.language="*" ) AND (b.language="'.$elid->language.'" OR b.language="*") ' ;
-
-             $query .='ORDER BY a.ordering, a.title, b.ordering';
-            //echo $query;
-            $db->setQuery( $query );
-
-            //(a.articlesid LIKE "%,'. $id .',%" )  AND
-            $results = $db->loadObjectList();
-
-            //echo "<br>count: " . count($results);
-            $cont = 0;
-            if($results)
+            if(!empty($id))
             {
-                foreach($results as $result)
-                {
-                    $taula =  explode(",", $result->articlesid);
-                    //echo "<br>srting:: ". $result->id;
-                    //echo "<br>contar taula:: ". count($taula);
-                    $trobat = false;
-                    foreach ($taula as $theid)
-                    {
-                        //echo "<br>buscando: " . $theid;
-                        if($theid == $id){
-                            $trobat = true;
-                           // echo "<br>trobat: " . $theid;
-                            break;
-                        }
-                        else{
-                            $trobat = false;
-                            }
-                    }
-                    if(! $trobat){
-                        unset($results[$cont]);
-                    }else{
-                        //Find in the fields,   exist?
-                        if($fields){
-                            foreach($fields as $obj)
-                            {
-                                if($result->id == $obj->id) unset($results[$cont]);
-                            }
-                        }
-                    }
-                    $cont++;
+                    $query = 'SELECT a.catid, a.language FROM #__content as a WHERE a.id='. $id  ;
 
+                    $db->setQuery( $query );
+                    $elid = $db->loadObject();
+                   
+                    if(!empty($elid)){
+                    $idioma = $elid->language;
+
+               
+                    //$id = ",".$id.",";
+                    $db = JFactory::getDBO();
+
+                    $query = 'SELECT a.id as idgroup, a.title as titlegroup ,  a.description as descriptiongroup ,a.position, a.catid, a.language, a.recursive, b.*, a.articlesid FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
+                    //$query .= 'WHERE (a.articlesid LIKE "%,'. $id .',%" )  AND a.published=1 AND b.published = 1 ';
+                    $query .= 'WHERE  a.published=1 AND b.published = 1 ';
+
+                    if($elid->language != "*")  $query .= ' AND (a.language="'.$elid->language.'" OR a.language="*" ) AND (b.language="'.$elid->language.'" OR b.language="*") ' ;
+
+                    $query .='ORDER BY a.ordering, a.title, b.ordering';
+                    //echo $query;
+                    $db->setQuery( $query );
+
+                    //(a.articlesid LIKE "%,'. $id .',%" )  AND
+                    $results = $db->loadObjectList();
+
+                    //echo "<br>count: " . count($results);
+                    $cont = 0;
+                    if($results)
+                    {
+                        foreach($results as $result)
+                        {
+                            $taula =  explode(",", $result->articlesid);
+                            //echo "<br>srting:: ". $result->id;
+                            //echo "<br>contar taula:: ". count($taula);
+                            $trobat = false;
+                            foreach ($taula as $theid)
+                            {
+                                //echo "<br>buscando: " . $theid;
+                                if($theid == $id){
+                                    $trobat = true;
+                                   // echo "<br>trobat: " . $theid;
+                                    break;
+                                }
+                                else{
+                                    $trobat = false;
+                                    }
+                            }
+                            if(! $trobat){
+                                unset($results[$cont]);
+                            }else{
+                                //Find in the fields,   exist?
+                                if($fields){
+                                    foreach($fields as $obj)
+                                    {
+                                        if($result->id == $obj->id) unset($results[$cont]);
+                                    }
+                                }
+                            }
+                            $cont++;
+
+                        }
+                        return $results;
+                    }
                 }
-                return $results;
-            }
-         }
-	 return $empty;
+
+            } 
+            
+	        return $empty;
 
 
         }
