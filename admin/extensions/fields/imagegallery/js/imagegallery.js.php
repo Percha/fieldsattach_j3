@@ -89,7 +89,7 @@ ObjImagegallery = new Class({
         },
         setunit:function(opt1,opt2,opt3)
         { 
-            alert('setunit'+ opt1);
+            
             if($('select#jform_params_galleryimage2') == null)   
             {
 
