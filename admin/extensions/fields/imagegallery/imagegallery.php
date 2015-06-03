@@ -298,7 +298,7 @@ class plgfieldsattachment_imagegallery extends extrafield
 .ui-sortable{overflow:hidden; margin:0; padding:0;}
 .sortable li  {
 cursor: move;margin: 0 10px 12px 0; border:1px #ccc solid; float:left;border-radius: 5px;
-padding: 3px;   width:200px; height:200px; overflow:hidden;
+padding: 3px;   width:190px; height:190px; overflow:hidden;
 } 
 </style>"; 
         $str .= '<div   class="ui-sortable"><ul id="gallerysortable'.$fieldsattachid.'" class="sortable" >';
@@ -310,7 +310,7 @@ padding: 3px;   width:200px; height:200px; overflow:hidden;
                   $url_edit =JURI::base(false).'/index.php?option=com_fieldsattach&view=fieldsattachimage&tmpl=component&layout=edit&id='.$row->id.'&fieldsattachid='.$fieldsattachid.'&reset=2';
                   $url_delete =JURI::base(false).'/index.php?option=com_fieldsattach&amp;view=fieldsattachimages&amp;task=delete&amp;id='.$row->id.'&amp;tmpl=component&amp;fieldsid='.$fieldsattachid;
                   $str.= '
-                  <li id="image_'.$fieldsattachid.'_'.$row->id.'"  style="width:150px; height:150px; ">
+                  <li id="image_'.$fieldsattachid.'_'.$row->id.'" >
 			    <div class="btn-group" style="margin-bottom:4px;">
 				       <a class="modal btn btn-mini" href="'.$sitepath.$row->image1.'">'.JText::_('ZOOM').'</a>
 				       <a class="modal btn btn-mini" href="'.$url_edit.'" rel="{handler: \'iframe\', size: {x: 980, y: 500}}">'.JText::_('EDIT').'</a>
