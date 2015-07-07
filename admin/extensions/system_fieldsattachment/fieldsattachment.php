@@ -497,6 +497,8 @@ class plgSystemfieldsattachment extends JPlugin
         $extension = JRequest::getVar('extension',"");
         $view= JRequest::getVar('view',"");
 
+
+
         $sitepath = JPATH_BASE ;
         $sitepath = str_replace ("administrator", "", $sitepath); 
         $sitepath = JPATH_SITE;
@@ -558,8 +560,10 @@ class plgSystemfieldsattachment extends JPlugin
              
             if(count($nameslst)>0)
             {
+                //JError::raiseWarning( 100, "onContentAfterSave ID: ".  $article->id  );
                 foreach($nameslst as $obj)
                 {
+
                     $query = 'SELECT a.id, b.required ,b.title, b.extras, b.type FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON a.fieldsid = b.id WHERE a.articleid='.$article->id .' AND a.fieldsid ='. $obj->id ;
                     //echo $query;
                     
@@ -658,17 +662,20 @@ class plgSystemfieldsattachment extends JPlugin
                     }
             
              
-                    //COPY AND SAVE LIKE COPY
-                    if ( (JRequest::getVar("id") != $article->id) && (!empty( $article->id) )   )  
-                    {
-                    
-                        $oldid = JRequest::getVar("id")  ; 
-                    
-                        //JError::raiseWarning( 100, "ARTICLE ID: ".  $article->id  );
-                        $this->copyArticle($article, $oldid); 
-                    }
+                   
                 //END COPY
                 }
+
+                //COPY AND SAVE LIKE COPY
+                if ( (JRequest::getVar("id") != $article->id) && (!empty( $article->id) )   )  
+                {
+                
+                    $oldid = JRequest::getVar("id")  ; 
+                
+                    //JError::raiseWarning( 100, "ARTICLE ID: ".  $article->id  );
+                    $this->copyArticle($article, $oldid); 
+                }
+
             } 
         }
 
@@ -1942,6 +1949,9 @@ class plgSystemfieldsattachment extends JPlugin
     */
     public function copyArticle($article,$oldid)
         {
+
+        //JError::raiseWarning( 100, "Copy article ".$article->id . " old: ".$oldid );
+                
         $app = JFactory::getApplication(); 
                 //COPY AND SAVE LIKE COPY   
                 $newid = $article->id;
@@ -1949,14 +1959,15 @@ class plgSystemfieldsattachment extends JPlugin
         if(!empty($oldid)) {
                 
             $db = JFactory::getDBO();
+
             
             //COPY __fieldsattach_values VALUES TABLE
-            $query = 'INSERT INTO #__fieldsattach_values (articleid, fieldsid, value) SELECT ' . $newid . ', fieldsid, value FROM #__fieldsattach_values WHERE articleid = '. $oldid;
-            $db->setQuery( $query );
-            $db->query(); 
+            //$query = 'INSERT INTO #__fieldsattach_values (articleid, fieldsid, value) SELECT ' . $newid . ', fieldsid, value FROM #__fieldsattach_values WHERE articleid = '. $oldid;
+            //$db->setQuery( $query );
+            //$db->query(); 
              
             //Log
-            plgSystemfieldsattachment::writeLog("function copyArticle log1: ".$query);
+            //plgSystemfieldsattachment::writeLog("function copyArticle log1: ".$query); 
             
             $query = 'INSERT into #__fieldsattach_images (articleid, fieldsattachid, title,  image1, image2, image3, description, ordering, published)'.
                 ' SELECT ' . $newid .', fieldsattachid, title,  image1, image2, image3, description, ordering, published FROM #__fieldsattach_images WHERE articleid = '. $oldid ;      
@@ -1965,7 +1976,7 @@ class plgSystemfieldsattachment extends JPlugin
             
             //copy documents and images
             $sitepath = JPATH_SITE;
-            //COPY  FOLDER -----------------------------
+            //COPY  FOLDER IMG-----------------------------
             $path= '/images/documents';
             if ((JRequest::getVar('option')=='com_categories' && JRequest::getVar('layout')=="edit" && JRequest::getVar('extension')=="com_content"  )) {
                  $path= '/images/documentscategories';
