@@ -94,9 +94,21 @@ class plgSystemfieldsattachment extends JPlugin
                 $base = JPATH_SITE;
                 $file = $base.'/plugins/fieldsattachment/'.$obj.'/'.$obj.'.php';
                 
+                /**
+                Cristian - 15/07/2015
+                */
                 if( JFile::exists($file)){
                     //file exist
-                    eval($function);
+                    if(method_exists("plgfieldsattachment_".$obj, "construct1")){
+                         eval($function);
+                     }else{
+                         
+ 
+                        // Add a message to the message queue
+                        JError::raiseWarning( 100, 'Fieldsattach : Update a plugin '.$obj );
+                         
+                     }
+                   
                 }
                         
             }
