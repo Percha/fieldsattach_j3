@@ -40,6 +40,8 @@ ALTER TABLE  `#__fieldsattach_groups` ADD `description` text AFTER  `title` ;
 ALTER TABLE  `#__fieldsattach_groups` ADD `position` varchar(255) AFTER  `description` ; 
 ALTER TABLE  `#__fieldsattach_groups` ADD `group_for` int(1) AFTER  `position` ; 
 ALTER TABLE  `#__fieldsattach_groups` ADD `note` varchar(150) AFTER  `title` ; 
+ALTER TABLE  `#__fieldsattach_groups` ADD `access` int(11) AFTER  `note` ; 
+
 
 
 

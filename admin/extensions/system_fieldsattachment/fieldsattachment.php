@@ -906,7 +906,7 @@ class plgSystemfieldsattachment extends JPlugin
                                 $cuantos_en_str++;
                                  
                   
-                                $str .= '<div class="tab-panewww" id="fiedlsattachTab_'.$field->idgroup.'"  >';
+                                $str .= '<div class="tab-panel-field" id="fiedlsattachTab_'.$field->idgroup.'"  >';
                                 if(!empty($field->descriptiongroup)) $str .= '<div class="desc">'.$field->descriptiongroup.'</div>';
                 
                                   

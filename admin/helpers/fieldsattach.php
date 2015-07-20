@@ -570,7 +570,7 @@ class fieldsattachHelper
                     $idioma = $elid->language; 
                    
                     $db = JFactory::getDBO();
-                    $query = 'SELECT a.id as idgroup, a.title as titlegroup ,  a.description as descriptiongroup, a.position, a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
+                    $query = 'SELECT a.access as access, a.id as idgroup, a.title as titlegroup ,  a.description as descriptiongroup, a.position, a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
                     $query .= 'WHERE a.catid = 0 AND a.published=1 AND b.published = 1 AND a.group_for=0 ';
                     //echo $elid->language."Language: ".$idioma;
                     if($elid->language != "*") $query .= ' AND (a.language="'.$elid->language.'" OR a.language="*" ) AND (b.language="'.$elid->language.'" OR b.language="*") ' ;
@@ -609,7 +609,7 @@ class fieldsattachHelper
 
 
                 $db	= & JFactory::getDBO();
-                $query = 'SELECT a.id as idgroup, a.title as titlegroup ,  a.description as descriptiongroup, a.position, a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
+                $query = 'SELECT a.access as access, a.id as idgroup, a.title as titlegroup ,  a.description as descriptiongroup, a.position, a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
                 $query .= 'WHERE a.catid = 0 AND a.published=1 AND b.published = 1 AND a.group_for=1  ';
                 //echo $elid->language."Language: ".$idioma;
                 if($elid->language != "*")  $query .= ' AND (a.language="'.$elid->language.'" OR a.language="*" ) AND (b.language="'.$elid->language.'" OR b.language="*") ' ;
@@ -667,7 +667,7 @@ class fieldsattachHelper
             if(!empty($elid)){
                 
                 //Extract all groups idgrou and idcat and put into array
-                  $query = 'SELECT a.id as idgroup, a.title as titlegroup, a.description as descriptiongroup, a.position,  a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
+                  $query = 'SELECT a.access as access, a.id as idgroup, a.title as titlegroup, a.description as descriptiongroup, a.position,  a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
                   $query .= 'WHERE  a.published=1 AND b.published = 1 AND a.group_for = 0 ';
                   //echo $elid->language."Language: ".$idioma;
                   if (  ($elid->language == $idioma ) && ($elid->language != "*") ) {
@@ -790,7 +790,7 @@ class fieldsattachHelper
                 $db	= & JFactory::getDBO();
 
                 //Extract all groups idgrou and idcat and put into array
-                  $query = 'SELECT a.id as idgroup, a.title as titlegroup, a.description as descriptiongroup, a.position,  a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
+                  $query = 'SELECT a.access as access, a.id as idgroup, a.title as titlegroup, a.description as descriptiongroup, a.position,  a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
                   $query .= 'WHERE  a.published=1 AND b.published = 1 AND a.group_for = 1 ';
                   //echo $elid->language."Language: ".$idioma;
                   if (  ($elid->language == $idioma ) && ($elid->language != "*")  ) {
@@ -903,7 +903,7 @@ class fieldsattachHelper
                     //$id = ",".$id.",";
                     $db = JFactory::getDBO();
 
-                    $query = 'SELECT a.id as idgroup, a.title as titlegroup ,  a.description as descriptiongroup ,a.position, a.catid, a.language, a.recursive, b.*, a.articlesid FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
+                    $query = 'SELECT a.access as access, a.id as idgroup, a.title as titlegroup ,  a.description as descriptiongroup ,a.position, a.catid, a.language, a.recursive, b.*, a.articlesid FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
                     //$query .= 'WHERE (a.articlesid LIKE "%,'. $id .',%" )  AND a.published=1 AND b.published = 1 ';
                     $query .= 'WHERE  a.published=1 AND b.published = 1 ';
 

@@ -935,41 +935,47 @@ class fieldattach
             
             $db = JFactory::getDBO(  );
             if(!$category){
-                $query = 'SELECT  b.type  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE b.published= true AND  a.fieldsid IN ('.$fieldid.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.articleid= '.$articleid;
+                $query = 'SELECT  b.type, c.access  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid INNER JOIN  #__fieldsattach_groups as c ON  b.groupid = c.id WHERE b.published= true AND  a.fieldsid IN ('.$fieldid.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.articleid= '.$articleid;
       	    }else{
-                $query = 'SELECT  b.type  FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE b.published= true AND a.fieldsid IN ('.$fieldid.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.catid= '.$articleid;
+                $query = 'SELECT  b.type, c.access  FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid INNER JOIN  #__fieldsattach_groups as c ON  b.groupid = c.id  WHERE b.published= true AND a.fieldsid IN ('.$fieldid.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.catid= '.$articleid;
       	    } 
- 
             
-             
             $db->setQuery( $query );
-	          $type = $db->loadResult();
-            $str = ""; 
-
-            JPluginHelper::importPlugin('fieldsattachment'); // very important
-
-	          if(empty($category)) $category = 0;
+            $record = $db->loadObject();
+            $str    = ""; 
              
-            $function  = "plgfieldsattachment_".$type."::getHTML( ".$articleid.", ".$fieldid.", ".$category." );";
-            
+            //User access view the layout takes some responsibility for display of limited information.
+            $user = JFactory::getUser();
+            $groups = $user->getAuthorisedViewLevels();  
 
+            if( in_array($record->access, $groups) ) 
+            { 
+                $type= $record->type;
 
-            $base = JPATH_SITE; 
+                JPluginHelper::importPlugin('fieldsattachment'); // very important
 
-            $file = $base.'/plugins/fieldsattachment/'.$type.'/'.$type.'.php';  
-            
-            $html=""; 
-            
-            if( JFile::exists($file)){
-              
-                //file exist 
-                eval($function);
-            }
-              
-             if($write)
-              echo $globalreturn ; 
-            else
-              return $globalreturn;        
+    	          if(empty($category)) $category = 0;
+                 
+                $function  = "plgfieldsattachment_".$type."::getHTML( ".$articleid.", ".$fieldid.", ".$category." );";
+                
+                $base = JPATH_SITE; 
+
+                $file = $base.'/plugins/fieldsattachment/'.$type.'/'.$type.'.php';  
+                
+                $html=""; 
+                
+                if( JFile::exists($file)){
+                  
+                    //file exist 
+                    eval($function);
+                }
+                  
+                 if($write)
+                  echo $globalreturn ; 
+                else
+                  return $globalreturn; 
+
+            }       
 	}
         
         
