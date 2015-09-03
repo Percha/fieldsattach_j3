@@ -181,7 +181,7 @@ class plgfieldsattachment_imagegallery extends extrafield
         $cont = 0;
 
         $sitepath  =  fieldsattachHelper::getabsoluteURL();
-        $title = fieldattach::getName( $articleid,  $fieldsid , $category  );
+        $fieldtitle = fieldattach::getName( $articleid,  $fieldsid , $category  );
         $published = plgfieldsattachment_imagegallery::getPublished( $fieldsid  );
 
         if(!empty($result) && $published){
@@ -235,7 +235,7 @@ class plgfieldsattachment_imagegallery extends extrafield
             
             
             
-            if(fieldattach::getShowTitle(   $fieldsid  )) $html = str_replace("[TITLE]", $title, $html); 
+            if(fieldattach::getShowTitle(   $fieldsid  )) $html = str_replace("[TITLE]", $fieldtitle, $html); 
             else $html = str_replace("[TITLE]", "", $html); 
 
             $html = str_replace("[ARTICLE_ID]", $articleid, $html);
