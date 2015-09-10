@@ -16,7 +16,7 @@ Update fieldsattach.<br /><br />
 If the installation is new, no problem.<br /><br />
 
 
-Froum - http://www.fieldsattach.com <br />
+Forum - http://www.fieldsattach.com <br />
 Modules, plugins, and more extras - http://www.fieldsattach.com<br />
 WIKI, https://github.com/Percha/fieldsattach_j3/wiki
 
