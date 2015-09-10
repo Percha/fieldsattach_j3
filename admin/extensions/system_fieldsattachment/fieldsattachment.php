@@ -656,7 +656,15 @@ class plgSystemfieldsattachment extends JPlugin
                             $db->setQuery($query);
                             //JError::raiseWarning( 100, $query  );
                             $db->query(); 
-                        } 
+                        }else{
+                            //10-09-2015 - Cristian
+                            //Exeption for empty value of select multipe
+                            if($obj->type == "selectmultiple"){
+                                 $query = 'UPDATE  #__fieldsattach_values SET value="'.$valor.'" WHERE id='.$valueslst->id .' AND articleid='.$article->id ;
+                                $db->setQuery($query); 
+                                $db->query(); 
+                            }
+                        }
                     }
 
                     //Acción PLUGIN ========================================================
