@@ -773,7 +773,7 @@ class fieldsattachHelper
         {
 
             $result = array();
-            $db	= & JFactory::getDBO();
+            $db	= JFactory::getDBO();
             $query = 'SELECT a.id, a.language FROM #__categories as a WHERE a.id='. $catid  ;
             $src="";
 
@@ -787,7 +787,7 @@ class fieldsattachHelper
 			$idscats = $retorno_recursive;
             
             if(!empty($elid)){
-                $db	= & JFactory::getDBO();
+                $db	= JFactory::getDBO();
 
                 //Extract all groups idgrou and idcat and put into array
                   $query = 'SELECT a.access as access, a.id as idgroup, a.title as titlegroup, a.description as descriptiongroup, a.position,  a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
