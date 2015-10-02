@@ -597,7 +597,7 @@ class fieldsattachHelper
         public function  getfieldsForAllCategory($id)
         {
 
-            $db	= & JFactory::getDBO();
+            $db	= JFactory::getDBO();
             $query = 'SELECT  a.language FROM #__categories as a WHERE a.id='. $id  ;
 
             $db->setQuery( $query );
