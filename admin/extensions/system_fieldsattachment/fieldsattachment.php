@@ -1503,7 +1503,7 @@ class plgSystemfieldsattachment extends JPlugin
             
         $db     = JFactory::getDBO();
         $user   = JFactory::getUser();
-        $mysqldate = date( 'Y-m-d H:i:s' );
+        $mysqldate = JFactory::getDate()->format('Y-m-d H:i:s');
         
         //-----------------------
         $query = 'SELECT  id  FROM #__content WHERE created_by='.$user->get('id').' AND title= "" ';
@@ -1581,7 +1581,7 @@ class plgSystemfieldsattachment extends JPlugin
         {
             $db = & JFactory::getDBO();
             $user =& JFactory::getUser();
-            $mysqldate = date( 'Y-m-d H:i:s' );
+            $mysqldate = JFactory::getDate()->format('Y-m-d H:i:s');
 
             //-----------------------
             $query = 'SELECT  id  FROM #__categories WHERE created_user_id='.$user->get(id).' AND title= "" ';
@@ -2114,7 +2114,7 @@ class plgSystemfieldsattachment extends JPlugin
                     
                     //LOG*********
                     jimport('joomla.cron.log');
-                    $create_date = date("Y-m-d H:i:s");
+                    $create_date = JFactory::getDate()->format('Y-m-d H:i:s');
                     $mesg = $create_date." - " .$mesg;
                     
                     JLog::addLogger(
