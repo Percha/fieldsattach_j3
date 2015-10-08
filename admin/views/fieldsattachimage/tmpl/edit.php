@@ -103,8 +103,8 @@ setcookie('loginin',"true" , time() + 3600,'/');
 		<p><?php echo $this->form->getLabel('published'); ?>
 		<?php echo $this->form->getInput('published'); ?></p>
 
-		<p><?php echo $this->form->getLabel('ordering'); ?>
-		<?php echo $this->form->getInput('ordering'); ?></p>
+		<!--<p><?php //echo $this->form->getLabel('ordering'); ?>
+		<?php //echo $this->form->getInput('ordering'); ?></p>-->
 		
 		<?php if($gallerydescription==1){?>
 		<p><?php echo $this->form->getLabel('description'); ?>
