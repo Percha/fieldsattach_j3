@@ -28,7 +28,7 @@ JLoader::register('fieldsattachHelper',   $dir.'administrator/components/com_fie
 $sitepath = JPATH_BASE ;
 $sitepath = str_replace ("administrator", "", $sitepath); 
 $sitepath = JPATH_SITE ;
-JLoader::register('fieldsattachHelper',   $sitepath.DS.'administrator/components/com_fieldsattach/helpers/fieldsattach.php');
+JLoader::register('fieldsattachHelper',   $sitepath.'/administrator/components/com_fieldsattach/helpers/fieldsattach.php');
 
 
 
@@ -66,9 +66,9 @@ class plgSystemfieldsattachment extends JPlugin
                
         parent::__construct($subject, $config);
                 
-                $this->path= '..'.DS.'images'.DS.'documents';
+                $this->path= '../images/documents';
                 if ((JRequest::getVar('option')=='com_categories' && JRequest::getVar('layout')=="edit" && JRequest::getVar('extension')=="com_content"  )){
-                     $this->path= '..'.DS.'images'.DS.'documentscategories';
+                     $this->path= '../images/documentscategories';
                 }
                 
         $mainframe = JFactory::getApplication();
@@ -790,7 +790,7 @@ class plgSystemfieldsattachment extends JPlugin
 
             $view = JRequest::getVar('view');
             if ($view =='article') $path = '';
-            else $path = '..'.DS;
+            else $path = '../';
         }
         $task = JRequest::getVar('task');
         $option= JRequest::getVar('option');
@@ -1138,7 +1138,7 @@ class plgSystemfieldsattachment extends JPlugin
 
                         $view = JRequest::getVar('view');
                         if ($view =='article') $path = '';
-                        else $path = '..'.DS;
+                        else $path = '../';
         }
         $task = JRequest::getVar('task');
         $option= JRequest::getVar('option');
@@ -1503,7 +1503,7 @@ class plgSystemfieldsattachment extends JPlugin
             
         $db     = JFactory::getDBO();
         $user   = JFactory::getUser();
-        $mysqldate = JFactory::getDate()->format('Y-m-d H:i:s');
+        $mysqldate = date( 'Y-m-d H:i:s' );
         
         //-----------------------
         $query = 'SELECT  id  FROM #__content WHERE created_by='.$user->get('id').' AND title= "" ';
@@ -1581,7 +1581,7 @@ class plgSystemfieldsattachment extends JPlugin
         {
             $db = & JFactory::getDBO();
             $user =& JFactory::getUser();
-            $mysqldate = JFactory::getDate()->format('Y-m-d H:i:s');
+            $mysqldate = date( 'Y-m-d H:i:s' );
 
             //-----------------------
             $query = 'SELECT  id  FROM #__categories WHERE created_user_id='.$user->get(id).' AND title= "" ';
@@ -2114,7 +2114,7 @@ class plgSystemfieldsattachment extends JPlugin
                     
                     //LOG*********
                     jimport('joomla.cron.log');
-                    $create_date = JFactory::getDate()->format('Y-m-d H:i:s');
+                    $create_date = date("Y-m-d H:i:s");
                     $mesg = $create_date." - " .$mesg;
                     
                     JLog::addLogger(
