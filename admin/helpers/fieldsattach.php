@@ -191,7 +191,7 @@ class fieldsattachHelper
         $return = "" ;
         //Load XML FORM ==================================================
         //$file = dirname(__FILE__) . DS . "form.xml";
-        $file = JPATH_PLUGINS.DS.'fieldsattachment'.DS.$name.DS.'form.xml';
+        $file = JPATH_PLUGINS.'/fieldsattachment/'.$name.'/form.xml';
         // echo "FILEWWWW:".$file;
         //$form = $this->form->loadfile( $file ); // to load in our own version of login.xml
         //$obj = new JForm();
@@ -237,7 +237,7 @@ class fieldsattachHelper
         $lang_file="plg_fieldsattachment_".$name ;
         $sitepath1 = JPATH_ROOT ;
         //$sitepath1 = str_replace ("administrator", "", $sitepath1);
-        $path = $sitepath1."/administrator/language".DS . $lang->getTag() .DS.$lang->getTag().".".$lang_file.".ini";
+        $path = $sitepath1."/administrator/language/" . $lang->getTag() ."/".$lang->getTag().".".$lang_file.".ini";
         
         //LOAD JS
         //$doc = new DOMDocument();
@@ -251,7 +251,7 @@ class fieldsattachHelper
         //LOAD JS -- 25-09-2012
         //$xml = JFactory::getXMLParser('Simple');
         
-        $xmlfile = JPATH_PLUGINS.DS.'fieldsattachment'.DS.$name.DS.$name.'.xml'; 
+        $xmlfile = JPATH_PLUGINS.'/fieldsattachment/'.$name.'/'.$name.'.xml'; 
         //$xml->loadFile($xmlfile); 
         //$xml = JFactory::getXMLParser('Simple');
         //$xml = SimpleXMLElement($xmlfile);
@@ -335,7 +335,7 @@ class fieldsattachHelper
             // JError::raiseWarning( 100, $file. " NAMETMP:".$SafeFile." ID:: ". $articleid. " ->  fieldsid ".$fieldsid ." PATH:".$path  );
             //JError::raiseWarning( 100,   $path .DS. $articleid .DS.  $_FILES[$file]["name"] );
              
-            if(!JFile::upload($_FILES[$file]['tmp_name'] , $path .DS. $articleid .DS.  $_FILES[$file]["name"]))
+            if(!JFile::upload($_FILES[$file]['tmp_name'] , $path .'/'. $articleid .'/'.  $_FILES[$file]["name"]))
             {
                 JError::raiseWarning( 100,  JTEXT::_("Uploda image Error")   );
             }else
@@ -343,16 +343,16 @@ class fieldsattachHelper
                 $app = JFactory::getApplication();
                 $app->enqueueMessage( JTEXT::_("Uploda image OK")  );
                 $nombreficherofinal = $_FILES[$file]["name"];
-                if (file_exists( $path .DS. $articleid .DS. $nombreficherofinal))
+                if (file_exists( $path .'/'. $articleid .'/'. $nombreficherofinal))
                 {
 
                     //$nombreficherofinal = $fieldsid."_".$nombreficherofinal;
                     $app->enqueueMessage( JTEXT::_("Name image changed " ). $nombreficherofinal  );
                     //JError::raiseWarning( 100, $_FILES[$file]["name"]. " ". JTEXT::_("already exists. "). " -> Name changed ".$nombreficherofinal   );
-                    JFile::move($path .DS. $articleid .DS.$_FILES[$file]["name"], $path .DS. $articleid .DS.$nombreficherofinal);
+                    JFile::move($path .'/'. $articleid .'/'.$_FILES[$file]["name"], $path .'/'. $articleid .'/'.$nombreficherofinal);
                 }
                 //UPDATE
-                $db	= & JFactory::getDBO();
+                $db	=  JFactory::getDBO();
                 if ((JRequest::getVar('option')=='com_categories' && JRequest::getVar('layout')=="edit"   ))
                 {
                     $query = 'UPDATE  #__fieldsattach_categories_values SET value="'. $nombreficherofinal.'" WHERE id='.$fieldsvalueid ;
@@ -378,7 +378,7 @@ class fieldsattachHelper
                      //echo $this->path .DS. $file ;
                      $deleted= false;
                      if(empty($selectable)){
-                         if(!JFile::delete( $path .DS. $articleid .DS.  $file) )
+                         if(!JFile::delete( $path .'/'. $articleid .'/'.  $file) )
                          {
                               JError::raiseWarning( 100,  JTEXT::_("Delete file Error")." ".$path   );
 
@@ -503,10 +503,10 @@ class fieldsattachHelper
             $tmp = $arr1[1];
 
             //$nombre = $path_absolute."/".$path .DS. $id .DS. $nombre;
-            $nombre =  $path .DS. $id .DS. $nombre;
-            $destarchivo = $path .DS. $id .DS. $archivo;
+            $nombre =  $path .'/'. $id .'/'. $nombre;
+            $destarchivo = $path .'/'. $id .'/'. $archivo;
             //$archivo =  $path_absolute."/".$path .DS. $id .DS. $archivo;
-            $archivo =  $path .DS. $id .DS. $archivo;
+            $archivo =  $path .'/'. $id .'/'. $archivo;
 
             //$app->enqueueMessage( JTEXT::_("Name file:  ").$nombre);
             //$app->enqueueMessage( JTEXT::_("New name:  ").$archivo);

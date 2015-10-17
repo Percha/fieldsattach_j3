@@ -299,7 +299,7 @@ class fieldsattachController extends JControllerLegacy
 
             //save file
             $app = JFactory::getApplication();
-            $path = JPATH_SITE.DS.'images'.DS;
+            $path = JPATH_SITE.'/images';
             $filename = 'db-backup-'.time().'-'.(md5(implode(',',$tables)));
             $handle = fopen($path.$filename.'.sql','w+');
             fwrite($handle,$return);

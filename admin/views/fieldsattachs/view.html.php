@@ -42,7 +42,7 @@ class fieldsattachViewfieldsattachs extends JViewLegacy
 		
 		//Version
 		$this->version=""; 
-		$xml=JFactory::getXML(JPATH_COMPONENT.DS.'fieldsattach.xml');
+		$xml=JFactory::getXML(JPATH_COMPONENT.'/fieldsattach.xml');
 		$this->version =(string)$xml->version;
 
 		// Set the toolbar

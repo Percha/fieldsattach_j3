@@ -29,7 +29,7 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_fieldsattach'))
 
 if(JRequest::getVar("view") == "fieldsattachimages" || JRequest::getVar("view") == "fieldsattachimage") JRequest::setVar('tmpl','component');
 // require helper file
-JLoader::register('fieldsattachHelper', dirname(__FILE__) . DS . 'helpers' . DS . 'fieldsattach.php');
+JLoader::register('fieldsattachHelper', dirname(__FILE__) . '/' . 'helpers' . '/' . 'fieldsattach.php');
  
 
 // import joomla controller library

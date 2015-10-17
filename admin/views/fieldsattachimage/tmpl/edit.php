@@ -22,7 +22,7 @@ JHtml::_('formbehavior.chosen', 'select');
 
 $sitepath = JPATH_SITE ; 
  
-JLoader::register('fieldattach',  $sitepath.DS.'components/com_fieldsattach/helpers/fieldattach.php');
+JLoader::register('fieldattach',  $sitepath.'/components/com_fieldsattach/helpers/fieldattach.php');
 
 
 

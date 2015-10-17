@@ -47,6 +47,7 @@ ALTER TABLE  `#__fieldsattach_groups` ADD `access` int(11) AFTER  `note` ;
 
 
 
+
 DROP TABLE IF EXISTS `#__fieldsattach_values`;
 
 CREATE TABLE IF NOT EXISTS `#__fieldsattach_values` (
