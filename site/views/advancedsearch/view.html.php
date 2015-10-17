@@ -24,7 +24,7 @@ jimport('joomla.application.component.view');
 global $sitepath;
 $sitepath = JPATH_BASE ;
 $sitepath = str_replace ("administrator", "", $sitepath);  
-JLoader::register('fieldattach',  $sitepath.DS.'components/com_fieldsattach/helpers/fieldattach.php');
+JLoader::register('fieldattach',  $sitepath.'/components/com_fieldsattach/helpers/fieldattach.php');
 
 class FieldsattachViewAdvancedSearch extends JViewLegacy
 {
@@ -238,7 +238,7 @@ class FieldsattachViewAdvancedSearch extends JViewLegacy
                 
                 //Add filter script
                 $doc =& JFactory::getDocument(); 
-                $doc->addScript(JURI::root()."components".DS."com_fieldsattach".DS."views".DS."advancedsearch".DS."fields".DS."filter.js" );
+                $doc->addScript(JURI::root()."components/com_fieldsattach/views/advancedsearch/fields/filter.js" );
 
 		$this->assignRef('pagination',  $pagination);
 		$this->assignRef('results',		$results);
