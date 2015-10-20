@@ -20,6 +20,7 @@
             >
                  <option value="">Without RichText</option>
                  <option value="RichText">With RichText</option>
+                 <option value="TyniEditor">With TinyEditor</option>
 
             </field>
         </fieldset>
