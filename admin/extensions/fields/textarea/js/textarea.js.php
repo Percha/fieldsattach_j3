@@ -47,8 +47,13 @@ ObjTextArea = new Class({
             valor = txt;
             var tmp = String(valor).split("|"); 
             opt1 = "";
-            if(tmp.length > 0) opt1=tmp[0]; 
-            this.setunit(opt1);
+            opt2 = "";
+            
+            if(tmp.length > 0) opt1=tmp[0];  
+            if(tmp.length > 1) opt2=tmp[1]; 
+            
+
+            this.setunit(opt1, opt2);
              
         },
         revalue: function(){
@@ -60,7 +65,12 @@ ObjTextArea = new Class({
             if($('jform_params_field_textarea') == null)  opt1 = el.getElement("select#params_field_textarea").get("value"); 
             else  opt1 = el.getElement("select#jform_params_field_textarea").get("value");  
 
-            str += opt1;   
+            opt2 =  el.getElement("select#params_field_textareaeditor").get("value");  
+
+            str += opt1; 
+            str += '|';   
+            str += opt2;   
+
             
             $("jform_extras").set("value", str);
              
@@ -68,10 +78,13 @@ ObjTextArea = new Class({
              
            
         },
-        setunit:function(opt1)
+        setunit:function(opt1, opt2)
         { 
             if($('jform_params_field_textarea') == null) $('params_field_textarea').set("value", opt1); 
             else $('jform_params_field_textarea').set("value", opt1); 
+
+            if($('jform_params_field_textareaeditor') == null) $('params_field_textareaeditor').set("value", opt2); 
+            else $('jform_params_field_textareaeditor').set("value", opt2); 
 
         },
 	timerevent:function(obj){
