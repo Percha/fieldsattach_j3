@@ -22,9 +22,12 @@ define('COM_MEDIA_BASE',	JPATH_ROOT.'/'.$params->get($path, 'images'));
 define('COM_MEDIA_BASEURL', JURI::root().$params->get($path, 'images'));
 
 // Access check.
-if (!JFactory::getUser()->authorise('core.manage', 'com_fieldsattach')) 
+if (!JFactory::getUser()->authorise('core.manage', 'com_fieldsattach')  ) 
 {
-	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
+	if(  (JRequest::getVar("view") != "images") && (JRequest::getVar("view") != "imagesList")) 
+		{
+			return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
+		}
 }
 
 if(JRequest::getVar("view") == "fieldsattachimages" || JRequest::getVar("view") == "fieldsattachimage") JRequest::setVar('tmpl','component');
