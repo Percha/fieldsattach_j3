@@ -66,6 +66,12 @@ class plgfieldsattachment_imagegallery extends extrafield
 		$session->set('fieldsattachid',$fieldsid);
 		
         $sitepath  =  fieldsattachHelper::getabsoluteURL();
+
+        $app = JFactory::getApplication();
+        $dir = '';
+        //if ($app->isSite())  echo 'Client is site';
+        if ($app->isAdmin()) $dir="administrator/";
+
         $str_gallery = '<div id="gallery_'.$fieldsid.'" class="galleryfield">'.plgfieldsattachment_imagegallery::getGallery1($articleid, $fieldsid).'</div>';
                 $str =''; 
                 $str .= $str_gallery; 
@@ -135,9 +141,10 @@ class plgfieldsattachment_imagegallery extends extrafield
 					      );
 					      
 					      //AJAX CALL *****
-					      var url  = \"".JURI::root(false)."/administrator/index.php?option=com_fieldsattach&task=fieldsattachimagesorderajax&catid=".$articleid."&fieldsid=\"+fieldsattachid+\"&order=\"+tmparray.toString();
-					       
-                                                  var xmlhttp;
+                            
+					      var url  = \"".JURI::root(false).$dir."index.php?option=com_fieldsattach&task=fieldsattachimagesorderajax&catid=".$articleid."&fieldsid=\"+fieldsattachid+\"&order=\"+tmparray.toString();
+					      
+                          var xmlhttp;
 					      if (window.XMLHttpRequest)
 					      {// code for IE7+, Firefox, Chrome, Opera, Safari
 					      xmlhttp=new XMLHttpRequest();
@@ -181,7 +188,7 @@ class plgfieldsattachment_imagegallery extends extrafield
         $cont = 0;
 
         $sitepath  =  fieldsattachHelper::getabsoluteURL();
-        $fieldtitle = fieldattach::getName( $articleid,  $fieldsid , $category  );
+        $title = fieldattach::getName( $articleid,  $fieldsid , $category  );
         $published = plgfieldsattachment_imagegallery::getPublished( $fieldsid  );
 
         if(!empty($result) && $published){
@@ -235,7 +242,7 @@ class plgfieldsattachment_imagegallery extends extrafield
             
             
             
-            if(fieldattach::getShowTitle(   $fieldsid  )) $html = str_replace("[TITLE]", $fieldtitle, $html); 
+            if(fieldattach::getShowTitle(   $fieldsid  )) $html = str_replace("[TITLE]", $title, $html); 
             else $html = str_replace("[TITLE]", "", $html); 
 
             $html = str_replace("[ARTICLE_ID]", $articleid, $html);

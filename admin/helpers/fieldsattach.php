@@ -1269,25 +1269,64 @@ class fieldsattachHelper
         }
 
 
-         /**
-	* Get value of one field content
+    /**
+	* Save the order of imagegallery
 	*
 	* @access	public
 	* @since	1.5
-	*/
-        /*function getfieldsvalue($fieldsid, $articleid)
-        {
-            $result ="";
-            $db	= & JFactory::getDBO();
-            $query = 'SELECT a.value FROM #__fieldsattach_values as a WHERE a.fieldsid='. $fieldsid.' AND a.articleid='.$articleid  ;
-            //echo $query;
-            $db->setQuery( $query );
-            $elid = $db->loadObject();
-            $return ="";
-            if(!empty($elid))  $return =$elid->value;
-            return $return ;
-        }*/
+	*/ 
+    public function fieldsattachimagesorderajax()
+    {
+       // Log the start
+        // Initialise a basic logger with no options (once only).
+        // Include the JLog class.
+        jimport('joomla.log.log');
+        
+        JLog::addLogger(array());
+        
+        // Add a message.
+        JLog::add('Logged 3', JLog::WARNING, 'fieldsattachimagesorderajax');
+                
+         
+        // Create a new query object.
+        $db = JFactory::getDBO();
+        $query = $db->getQuery(true);
+ 
+        $session          = JFactory::getSession();
+        $fieldsattachid   = JRequest::getVar("fieldsid");
+        $order            = JRequest::getVar("order");
+        //Article -------------------
+        $articleid =  $session->get('articleid');
+        
+        // Add a message.
+        JLog::add($articleid, JLog::WARNING, 'Article ID');
+        JLog::add($fieldsattachid, JLog::WARNING, 'Fieldsattahc ID');
+        JLog::add($order, JLog::WARNING, 'Order');
+                 
+        if(empty($articleid) || empty($fieldsattachid) || empty($order)){
+        //Empty  Nothing TODO
+        }else{
+        //SQL
+            $tmporder = explode(",",$order);
+            if(count($tmporder)>0)
+            {
+                $cont = 1;
+                foreach($tmporder as $obj){
+                        //$query = 'UPDATE  #__fieldsattach_images SET ordering='.$obj.' WHERE id='.$fieldsattachid .' AND articleid='.$articleid;
+                        $query = 'UPDATE  #__fieldsattach_images SET ordering='.$cont.' WHERE id='.$obj ;
+                        
+                        JLog::add($query, JLog::WARNING, "sql");
+                        $db->setQuery($query);
+                        // Add a message.
+                        $db->execute();
+                        //$db->query();
+                        $cont++;
+                }
+        
+            }
+        }
 
+    }
 
         
 
