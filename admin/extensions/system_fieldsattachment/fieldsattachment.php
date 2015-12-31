@@ -131,7 +131,7 @@ class plgSystemfieldsattachment extends JPlugin
         
     public function batchcopy($newId, $oldId)
     {
-        $db = & JFactory::getDBO();
+        $db = JFactory::getDBO();
         $query = 'SELECT a.* FROM #__content as a  WHERE  a.id ='. $newId ; 
         $db->setQuery($query);  
 
@@ -302,7 +302,7 @@ class plgSystemfieldsattachment extends JPlugin
         //$idscat = $this->recursivecat($article->id);
         $this->str = fieldsattachHelper::recursivecat($article->id  );
        
-        $db = & JFactory::getDBO(); 
+        $db = JFactory::getDBO(); 
         
         //JError::raiseWarning( 100,   " IDDDD CATEGORIES: ".$article->id    );
 /*
@@ -920,7 +920,8 @@ class plgSystemfieldsattachment extends JPlugin
                                   
                             }
                             $idgroup = $field->idgroup;
-                            $titlegropu = $field->titlegroup;
+                            //30-12-2015 - Bug: Single quote in Group title blocks plugin #51
+                            $titlegropu = addslashes($field->titlegroup);
                                
                           
                             //NEW GET PLUGIN ********************************************************************
