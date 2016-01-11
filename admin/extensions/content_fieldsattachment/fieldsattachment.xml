@@ -7,7 +7,7 @@
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 	<authorEmail>cristian@percha.com</authorEmail>
 	<authorUrl>http://www.percha.com</authorUrl>
-	<version>1.7</version>
+	<version>1.8</version>
 	<description>PERCHA field ATTACHMENT PLUGIN INSTALLED</description> 
 	<files>
 		<filename plugin="fieldsattachment">fieldsattachment.php</filename>

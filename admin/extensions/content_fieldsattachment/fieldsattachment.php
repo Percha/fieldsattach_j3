@@ -122,6 +122,11 @@ class plgContentfieldsattachment extends JPlugin
                             { 
                                //echo "field id: ".$field->id;
                                //echo "<br>field id: ".$field->access;
+                               
+                            //Access privilege feature is not suppported yet
+                               if(empty($field->access)) $field->access=1;
+                               //***************************
+                               
                                if( in_array($field->access, $groups) ) {
                                 //NEW
                                 JPluginHelper::importPlugin('fieldsattachment'); // very important
