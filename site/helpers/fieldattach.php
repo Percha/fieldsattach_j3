@@ -1026,5 +1026,53 @@ class fieldattach
               
             return $html; 
         }
+        
+         /**
+     * Show all fields of one article or category
+     *
+     * @param $articleid   id of article 
+     *        $category if category (Don't work for categories yet)
+     *
+     * @return  value to link.
+     * @since 1.6
+     */
+      static function getAllFieldValue($articleid, $category  = false)
+      { 
+            global $globalreturn ;
+            $db = JFactory::getDBO(  );
+            if(!$category){
+                $query = 'SELECT a.id,  b.type  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE   (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.articleid= '.$articleid;
+            }else{
+               // $query = 'SELECT a.id,  b.type  FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.catid= '.$articleid;
+            } 
+                   
+                  
+            $db->setQuery( $query );
+            // Load the results as a list of stdClass objects (see later for more options on retrieving data).
+            $results = $db->loadObjectList();
+             
+           
+            $html=""; 
+            JPluginHelper::importPlugin('fieldsattachment'); // very important 
+
+            foreach ($results as $result) { 
+              //echo "<br>Fieldid:".$result->id." type: ".$result->type;
+              $type     = $result->type;
+              $fieldid  = $result->id;
+            
+              $function  = "plgfieldsattachment_".$type."::getHTML( ".$articleid.", ".$fieldid.", false, false );";
+             
+              $base = JPATH_SITE;
+              $file = $base.'/plugins/fieldsattachment/'.$type.'/'.$type.'.php'; 
+               
+              
+              if( JFile::exists($file)){ 
+                
+                eval($function);
+                echo '<div id="field_'.$articleid.'"_'.$fieldid.'">'.$globalreturn.'</div>'; 
+              }
+            } 
+
+      }
 
 }
