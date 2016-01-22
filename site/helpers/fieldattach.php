@@ -1069,7 +1069,7 @@ class fieldattach
               if( JFile::exists($file)){ 
                 
                 eval($function);
-                echo '<div id="field_'.$articleid.'"_'.$fieldid.'">'.$globalreturn.'</div>'; 
+                echo '<div id="field_'.$articleid.'_'.$fieldid.'">'.$globalreturn.'</div>'; 
               }
             } 
 
