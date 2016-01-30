@@ -150,11 +150,27 @@ class plgfieldsattachment_input extends extrafield
             $jsonValues       = fieldattach::getFieldValues( $articleid,  $fieldid , $category   );
             $jsonValuesArray  = json_decode($jsonValues); 
 
+            $valor      =  '';
+            if(isset($jsonValuesArray->value)){
+               $valor      = html_entity_decode($jsonValuesArray->value);
+            }
 
-            $valor      = html_entity_decode($jsonValuesArray->value);
-            $title      = $jsonValuesArray->title;
-            $published  = $jsonValuesArray->published;
-            $showTitle  = $jsonValuesArray->showtitle;
+            $title      =  '';
+            if(isset($jsonValuesArray->value)){
+               $title      =  $jsonValuesArray->title;
+            }
+
+            $published      =  '';
+            if(isset($jsonValuesArray->value)){
+               $published      =  $jsonValuesArray->published;
+            }
+
+            $showTitle      =  '';
+            if(isset($jsonValuesArray->value)){
+               $showTitle      =  $jsonValuesArray->showtitle;
+            }
+           
+         
 
           }
           else
@@ -242,7 +258,7 @@ class plgfieldsattachment_input extends extrafield
 
     }
 	
-	public function searchinput($fieldsid, $value, $extras)
+	public static function searchinput($fieldsid, $value, $extras)
 	{
 		return plgfieldsattachment_input::renderInput(-1, $fieldsid, $value, $extras);
 		  
