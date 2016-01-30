@@ -594,7 +594,7 @@ class fieldsattachHelper
 	* @access	public
 	* @since	1.5
 	*/
-        public function  getfieldsForAllCategory($id)
+        public static function  getfieldsForAllCategory($id)
         {
 
             $db	= JFactory::getDBO();
@@ -608,7 +608,7 @@ class fieldsattachHelper
                 $idioma = $elid->language;
 
 
-                $db	= & JFactory::getDBO();
+                $db	=  JFactory::getDBO();
                 $query = 'SELECT a.access as access, a.id as idgroup, a.title as titlegroup ,  a.description as descriptiongroup, a.position, a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
                 $query .= 'WHERE a.catid = 0 AND a.published=1 AND b.published = 1 AND a.group_for=1  ';
                 //echo $elid->language."Language: ".$idioma;
@@ -769,7 +769,7 @@ class fieldsattachHelper
 	* @access	public
 	* @since	1.5
 	*/
-        public function getfieldsCategory($catid)
+        public static function getfieldsCategory($catid)
         {
 
             $result = array();
@@ -1213,7 +1213,7 @@ class fieldsattachHelper
 	* @access	public
 	* @since	1.5
 	*/
-        public function getfieldsvalueCategories($fieldsid, $catid)
+        public static function getfieldsvalueCategories($fieldsid, $catid)
         {
             $result ="";
             $db	=  JFactory::getDBO();
