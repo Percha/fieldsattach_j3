@@ -241,7 +241,7 @@ class plgfieldsattachment_select extends extrafield
 	    return $retorno;
 	}
         
-	public function searchinput($fieldsid, $value, $extras)
+	public static function searchinput($fieldsid, $value, $extras)
 	{
 		return plgfieldsattachment_select::renderInput(-1, $fieldsid, $value, $extras);
 		  
