@@ -299,22 +299,34 @@ class fieldsattachController extends JControllerLegacy
 
             //save file
             $app = JFactory::getApplication();
-            $path = JPATH_SITE.'/images';
+            $path = JPATH_SITE.'/tmp';
             $filename = 'db-backup-'.time().'-'.(md5(implode(',',$tables)));
-            $handle = fopen($path.$filename.'.sql','w+');
+            $handle = fopen($path.'/'.$filename.'.sql','w+');
             fwrite($handle,$return);
             fclose($handle);
             
             $files_to_zip = array(
-            $path.$filename.'.sql'
+            $path.'/'.$filename.'.sql'
             );
             //if true, good; if false, zip creation failed
-            $result = $this->create_zip($files_to_zip, $path.$filename.'.zip');
-            $app->enqueueMessage( JTEXT::_("EXPORT OK") . '<br /><br /> Download: <a href="../images/'.$filename.'.zip">images/'.$filename.'.zip</a>' )   ;
-            unlink($path.$filename.'.sql');
+            //$result = $this->create_zip($files_to_zip, $path.'/'.$filename.'.zip');
+            $app->enqueueMessage( JTEXT::_("EXPORT OK") . '<br /><br /> Download: <a href="../tmp/'.$filename.'.sql" target="_blank">'.$filename.'.sql</a>' )   ;
+            //unlink($path.'/'.$filename.'.sql');
+
+            /*
+            //Download SQL
+            //save file
+            $handle = fopen($path.'/'.$filename.'.sql','w+');
+            // print_r($handle);exit;
+            fwrite($handle,$return);
+            fclose($handle);
+            //add below code to download it as a sql file
+            Header('Content-type: application/octet-stream');
+            Header('Content-Disposition: attachment; '.$path.'/'.$filename.'.sql');
+            echo $return;*/
             
              // Load the submenu.
-		fieldsattachHelper::addSubmenu(JRequest::getCmd('view', 'fieldsattach'));
+		    fieldsattachHelper::addSubmenu(JRequest::getCmd('view', 'fieldsattach'));
             parent::display(); 
         }
         
