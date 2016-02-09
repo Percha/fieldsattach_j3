@@ -29,7 +29,7 @@ class fieldattach
    * @since 1.6
    */
 
-  static public function getFieldValues($articleid, $fieldsids, $category  = false)
+  static public function getjsonFieldValues($articleid, $fieldsids, $category  = false)
   {
       $db = JFactory::getDBO(  );
       /*if(!$category){

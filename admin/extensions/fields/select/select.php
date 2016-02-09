@@ -120,9 +120,9 @@ class plgfieldsattachment_select extends extrafield
           //$title = fieldattach::getName( $articleid,  $fieldsid , $category );
           //$published = plgfieldsattachment_select::getPublished( $fieldsid  );
 
-          if(method_exists ( 'fieldattach' , 'getFieldValues' ))
+          if(method_exists ( 'fieldattach' , 'getjsonFieldValues' ))
           {
-            $jsonValues       = fieldattach::getFieldValues( $articleid,  $fieldsid , $category   );
+            $jsonValues       = fieldattach::getjsonFieldValues( $articleid,  $fieldsid , $category   );
             $jsonValuesArray  = json_decode($jsonValues); 
 
 

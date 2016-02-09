@@ -145,9 +145,9 @@ class plgfieldsattachment_input extends extrafield
          
 
           //if(function_exists( 'fieldattach::getFieldValues' )) 
-          if(method_exists ( 'fieldattach' , 'getFieldValues' ))
+          if(method_exists ( 'fieldattach' , 'getjsonFieldValues' ))
           {
-            $jsonValues       = fieldattach::getFieldValues( $articleid,  $fieldid , $category   );
+            $jsonValues       = fieldattach::getjsonFieldValues( $articleid,  $fieldid , $category   );
             $jsonValuesArray  = json_decode($jsonValues); 
 
             $valor      =  '';

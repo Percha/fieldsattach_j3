@@ -141,9 +141,9 @@ class plgfieldsattachment_textarea extends extrafield
     {
         global $globalreturn;
 
-        if(method_exists ( 'fieldattach' , 'getFieldValues' ))
+        if(method_exists ( 'fieldattach' , 'getjsonFieldValues' ))
           {
-            $jsonValues       = fieldattach::getFieldValues( $articleid,  $fieldsid , $category   );
+            $jsonValues       = fieldattach::getjsonFieldValues( $articleid,  $fieldsid , $category   );
             $jsonValuesArray  = (json_decode($jsonValues)); 
 
 
