@@ -945,11 +945,11 @@ class fieldattach
             $str    = ""; 
              
             //User access view the layout takes some responsibility for display of limited information.
-            $user = JFactory::getUser();
-            $groups = $user->getAuthorisedViewLevels();  
+            //$user = JFactory::getUser();
+           // $groups = $user->getAuthorisedViewLevels();  
 
-            if( in_array($record->access, $groups) ) 
-            { 
+           // if( in_array($record->access, $groups) ) 
+           // { 
                 $type= $record->type;
 
                 JPluginHelper::importPlugin('fieldsattachment'); // very important
@@ -975,7 +975,7 @@ class fieldattach
                 else
                   return $globalreturn; 
 
-            }       
+           // }       
 	}
         
         
