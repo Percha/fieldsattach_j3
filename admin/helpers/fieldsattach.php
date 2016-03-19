@@ -406,34 +406,67 @@ class fieldsattachHelper
         
         
         /*resizeImg function*/
-        
+
         function resizeImg($img, $w, $h, $newfilename,$filter=null) {
 
+            $app = JFactory::getApplication();
             
-        $app = JFactory::getApplication();
-        
-        
-        $app->enqueueMessage( JTEXT::_("IMAGE RESIZE: ")." width:".$w." height:".$h  );
-            
-            
-        //Check if GD extension is loaded
-        if (!extension_loaded('gd') && !extension_loaded('gd2')) {
-        trigger_error("GD is not loaded", E_USER_WARNING);
-        return false;
-        }
+            #$app->enqueueMessage( JTEXT::_("IMAGE RESIZE: ")." width:".$w." height:".$h  );
+                 
+            //Check if GD extension is loaded
+            if (!extension_loaded('gd') && !extension_loaded('gd2')) {
+                trigger_error("GD is not loaded", E_USER_WARNING);
+                return false;
+            }
 
-        //Get Image size info
-        $imgInfo = getimagesize($img);
-        switch ($imgInfo[2]) {
-        case 1: $im = imagecreatefromgif($img); break;
-        case 2: $im = imagecreatefromjpeg($img);  break;
-        case 3: $im = imagecreatefrompng($img); break;
-        default:  trigger_error('Unsupported filetype!', E_USER_WARNING);  break;
-        }
-        
-        //FILTER
-        if(!empty($filter))
-        { 
+            //Get Image size info
+            $imgInfo = getimagesize($img);
+            $img_exif = exif_read_data($img);
+            
+            #$app->enqueueMessage( "<pre>imgInfo: " . print_r($imgInfo, TRUE) . "</pre>" );
+            #$app->enqueueMessage( "<pre>img_exif: " . print_r($img_exif, TRUE) . "</pre>" );
+            
+            switch ($imgInfo[2]) {
+                case 1: $im = imagecreatefromgif($img); break;
+                case 2: $im = imagecreatefromjpeg($img);  break;
+                case 3: $im = imagecreatefrompng($img); break;
+                default:  trigger_error('Unsupported filetype!', E_USER_WARNING);  break;
+            }
+
+            # see if we have exif orientation data
+            if ( isset($img_exif['Orientation']) ) {
+                #$app->enqueueMessage( "Orientation: " . $img_exif['Orientation'] . "<br/>" );
+                
+                # exif orientation 1 =  nothing
+                # exif orientation 2 =  horizontal flip 
+                # exif orientation 3 =  180 rotate left
+                # exif orientation 4 =  vertical flip
+                # exif orientation 5 =  vertical flip + 90 rotate right
+                # exif orientation 6 =  90 rotate right
+                # exif orientation 7 =  horizontal flip + 90 rotate right
+                # exif orientation 8 =  90 rotate left
+                
+                if ($img_exif['Orientation'] == 2) {    
+                    #$app->enqueueMessage( "2: Flip.<br/>" );
+                    #$im = imagerotate($im, xxx, 0);
+                } elseif ($img_exif['Orientation'] == 3) {    
+                    #$app->enqueueMessage( "3: 180 rotate left.<br/>" );                
+                    $im = imagerotate($im, 180, 0);
+                } elseif ($img_exif['Orientation'] == 6) {   
+                    #$app->enqueueMessage( "6: 90 rotate right.<br/>" );                   
+                    $im = imagerotate($im, 270, 0);
+                    # swap width and height values
+                    list($imgInfo[0],$imgInfo[1]) = array($imgInfo[1],$imgInfo[0]);
+                } elseif ($img_exif['Orientation'] == 8) {     
+                    #$app->enqueueMessage( "8: 90 rotate left.<br/>" );                   
+                    $im = imagerotate($im, 90, 0);
+                    # swap width and height values
+                    list($imgInfo[0],$imgInfo[1]) = array($imgInfo[1],$imgInfo[0]);
+                }   
+            }  
+
+            //FILTER
+            if(!empty($filter)) { 
                 if($filter =="IMG_FILTER_NEGATE") $filter_num = 0;
                 if($filter =="IMG_FILTER_GRAYSCALE") $filter_num = 1;
                 if($filter =="IMG_FILTER_BRIGHTNESS") $filter_num = 2;
@@ -452,46 +485,48 @@ class fieldsattachHelper
                 }  else {
                     JError::raiseWarning( 100,  JTEXT::_("Apply filter ERROR:").$filter_num   );
                 }
+            }
 
-        }
+            //If image dimension is smaller, do not resize
+            if ($imgInfo[0] <= $w && $imgInfo[1] <= $h) {
+                $nHeight = $imgInfo[1];
+                $nWidth = $imgInfo[0];
+            } else {
+                //yeah, resize it, but keep it proportional
+                if ($w/$imgInfo[0] > $h/$imgInfo[1]) {
+                    $nWidth = $w;
+                    $nHeight = $imgInfo[1]*($w/$imgInfo[0]);
+                }else{
+                    $nWidth = $imgInfo[0]*($h/$imgInfo[1]);
+                    $nHeight = $h;
+                }
+            }
+            $nWidth = round($nWidth);
+            $nHeight = round($nHeight);
 
-        //If image dimension is smaller, do not resize
-        if ($imgInfo[0] <= $w && $imgInfo[1] <= $h) {
-        $nHeight = $imgInfo[1];
-        $nWidth = $imgInfo[0];
-        }else{
-                        //yeah, resize it, but keep it proportional
-        if ($w/$imgInfo[0] > $h/$imgInfo[1]) {
-        $nWidth = $w;
-        $nHeight = $imgInfo[1]*($w/$imgInfo[0]);
-        }else{
-        $nWidth = $imgInfo[0]*($h/$imgInfo[1]);
-        $nHeight = $h;
-        }
-        }
-        $nWidth = round($nWidth);
-        $nHeight = round($nHeight);
+            $newImg = imagecreatetruecolor($nWidth, $nHeight);
 
-        $newImg = imagecreatetruecolor($nWidth, $nHeight);
+            /* Check if this image is PNG or GIF, then set if Transparent*/  
+            if(($imgInfo[2] == 1) OR ($imgInfo[2]==3)){
+                imagealphablending($newImg, false);
+                imagesavealpha($newImg,true);
+                $transparent = imagecolorallocatealpha($newImg, 255, 255, 255, 127);
+                imagefilledrectangle($newImg, 0, 0, $nWidth, $nHeight, $transparent);
+            }
+            imagecopyresampled($newImg, $im, 0, 0, 0, 0, $nWidth, $nHeight, $imgInfo[0], $imgInfo[1]);
 
-        /* Check if this image is PNG or GIF, then set if Transparent*/  
-        if(($imgInfo[2] == 1) OR ($imgInfo[2]==3)){
-        imagealphablending($newImg, false);
-        imagesavealpha($newImg,true);
-        $transparent = imagecolorallocatealpha($newImg, 255, 255, 255, 127);
-        imagefilledrectangle($newImg, 0, 0, $nWidth, $nHeight, $transparent);
-        }
-        imagecopyresampled($newImg, $im, 0, 0, 0, 0, $nWidth, $nHeight, $imgInfo[0], $imgInfo[1]);
-
-        //Generate the file, and rename it to $newfilename
-        switch ($imgInfo[2]) {
-        case 1: imagegif($newImg,$newfilename); break;
-        case 2: imagejpeg($newImg,$newfilename);  break;
-        case 3: imagepng($newImg,$newfilename); break;
-        default:  trigger_error('Failed resize image!', E_USER_WARNING);  break;
-        }
+            //Generate the file, and rename it to $newfilename
+            switch ($imgInfo[2]) {
+                case 1: imagegif($newImg,$newfilename); break;
+                case 2: imagejpeg($newImg,$newfilename);  break;
+                case 3: imagepng($newImg,$newfilename); break;
+                default:  trigger_error('Failed resize image!', E_USER_WARNING);  break;
+            }
  
         }
+
+
+
 
          //IMAGE RESIZE FUNCTION FOLLOW ABOVE DIRECTIONS
         public function resize($nombre,$archivo,$ancho,$alto,$id, $path, $filter=NULL)
