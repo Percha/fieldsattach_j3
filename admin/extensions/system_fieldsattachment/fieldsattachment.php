@@ -605,11 +605,14 @@ class plgSystemfieldsattachment extends JPlugin
                         //remove vbad characters
                         //$valor = preg_replace('/[^(\x20-\x7F)]*/','', $valor);
                         
-                        if($type == "listunits"){
+                        /*if($type == "listunits"){
                               
                         }else{
                              $valor = htmlspecialchars($valor);
-                        } 
+                        } */
+
+                        $valor = htmlspecialchars($valor);
+
                         //INSERT 
                         $query = 'INSERT INTO #__fieldsattach_values(articleid,fieldsid,value) VALUES ('.$article->id.',\''.  $obj->id .'\','.$db->quote($valor).' )     ';
                         $db->setQuery($query);
@@ -646,12 +649,14 @@ class plgSystemfieldsattachment extends JPlugin
                             //Remove BAD characters ****
                             $valor = preg_replace('/border="*"*/','', $valor);
                         
-                            if($valueslst->type == "listunits"){
+                            /*if($valueslst->type == "listunits"){
                               
                             }else{
                                 $valor = htmlspecialchars($valor);
-                            }
-                        
+                            }*/
+
+                            $valor = htmlspecialchars($valor);
+
                             $query = 'UPDATE  #__fieldsattach_values SET value="'.$valor.'" WHERE id='.$valueslst->id .' AND articleid='.$article->id ;
                             $db->setQuery($query);
                             //JError::raiseWarning( 100, $query  );
