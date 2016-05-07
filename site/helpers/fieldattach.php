@@ -1051,7 +1051,7 @@ class fieldattach
             global $globalreturn ;
             $db = JFactory::getDBO(  );
             if(!$category){
-                $query = 'SELECT b.id,  b.type  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE   (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.articleid= '.$articleid;
+                $query = 'SELECT b.id,  b.type  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE   (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.articleid= '.$articleid.' ORDER BY b.ordering ';
             }else{
                // $query = 'SELECT a.id,  b.type  FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.catid= '.$articleid;
             } 
