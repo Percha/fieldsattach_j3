@@ -16,7 +16,10 @@ jimport( 'joomla.plugin.plugin' );
 // require helper file
 $sitepath = JPATH_BASE ;
 $sitepath = str_replace ("administrator", "", $sitepath); 
-JLoader::register('fieldattach',  $sitepath.'components/com_fieldsattach/helpers/fieldattach.php'); 
+//JLoader::register('fieldattach',  $sitepath.'components/com_fieldsattach/helpers/fieldattach.php'); 
+/* user rigin --- FIX BUG - 12/05/2016*/
+JLoader::register('fieldattach',  $sitepath.'/components/com_fieldsattach/helpers/fieldattach.php');
+
 JLoader::register('fieldsattachHelper',   $sitepath.DS.'administrator/components/com_fieldsattach/helpers/fieldsattach.php');
 
 include_once $sitepath.'/administrator/components/com_fieldsattach/helpers/extrafield.php';
