@@ -5,14 +5,14 @@
 	<name>fieldsattach</name>
 	<!-- The following elements are optional and free of formatting conttraints -->
 	<creationDate>Genuary 2011</creationDate>
-	<updateDate>22/07/2012</updateDate>
+	<updateDate>05/06/2016</updateDate>
 	<author>Cristian Grañó Reder</author>
 	<authorEmail>cristian@percha.com</authorEmail>
 	<authorUrl>http://www.percha.com</authorUrl>
 	<copyright>Copyright Info</copyright>
 	<license>License Info</license>
 	<!--  The version string is recorded in the components table -->
-	<version>3.5.1.6</version>
+	<version>3.5.1.7</version>
 	<!-- The description is optional and defaults to the name -->
 	<description></description>
 

@@ -10,9 +10,12 @@
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted Access');
-
+/*
 $listOrder	= "a.ordering";
-$listDirn	=  "asc";
+$listDirn	=  "asc";*/
+$listOrder = $this->escape($this->state->get('list.ordering'));
+$listDirn  = $this->escape($this->state->get('list.direction'));
+
 ?>
 <tr>
 	<th width="1%" class="nowrap center hidden-phone">

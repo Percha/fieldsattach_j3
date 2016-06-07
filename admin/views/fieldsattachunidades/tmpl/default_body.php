@@ -19,23 +19,33 @@ $listOrder	="a.ordering";
 $saveOrder	= $listOrder=='a.ordering';
 ?>
 <?php foreach($this->items as $i => $item):
-$item->max_ordering = 0; //??
-	$ordering   = ($listOrder == 'a.ordering'); ?>
+	$item->max_ordering = 0; //??
+	$ordering   = ($listOrder == 'a.ordering'); 
+	//$canChange  = $user->authorise('core.edit.state', 'com_fieldsattach.fieldsattachunidades.' . $item->catid) && $canCheckin;
+	$canChange = true;
+?>
 	<tr class="row<?php echo $i % 2; ?>">
+
 		<td class="order nowrap center hidden-phone"> 
 			<?php
-			$disableClassName = '';
-			$disabledLabel	  = '';
-
-			if (!$saveOrder) :
-				$disabledLabel    = JText::_('JORDERINGDISABLED');
-				$disableClassName = 'inactive tip-top';
-			endif; ?>
-			<span class="sortable-handler hasTooltip <?php echo $disableClassName?>" title="<?php echo $disabledLabel?>">
-				<i class="icon-menu"></i>
+			$iconClass = '';
+			if (!$canChange)
+			{
+				$iconClass = ' inactive';
+			}
+			elseif (!$saveOrder)
+			{
+				$iconClass = ' inactive tip-top hasTooltip" title="' . JHtml::tooltipText('JORDERINGDISABLED');
+			}
+			?>
+			<span class="sortable-handler<?php echo $iconClass ?>">
+				<span class="icon-menu"></span>
 			</span>
-			<input type="text"   name="order[]" size="5" value="<?php echo $item->ordering;?>" class="width-20 text-area-order " />
-		 
+			<?php if ($saveOrder) : ?>
+				<input type="text" style="display:none" name="order[]" size="5"
+					value="<?php echo $item->ordering; ?>" class="width-20 text-area-order " />
+			<?php endif; ?>
+  
 		</td>
 		<td class="center">
                     <?php echo JHtml::_('jgrid.published', $item->published, $i, 'fieldsattachunidad.', true, 'cb', false, false); ?>
