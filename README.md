@@ -15,6 +15,9 @@ Update fieldsattach.<br /><br />
 
 If the installation is new, no problem.<br /><br />
 
+<h1>SEARCH COMPONENT</h1>
+https://github.com/Percha/com_fieldsattachsearch
+
 
 Forum - http://www.fieldsattach.com <br />
 Modules, plugins, and more extras - http://www.fieldsattach.com<br />
