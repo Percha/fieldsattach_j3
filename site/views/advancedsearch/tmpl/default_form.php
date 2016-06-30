@@ -11,7 +11,7 @@ defined('_JEXEC') or die;
 $lang = JFactory::getLanguage();
 $upper_limit = $lang->getUpperLimitSearchWord();
  
-JLoader::register('fieldattach',  JPATH_ROOT.DS.'components/com_fieldsattach/helpers/fieldattach.php');
+JLoader::register('fieldattach',  JPATH_ROOT.'/components/com_fieldsattach/helpers/fieldattach.php');
 
 //           
 ?>

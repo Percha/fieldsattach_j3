@@ -17,7 +17,7 @@ jimport( 'joomla.html.parameter' );
  // require helper file
 global $sitepath;
 $sitepath = JPATH_ROOT ; 
-JLoader::register('fieldattach',  $sitepath.DS.'components/com_fieldsattach/helpers/fieldattach.php');
+JLoader::register('fieldattach',  $sitepath.'/components/com_fieldsattach/helpers/fieldattach.php');
  
 
 class extrafield extends JPlugin

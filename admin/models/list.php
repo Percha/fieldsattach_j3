@@ -13,7 +13,7 @@ jimport('joomla.filesystem.file');
 
 
 $sitepath = JPATH_ADMINISTRATOR; 
-JLoader::register('MediaHelper',  $sitepath.DS.'components/com_media/helpers/media.php');
+JLoader::register('MediaHelper',  $sitepath.'/components/com_media/helpers/media.php');
 
 /**
  * Media Component List Model

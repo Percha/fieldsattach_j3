@@ -49,12 +49,16 @@ ObjInput = new Class({
             var tmp = String(valor).split("|");
             size="";
             max_size = "";
+            defaultvalue="";
             if(tmp.length > 0) size=tmp[0];
             if(tmp.length > 1) max_size=tmp[1];
+            if(tmp.length > 2) defaultvalue=tmp[2];
+
+            
 
             //alert('init:'+max_size);
 
-            this.setunit(size,max_size);
+            this.setunit(size,max_size,defaultvalue);
              
         },
         revalue: function(){
@@ -67,11 +71,16 @@ ObjInput = new Class({
 
             if($('jform_params_field_maxlenght') == null)   max_size = el.getElement("input#params_field_maxlenght").get("value");
             else  max_size = el.getElement("input#jform_params_field_maxlenght").get("value");
+
+            if($('jform_params_field_defaultvalue') == null)   defaultvalue = el.getElement("input#params_field_defaultvalue").get("value");
+            else  defaultvalue = el.getElement("input#jform_params_field_defaultvalue").get("value");
  
 
             str += size;
             str += "|"
-            str += max_size; 
+            str += max_size;
+            str += "|"
+            str += defaultvalue; 
  
                       
             if(size != ""){ 
@@ -81,7 +90,7 @@ ObjInput = new Class({
              
            
         },
-        setunit:function(size, max_size)
+        setunit:function(size, max_size, defaultvalue)
         {  
             
             if($('jform_params_field_size') == null) $('params_field_size').set("value", size);
@@ -89,6 +98,10 @@ ObjInput = new Class({
 
             if($('jform_params_field_maxlenght') == null) $('params_field_maxlenght').set("value", max_size);
             else $('jform_params_field_maxlenght').set("value", max_size); 
+
+             if($('jform_params_field_defaultvalue') == null) $('params_field_defaultvalue').set("value", defaultvalue);
+            else $('jform_params_field_defaultvalue').set("value", defaultvalue); 
+
         },
         eventinput:function(obj){
              

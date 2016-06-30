@@ -108,6 +108,10 @@ class plgContentfieldsattachment extends JPlugin
 
             $fields = array_merge($fields, $fields_tmp2 );
 
+            //User access view the layout takes some responsibility for display of limited information.
+            $user = JFactory::getUser();
+            $groups = $user->getAuthorisedViewLevels();
+
             if(count($fields)>0){
                         //$body = str_replace('</head>', $header_code.'</head>', $body); 
                           $idgroup =  $fields[0]->idgroup;
@@ -116,6 +120,14 @@ class plgContentfieldsattachment extends JPlugin
                           $cont = 0;
                           foreach($fields as $field)
                             { 
+                               //echo "field id: ".$field->id;
+                               //echo "<br>field id: ".$field->access;
+                               
+                            //Access privilege feature is not suppported yet
+                               if(empty($field->access)) $field->access=1;
+                               //***************************
+                               
+                               if( in_array($field->access, $groups) ) {
                                 //NEW
                                 JPluginHelper::importPlugin('fieldsattachment'); // very important
                                 //select  
@@ -152,7 +164,7 @@ class plgContentfieldsattachment extends JPlugin
 
                               
                                //************************************************************************
-                              //**************************** Title campos **********************
+                              //**************************** titulo campos **********************
                               //***********************************************************************
                               
                               if(($cont+1)< count($fields) ){
@@ -170,9 +182,10 @@ class plgContentfieldsattachment extends JPlugin
                                 }else{
 				                            $article->text    = $str_before.$article->text.$str;
                                     $article->fulltext= $str_before.$article->fulltext.$str;
-				                      }
+				                        }
+                              }
                              $cont++;
-                            }
+                          }
                  }
             }
 

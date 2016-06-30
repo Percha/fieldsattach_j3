@@ -93,6 +93,7 @@ class plgfieldsattachment_input extends extrafield
             
             $maxlenght="";
             $size=30;
+            $defaultvalue="";
             
              //Add CSS ***********************
             $str =  '<link rel="stylesheet" href="'.JURI::root() .'plugins/fieldsattachment/input/input.css" type="text/css" />'; 
@@ -114,12 +115,15 @@ class plgfieldsattachment_input extends extrafield
                     $tmp = explode('|',  $linea);
                     if(!empty( $tmp[0])) $size = $tmp[0];
                     if(count($tmp)>=1) if(!empty( $tmp[1])) $maxlenght = $tmp[1];
+                    if(count($tmp)>=2) if(!empty( $tmp[2])) $defaultvalue = $tmp[2];
                      
                     
                 }
             }
             
             $value = str_replace ('"', '&quot;', $value); 
+
+            if(empty($value)) $value = $defaultvalue;
             
             $str .= '<div class="file"><input  name="field_'.$fieldsid.'" id="field_'.$fieldsid.'" type="text"  value="'.$value.'" class="customfields '.$required.'" size="'.$size.'" maxlength="'.$maxlenght.'" /></div> ';
                
@@ -141,16 +145,32 @@ class plgfieldsattachment_input extends extrafield
          
 
           //if(function_exists( 'fieldattach::getFieldValues' )) 
-          if(method_exists ( 'fieldattach' , 'getFieldValues' ))
+          if(method_exists ( 'fieldattach' , 'getjsonFieldValues' ))
           {
-            $jsonValues       = fieldattach::getFieldValues( $articleid,  $fieldid , $category   );
+            $jsonValues       = fieldattach::getjsonFieldValues( $articleid,  $fieldid , $category   );
             $jsonValuesArray  = json_decode($jsonValues); 
 
+            $valor      =  '';
+            if(isset($jsonValuesArray->value)){
+               $valor      = html_entity_decode($jsonValuesArray->value);
+            }
 
-            $valor      = html_entity_decode($jsonValuesArray->value);
-            $title      = $jsonValuesArray->title;
-            $published  = $jsonValuesArray->published;
-            $showTitle  = $jsonValuesArray->showtitle;
+            $title      =  '';
+            if(isset($jsonValuesArray->value)){
+               $title      =  $jsonValuesArray->title;
+            }
+
+            $published      =  '';
+            if(isset($jsonValuesArray->value)){
+               $published      =  $jsonValuesArray->published;
+            }
+
+            $showTitle      =  '';
+            if(isset($jsonValuesArray->value)){
+               $showTitle      =  $jsonValuesArray->showtitle;
+            }
+           
+         
 
           }
           else
@@ -203,42 +223,42 @@ class plgfieldsattachment_input extends extrafield
 	 * @return  	html of field
 	 * @since	1.0
 	 */
-        static function getTemplate($fieldsids, $file="input")
-        {
-             //Search field template GENERIC *****************************************************************
-              $templateDir =  dirname(__FILE__).'/tmpl/'.$file.'.tpl.php'; 
+    static function getTemplate($fieldsids, $file="input")
+    {
+         //Search field template GENERIC *****************************************************************
+          $templateDir =  dirname(__FILE__).'/tmpl/'.$file.'.tpl.php'; 
+          $html = file_get_contents ($templateDir);
+          
+          //Search field template in joomla Template  ******************************************************  
+          $app = JFactory::getApplication();
+          $templateDir =  JPATH_BASE . '/templates/' . $app->getTemplate().'/html/com_fieldsattach/fields/'.$file.'.tpl.php';
+          
+          if(file_exists($templateDir))
+          {
+               
               $html = file_get_contents ($templateDir);
-              
-              //Search field template in joomla Template  ******************************************************  
-              $app = JFactory::getApplication();
-              $templateDir =  JPATH_BASE . '/templates/' . $app->getTemplate().'/html/com_fieldsattach/fields/'.$file.'.tpl.php';
-              
-              if(file_exists($templateDir))
-              {
-                   
-                  $html = file_get_contents ($templateDir);
-              }
-              
-              //Search a specific field template in joomla Template  *********************************************  
-              $app = JFactory::getApplication();
-              $templateDir =  JPATH_BASE . '/templates/' . $app->getTemplate().'/html/com_fieldsattach/fields/'.$fieldsids.'_'.$file.'.tpl.php';
-              
-              if(file_exists($templateDir))
-              { 
-                  $html = file_get_contents ($templateDir);
-              }
-              
-              return $html;
-        }
-        
-         
+          }
+          
+          //Search a specific field template in joomla Template  *********************************************  
+          $app = JFactory::getApplication();
+          $templateDir =  JPATH_BASE . '/templates/' . $app->getTemplate().'/html/com_fieldsattach/fields/'.$fieldsids.'_'.$file.'.tpl.php';
+          
+          if(file_exists($templateDir))
+          { 
+              $html = file_get_contents ($templateDir);
+          }
+          
+          return $html;
+    }
+    
+     
 
-        function action( $articleid, $fieldsid, $fieldsvalueid )
-        {
+    function action( $articleid, $fieldsid, $fieldsvalueid )
+    {
 
-        }
+    }
 	
-	public function searchinput($fieldsid, $value, $extras)
+	public static function searchinput($fieldsid, $value, $extras)
 	{
 		return plgfieldsattachment_input::renderInput(-1, $fieldsid, $value, $extras);
 		  

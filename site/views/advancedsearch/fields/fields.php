@@ -147,7 +147,7 @@ $document->addScriptDeclaration($str);
              
             $base =JURI::base();
             $base = str_replace("administrator/", "",$base);
-          $js =  $base."components".DS."com_fieldsattach".DS."views".DS."advancedsearch".DS."fields".DS."fields.js";
+          $js =  $base."components/com_fieldsattach/views/advancedsearch/fields/fields.js";
 	  // Add the script to the document head.
           JFactory::getDocument()->addScript($js);
 	  JFactory::getDocument()->addScriptDeclaration(implode("\n", $script));

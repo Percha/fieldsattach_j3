@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
 
 
  // require helper file
-JLoader::register('fieldsattachHelper',  JPATH_INSTALLATION.DS.'..'.DS.'administrator/components/com_fieldsattach/helpers/fieldsattach.php');
+JLoader::register('fieldsattachHelper',  JPATH_INSTALLATION.'/../administrator/components/com_fieldsattach/helpers/fieldsattach.php');
 
 
 class fieldattach
@@ -29,7 +29,7 @@ class fieldattach
    * @since 1.6
    */
 
-  static public function getFieldValues($articleid, $fieldsids, $category  = false)
+  static public function getjsonFieldValues($articleid, $fieldsids, $category  = false)
   {
       $db = JFactory::getDBO(  );
       /*if(!$category){
@@ -90,20 +90,24 @@ class fieldattach
 	 */
 	static  public function getValue($articleid, $fieldsids, $category = false )
 	{
-	    $db = JFactory::getDBO(  );
+    if(!empty($articleid))
+    {
+      $db = JFactory::getDBO(  );
 
-	    $query = 'SELECT  a.value  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsids.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.articleid= '.$articleid;
+      $query = 'SELECT  a.value  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsids.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.articleid= '.$articleid;
 
             if($category)  $query = 'SELECT  a.value  FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a.fieldsid IN ('.$fieldsids.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.catid= '.$articleid;
 
            //echo "<br/>  ".$query."<br/>ss: ".$category."<br>";
             $db->setQuery( $query );
-	    $result = $db->loadResult();
+      $result = $db->loadResult();
             $result = htmlspecialchars_decode($result);
             $str = "";
             if(!empty($result)) $str = $result;
             //echo "VALOR: ".$str."<br/>";
-	    return $str;
+      return $str;
+    }
+	   
 	}
         
         /**
@@ -209,11 +213,11 @@ class fieldattach
 
             if(!empty($result)) {
                 $file = $result;
-                if (JFile::exists( JPATH_SITE .DS."images".DS.$directorio.DS. $id .DS. $file)  )
+                if (JFile::exists( JPATH_SITE ."/images"."/".$directorio."/". $id ."/". $file)  )
                 {
                     $html =  '<img src="images/'.$directorio.'/'.$id.'/'.$result.'" title = "'.$title.'" alt="'.$title.'" />' ;
                 }else{
-                    if (JFile::exists( JPATH_SITE .DS.$result)  ){
+                    if (JFile::exists( JPATH_SITE ."/".$result)  ){
                         $html =  '<img src="'.$result.'" title = "'.$title.'" alt="'.$title.'" />' ;
                     }
                 }
@@ -343,7 +347,7 @@ class fieldattach
                     $html .=  '<a href="'.$file_absolute.'"   alt="'.$titlefile.'" class="downloads" target="_blank" />'.$titlefile.'</a>';
                   
                 }else{
-                    if (JFile::exists( JPATH_SITE .DS."images".DS.$directorio.DS. $articleid .DS. $file)  )
+                    if (JFile::exists( JPATH_SITE ."/images/".$directorio."/". $articleid ."/". $file)  )
                     {
                         if(fieldattach::getShowTitle(   $fieldsids  ))  $html .= '<span class="title">'.$title.' </span>';
                             $html .=  '<a href="'.$file_absolute.'"   alt="'.$titlefile.'" class="downloads" target="_blank" />'.$titlefile.'</a>';
@@ -444,13 +448,13 @@ class fieldattach
                 foreach ($result as $obj){
                     //if (JFile::exists( JPATH_SITE .DS."images".DS."documents".DS. $articleid .DS. $result->value)  )
                     $html .=  '<li>' ;
-                    if (JFile::exists( JPATH_SITE .DS. $obj->image2)  )
+                    if (JFile::exists( JPATH_SITE .'/'. $obj->image2)  )
                     {
                         $html .=  '<a href="'.$sitepath.''.$obj->image1.'" id="imgFiche" class="nyroModal" title="'.$obj->title.'" rel="gal_'.$articleid.'">';
                         $html .=  '<img src="'.$sitepath.''.$obj->image2.'"  alt="'.$obj->title.'" />';
                     }else{$html .=  '<img src="'.$sitepath.''.$obj->image1.'"  alt="'.$obj->title.'" />';}
 
-                    if (JFile::exists( JPATH_SITE .DS. $obj->image2)  )
+                    if (JFile::exists( JPATH_SITE .'/'. $obj->image2)  )
                     {
                         $html .=  '</a>';
                     }
@@ -712,7 +716,7 @@ class fieldattach
         public function creteButtonImage($id, $fieldsids, $width, $height)
         {
             $db = JFactory::getDBO(  );
-            $path=  'images'.DS.'documents';
+            $path=  'images/documents';
 
             $query = 'SELECT  a.value  FROM #__fieldsattach_values as a WHERE fieldsid='.$fieldsids.' AND articleid= '.$id;
 
@@ -722,10 +726,10 @@ class fieldattach
             $ancho = $width;
             $alto = $height;
 
-            $nombre = JPATH_BASE. DS .$path. DS . $id. DS . $result->value;
-            $nombre = JPATH_BASE. DS ."images". DS . "documents" . DS . $id . DS .  $result->value;
-            $archivo = $path. DS . $id. DS . "btn_1" ;
-            $archivo_on = $path. DS . $id. DS . "btn_1_on" ;
+            $nombre = JPATH_BASE. '/' .$path. '/' . $id. '/' . $result->value;
+            $nombre = JPATH_BASE. '/' ."images". '/' . "documents" . '/' . $id . '/' .  $result->value;
+            $archivo = $path. '/' . $id. '/' . "btn_1" ;
+            $archivo_on = $path. '/' . $id. '/' . "btn_1_on" ;
 
 
            // echo "<br>".$nombre."<br>";
@@ -787,8 +791,8 @@ class fieldattach
 
             //echo " archivo:: ".$nombre;
 
-            $tmp = JPATH_BASE. DS . $archivo;
-            $tmp2 = JPATH_BASE. DS . $archivo_on;
+            $tmp = JPATH_BASE. '/' . $archivo;
+            $tmp2 = JPATH_BASE. '/' . $archivo_on;
 
             if (preg_match("/png/",$tmp))
                 {
@@ -864,7 +868,7 @@ class fieldattach
  
             } 
             
-            JLoader::register('plgfieldsattachment_googlemap',  JPATH_INSTALLATION.DS.'..'.DS.'plugin/fieldsattachment/googlemap/googlemap.php');
+            JLoader::register('plgfieldsattachment_googlemap',  JPATH_INSTALLATION.'/../plugin/fieldsattachment/googlemap/googlemap.php');
             
             
             echo plgfieldsattachment_googlemap::getHTML($articleid, $fieldsids);
@@ -932,44 +936,56 @@ class fieldattach
         static function getFieldValue($articleid, $fieldid, $category  = false, $write = true)
         { 
             global $globalreturn ;
-            
-            $db = JFactory::getDBO(  );
-            if(!$category){
-                $query = 'SELECT  b.type  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE b.published= true AND  a.fieldsid IN ('.$fieldid.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.articleid= '.$articleid;
-      	    }else{
-                $query = 'SELECT  b.type  FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE b.published= true AND a.fieldsid IN ('.$fieldid.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.catid= '.$articleid;
-      	    } 
- 
-            
-             
-            $db->setQuery( $query );
-	          $type = $db->loadResult();
-            $str = ""; 
 
-            JPluginHelper::importPlugin('fieldsattachment'); // very important
-
-	          if(empty($category)) $category = 0;
-             
-            $function  = "plgfieldsattachment_".$type."::getHTML( ".$articleid.", ".$fieldid.", ".$category." );";
-            
-
-
-            $base = JPATH_SITE; 
-
-            $file = $base.'/plugins/fieldsattachment/'.$type.'/'.$type.'.php';  
-            
-            $html=""; 
-            
-            if( JFile::exists($file)){
+            if(!empty($articleid))
+            {
+              $db = JFactory::getDBO(  );
+              if(!$category){
+                  $query = 'SELECT  b.type, c.access  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid INNER JOIN  #__fieldsattach_groups as c ON  b.groupid = c.id WHERE b.published= true AND  a.fieldsid IN ('.$fieldid.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.articleid= '.$articleid;
+              }else{
+                  $query = 'SELECT  b.type, c.access  FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid INNER JOIN  #__fieldsattach_groups as c ON  b.groupid = c.id  WHERE b.published= true AND a.fieldsid IN ('.$fieldid.') AND (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.catid= '.$articleid;
+              } 
               
-                //file exist 
-                eval($function);
+              $db->setQuery( $query );
+              $record = $db->loadObject();
+              $str    = ""; 
+               
+              //User access view the layout takes some responsibility for display of limited information.
+              //$user = JFactory::getUser();
+             // $groups = $user->getAuthorisedViewLevels();  
+
+             // if( in_array($record->access, $groups) ) 
+             // { 
+                  $type= $record->type;
+
+                  JPluginHelper::importPlugin('fieldsattachment'); // very important
+
+                  if(empty($category)) $category = 0;
+                   
+                  $function  = "plgfieldsattachment_".$type."::getHTML( ".$articleid.", ".$fieldid.", ".$category." );";
+                  
+                  $base = JPATH_SITE; 
+
+                  $file = $base.'/plugins/fieldsattachment/'.$type.'/'.$type.'.php';  
+                  
+                  $html=""; 
+                  
+                  if( JFile::exists($file)){
+                    
+                      //file exist 
+                      eval($function);
+                  }
+                    
+                   if($write)
+                    echo $globalreturn ; 
+                  else
+                    return $globalreturn; 
+
             }
-              
-             if($write)
-              echo $globalreturn ; 
-            else
-              return $globalreturn;        
+            
+            
+
+           // }       
 	}
         
         
@@ -1020,5 +1036,53 @@ class fieldattach
               
             return $html; 
         }
+        
+         /**
+     * Show all fields of one article or category
+     *
+     * @param $articleid   id of article 
+     *        $category if category (Don't work for categories yet)
+     *
+     * @return  value to link.
+     * @since 1.6
+     */
+      static function getAllFieldValue($articleid, $category  = false)
+      { 
+            global $globalreturn ;
+            $db = JFactory::getDBO(  );
+            if(!$category){
+                $query = 'SELECT b.id,  b.type  FROM #__fieldsattach_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE   (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.articleid= '.$articleid.' ORDER BY b.ordering ';
+            }else{
+               // $query = 'SELECT a.id,  b.type  FROM #__fieldsattach_categories_values as a INNER JOIN #__fieldsattach as b ON  b.id = a.fieldsid  WHERE a (b.language="'. JRequest::getVar("language", "*").'" OR b.language="*" ) AND a.catid= '.$articleid;
+            } 
+                   
+                  
+            $db->setQuery( $query );
+            // Load the results as a list of stdClass objects (see later for more options on retrieving data).
+            $results = $db->loadObjectList();
+             
+           
+            $html=""; 
+            JPluginHelper::importPlugin('fieldsattachment'); // very important 
+
+            foreach ($results as $result) { 
+              //echo "<br>Fieldid:".$result->id." type: ".$result->type;
+              $type     = $result->type;
+              $fieldid  = $result->id;
+            
+              $function  = "plgfieldsattachment_".$type."::getHTML( ".$articleid.", ".$fieldid.", false, true );";
+             
+              $base = JPATH_SITE;
+              $file = $base.'/plugins/fieldsattachment/'.$type.'/'.$type.'.php'; 
+               
+              
+              if( JFile::exists($file)){ 
+                
+                eval($function);
+                 
+              }
+            } 
+
+      }
 
 }

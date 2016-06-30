@@ -15,8 +15,9 @@ defined('_JEXEC') or die;
 
 jimport('joomla.application.component.controller');
 //jimport('components.com_search.controller');
-JLoader::register('SearchController',  'components/com_search/controller.php');
+JLoader::register('SearchController',  'helper/com_search/controller.php');
 
+JLoader::register('fieldsattachHelper',  JPATH_ADMINISTRATOR.'/components/com_fieldsattach/helpers/fieldsattach.php');
 
 
 /**
@@ -45,6 +46,9 @@ class FieldsattachController extends JControllerLegacy
                 
                 //echo "VIEW:".JRequest::getVar("view"); 
                 $vName = JRequest::getVar("view");
+                $task	= JRequest::getVar('task', 'default');
+
+
                // echo "<br>vNAEMMME:  ".$vName;
                 if($vName == "images" || $vName == "imagesList" || $vName == "fieldsattachimage" || $vName == "fieldsattachimages"  || $vName == "fieldsattachimagesajax"){
                    
@@ -112,8 +116,17 @@ class FieldsattachController extends JControllerLegacy
                     // Set the layout
                     $view->setLayout($vLayout);
 
+                   
                     // Display the view
-                    $view->display();
+                   
+                    if($task == "fieldsattachimagesorderajax")
+					{
+							// Add a message.
+							$this->fieldsattachimagesorderajax();
+					}else{
+							$view->display();
+					}
+
                     
                     //return $this;
                      
@@ -122,8 +135,8 @@ class FieldsattachController extends JControllerLegacy
                     return parent::display($cachable, $urlparams);
                 }
 	}
-        /*DELETE IMAGE GALLERY*/
-         public function delete()
+    /*DELETE IMAGE GALLERY*/
+     public function delete()
 	{  
                 $model = $this->getModel( "fieldsattachimage" );
                 $model->delete();
@@ -253,9 +266,9 @@ class FieldsattachController extends JControllerLegacy
 		$uri = JURI::getInstance();
 		$uri->setQuery($post);
 		$uri->setVar('option', 'com_fieldsattach');
-                $uri->setVar('view', 'advancedsearch');
-                $uri->setVar('advancedsearchcategories', $advancedsearchcategories);
-                $uri->setVar('fields', $fields);
+        $uri->setVar('view', 'advancedsearch');
+        $uri->setVar('advancedsearchcategories', $advancedsearchcategories);
+        $uri->setVar('fields', $fields);
                 
                 
                   
@@ -264,5 +277,54 @@ class FieldsattachController extends JControllerLegacy
 	 
             
          }
+
+      /* Reorder Galery type */
+ 	function fieldsattachimagesorderajax()
+	{
+	 	
+ 
+
+	 	fieldsattachHelper::fieldsattachimagesorderajax();
+
+		// Log the start
+		// Initialise a basic logger with no options (once only).
+		// Include the JLog class.
+		/*jimport('joomla.log.log');
+		
+		JLog::addLogger(array());
+		  
+		 
+		// Create a new query object.
+		$db = JFactory::getDBO();
+		$query = $db->getQuery(true);
+ 
+        $session          = JFactory::getSession();
+		$fieldsattachid   = JRequest::getVar("fieldsid");
+		$order            = JRequest::getVar("order");
+		//Article -------------------
+        $articleid =  $session->get('articleid'); 
+                 
+        if(empty($articleid) || empty($fieldsattachid) || empty($order)){
+		//Empty  Nothing TODO
+        }else{
+		//SQL
+    		$tmporder = explode(",",$order);
+    		if(count($tmporder)>0)
+    		{
+    			$cont = 1;
+    			foreach($tmporder as $obj){
+    					$query = 'UPDATE  #__fieldsattach_images SET ordering='.$cont.' WHERE id='.$obj ; 
+    					 
+    					$db->setQuery($query);
+    					// Add a message.
+    					$db->execute();
+    					//$db->query();
+    					$cont++;
+    			}
+		
+		    }
+		}*/
+
+	}
 
 }

@@ -64,16 +64,74 @@ class plgfieldsattachment_textarea extends extrafield
         $pathcss= JURI::root()."administrator/templates/". $app->getTemplate()."/html/com_fieldsattach/css/textarea.css"; 
         if(file_exists($css)){ $str .=  '<link rel="stylesheet" href="'.$pathcss.'" type="text/css" />'; } 
 
-     
-        if($lineas[0] == "RichText")
-        {
+        $editor = JFactory::getEditor();
+        //var_dump($editor); 
+          
+        /*if($lineas[0] == "tinymce")
+        {   
             $editor = JFactory::getEditor();
-            $str .=  $editor->display('field_'.$fieldsid.'', $value , '100%', ''.$height.'', '60', '20', true);
+            var_dump($editor);
+            
+            if($editor->get("_name") != "tinymce"){
+                $str .= '<script type="text/javascript" src="'.JURI::root().'/media/editors/tinymce/tinymce.min.js"></script>';
+
+            }
+            
+            $str .= '<script type="text/javascript">
+           
+              tinyMCE.init({
+                    mode : "textareas",
+                    editor_selector : "mceSimple"
+                });
+           
+ 
+            </script>';
+             
+
+            $str .= '<textarea name="field_'.$fieldsid.'" class="mceSimple" style="width:95%">'.$value.'</textarea>';
 
         }else{
-             $str .= '<textarea style="width:100%; height:'.$height.'px;" name="field_'.$fieldsid.'" >'.$value.'</textarea>';
-    
+
+            if($lineas[0] == "RichText")
+            {
+                $editor = JFactory::getEditor();
+                $str .=  $editor->display('field_'.$fieldsid.'', $value , '100%', ''.$height.'', '60', '20', false);
+
+              
+            }else{
+                 $str .= '<textarea style="width:100%; height:'.$height.'px;" name="field_'.$fieldsid.'" >'.$value.'</textarea>';
+        
+            }
+            
+
+        }*/
+        
+        $tmp = explode("|",  $lineas[0]); 
+
+
+        if($tmp[0] == "RichText")
+            {
+                $editor = JFactory::getEditor();
+                $str .=  $editor->display('field_'.$fieldsid.'', $value , '100%', ''.$height.'', '60', '20', false);
+
+              
+            }else{
+
+                if($tmp[0] == "RichText_particular")
+                {
+                   
+                    $editor = JFactory::getEditor($tmp[1]);
+
+                    $str .=  $editor->display('field_'.$fieldsid.'', $value , '100%', ''.$height.'', '60', '20', false);
+
+
+                }else{
+                    $str .= '<textarea style="width:100%; height:'.$height.'px;" name="field_'.$fieldsid.'" >'.$value.'</textarea>';
+
+                }
+        
         }
+
         
         //$str .= '<script>window.addEvent("load", function() { $("field_'.$fieldsid.'").addClass("'.$required.'"); } );</script>';
         return  $str;
@@ -83,9 +141,9 @@ class plgfieldsattachment_textarea extends extrafield
     {
         global $globalreturn;
 
-        if(method_exists ( 'fieldattach' , 'getFieldValues' ))
+        if(method_exists ( 'fieldattach' , 'getjsonFieldValues' ))
           {
-            $jsonValues       = fieldattach::getFieldValues( $articleid,  $fieldsid , $category   );
+            $jsonValues       = fieldattach::getjsonFieldValues( $articleid,  $fieldsid , $category   );
             $jsonValuesArray  = (json_decode($jsonValues)); 
 
 

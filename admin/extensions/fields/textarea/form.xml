@@ -19,9 +19,24 @@
                     default=""
             >
                  <option value="">Without RichText</option>
-                 <option value="RichText">With RichText</option>
+                 <option value="RichText">With RichText (joomla default)</option>
+                 <option value="RichText_particular">With RichText</option> 
 
             </field>
+
+            <field
+            name="field_textareaeditor"
+            type="plugins"
+            folder="editors"
+            default="tinymce"
+            label="PLG_TEXTAREA_OPTIONS_EDITOR_LABEL"
+            description=""
+            required="true"
+            filter="cmd" >
+
+            </field>
+
+
         </fieldset>
     </fields>
 </form>

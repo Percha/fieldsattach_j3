@@ -191,7 +191,7 @@ class fieldsattachHelper
         $return = "" ;
         //Load XML FORM ==================================================
         //$file = dirname(__FILE__) . DS . "form.xml";
-        $file = JPATH_PLUGINS.DS.'fieldsattachment'.DS.$name.DS.'form.xml';
+        $file = JPATH_PLUGINS.'/fieldsattachment/'.$name.'/form.xml';
         // echo "FILEWWWW:".$file;
         //$form = $this->form->loadfile( $file ); // to load in our own version of login.xml
         //$obj = new JForm();
@@ -237,7 +237,7 @@ class fieldsattachHelper
         $lang_file="plg_fieldsattachment_".$name ;
         $sitepath1 = JPATH_ROOT ;
         //$sitepath1 = str_replace ("administrator", "", $sitepath1);
-        $path = $sitepath1."/administrator/language".DS . $lang->getTag() .DS.$lang->getTag().".".$lang_file.".ini";
+        $path = $sitepath1."/administrator/language/" . $lang->getTag() ."/".$lang->getTag().".".$lang_file.".ini";
         
         //LOAD JS
         //$doc = new DOMDocument();
@@ -251,7 +251,7 @@ class fieldsattachHelper
         //LOAD JS -- 25-09-2012
         //$xml = JFactory::getXMLParser('Simple');
         
-        $xmlfile = JPATH_PLUGINS.DS.'fieldsattachment'.DS.$name.DS.$name.'.xml'; 
+        $xmlfile = JPATH_PLUGINS.'/fieldsattachment/'.$name.'/'.$name.'.xml'; 
         //$xml->loadFile($xmlfile); 
         //$xml = JFactory::getXMLParser('Simple');
         //$xml = SimpleXMLElement($xmlfile);
@@ -335,7 +335,7 @@ class fieldsattachHelper
             // JError::raiseWarning( 100, $file. " NAMETMP:".$SafeFile." ID:: ". $articleid. " ->  fieldsid ".$fieldsid ." PATH:".$path  );
             //JError::raiseWarning( 100,   $path .DS. $articleid .DS.  $_FILES[$file]["name"] );
              
-            if(!JFile::upload($_FILES[$file]['tmp_name'] , $path .DS. $articleid .DS.  $_FILES[$file]["name"]))
+            if(!JFile::upload($_FILES[$file]['tmp_name'] , $path .'/'. $articleid .'/'.  $_FILES[$file]["name"]))
             {
                 JError::raiseWarning( 100,  JTEXT::_("Uploda image Error")   );
             }else
@@ -343,16 +343,16 @@ class fieldsattachHelper
                 $app = JFactory::getApplication();
                 $app->enqueueMessage( JTEXT::_("Uploda image OK")  );
                 $nombreficherofinal = $_FILES[$file]["name"];
-                if (file_exists( $path .DS. $articleid .DS. $nombreficherofinal))
+                if (file_exists( $path .'/'. $articleid .'/'. $nombreficherofinal))
                 {
 
                     //$nombreficherofinal = $fieldsid."_".$nombreficherofinal;
                     $app->enqueueMessage( JTEXT::_("Name image changed " ). $nombreficherofinal  );
                     //JError::raiseWarning( 100, $_FILES[$file]["name"]. " ". JTEXT::_("already exists. "). " -> Name changed ".$nombreficherofinal   );
-                    JFile::move($path .DS. $articleid .DS.$_FILES[$file]["name"], $path .DS. $articleid .DS.$nombreficherofinal);
+                    JFile::move($path .'/'. $articleid .'/'.$_FILES[$file]["name"], $path .'/'. $articleid .'/'.$nombreficherofinal);
                 }
                 //UPDATE
-                $db	= & JFactory::getDBO();
+                $db	=  JFactory::getDBO();
                 if ((JRequest::getVar('option')=='com_categories' && JRequest::getVar('layout')=="edit"   ))
                 {
                     $query = 'UPDATE  #__fieldsattach_categories_values SET value="'. $nombreficherofinal.'" WHERE id='.$fieldsvalueid ;
@@ -378,7 +378,7 @@ class fieldsattachHelper
                      //echo $this->path .DS. $file ;
                      $deleted= false;
                      if(empty($selectable)){
-                         if(!JFile::delete( $path .DS. $articleid .DS.  $file) )
+                         if(!JFile::delete( $path .'/'. $articleid .'/'.  $file) )
                          {
                               JError::raiseWarning( 100,  JTEXT::_("Delete file Error")." ".$path   );
 
@@ -406,34 +406,67 @@ class fieldsattachHelper
         
         
         /*resizeImg function*/
-        
+
         function resizeImg($img, $w, $h, $newfilename,$filter=null) {
 
+            $app = JFactory::getApplication();
             
-        $app = JFactory::getApplication();
-        
-        
-        $app->enqueueMessage( JTEXT::_("IMAGE RESIZE: ")." width:".$w." height:".$h  );
-            
-            
-        //Check if GD extension is loaded
-        if (!extension_loaded('gd') && !extension_loaded('gd2')) {
-        trigger_error("GD is not loaded", E_USER_WARNING);
-        return false;
-        }
+            #$app->enqueueMessage( JTEXT::_("IMAGE RESIZE: ")." width:".$w." height:".$h  );
+                 
+            //Check if GD extension is loaded
+            if (!extension_loaded('gd') && !extension_loaded('gd2')) {
+                trigger_error("GD is not loaded", E_USER_WARNING);
+                return false;
+            }
 
-        //Get Image size info
-        $imgInfo = getimagesize($img);
-        switch ($imgInfo[2]) {
-        case 1: $im = imagecreatefromgif($img); break;
-        case 2: $im = imagecreatefromjpeg($img);  break;
-        case 3: $im = imagecreatefrompng($img); break;
-        default:  trigger_error('Unsupported filetype!', E_USER_WARNING);  break;
-        }
-        
-        //FILTER
-        if(!empty($filter))
-        { 
+            //Get Image size info
+            $imgInfo = getimagesize($img);
+            $img_exif = exif_read_data($img);
+            
+            #$app->enqueueMessage( "<pre>imgInfo: " . print_r($imgInfo, TRUE) . "</pre>" );
+            #$app->enqueueMessage( "<pre>img_exif: " . print_r($img_exif, TRUE) . "</pre>" );
+            
+            switch ($imgInfo[2]) {
+                case 1: $im = imagecreatefromgif($img); break;
+                case 2: $im = imagecreatefromjpeg($img);  break;
+                case 3: $im = imagecreatefrompng($img); break;
+                default:  trigger_error('Unsupported filetype!', E_USER_WARNING);  break;
+            }
+
+            # see if we have exif orientation data
+            if ( isset($img_exif['Orientation']) ) {
+                #$app->enqueueMessage( "Orientation: " . $img_exif['Orientation'] . "<br/>" );
+                
+                # exif orientation 1 =  nothing
+                # exif orientation 2 =  horizontal flip 
+                # exif orientation 3 =  180 rotate left
+                # exif orientation 4 =  vertical flip
+                # exif orientation 5 =  vertical flip + 90 rotate right
+                # exif orientation 6 =  90 rotate right
+                # exif orientation 7 =  horizontal flip + 90 rotate right
+                # exif orientation 8 =  90 rotate left
+                
+                if ($img_exif['Orientation'] == 2) {    
+                    #$app->enqueueMessage( "2: Flip.<br/>" );
+                    #$im = imagerotate($im, xxx, 0);
+                } elseif ($img_exif['Orientation'] == 3) {    
+                    #$app->enqueueMessage( "3: 180 rotate left.<br/>" );                
+                    $im = imagerotate($im, 180, 0);
+                } elseif ($img_exif['Orientation'] == 6) {   
+                    #$app->enqueueMessage( "6: 90 rotate right.<br/>" );                   
+                    $im = imagerotate($im, 270, 0);
+                    # swap width and height values
+                    list($imgInfo[0],$imgInfo[1]) = array($imgInfo[1],$imgInfo[0]);
+                } elseif ($img_exif['Orientation'] == 8) {     
+                    #$app->enqueueMessage( "8: 90 rotate left.<br/>" );                   
+                    $im = imagerotate($im, 90, 0);
+                    # swap width and height values
+                    list($imgInfo[0],$imgInfo[1]) = array($imgInfo[1],$imgInfo[0]);
+                }   
+            }  
+
+            //FILTER
+            if(!empty($filter)) { 
                 if($filter =="IMG_FILTER_NEGATE") $filter_num = 0;
                 if($filter =="IMG_FILTER_GRAYSCALE") $filter_num = 1;
                 if($filter =="IMG_FILTER_BRIGHTNESS") $filter_num = 2;
@@ -452,46 +485,48 @@ class fieldsattachHelper
                 }  else {
                     JError::raiseWarning( 100,  JTEXT::_("Apply filter ERROR:").$filter_num   );
                 }
+            }
 
-        }
+            //If image dimension is smaller, do not resize
+            if ($imgInfo[0] <= $w && $imgInfo[1] <= $h) {
+                $nHeight = $imgInfo[1];
+                $nWidth = $imgInfo[0];
+            } else {
+                //yeah, resize it, but keep it proportional
+                if ($w/$imgInfo[0] > $h/$imgInfo[1]) {
+                    $nWidth = $w;
+                    $nHeight = $imgInfo[1]*($w/$imgInfo[0]);
+                }else{
+                    $nWidth = $imgInfo[0]*($h/$imgInfo[1]);
+                    $nHeight = $h;
+                }
+            }
+            $nWidth = round($nWidth);
+            $nHeight = round($nHeight);
 
-        //If image dimension is smaller, do not resize
-        if ($imgInfo[0] <= $w && $imgInfo[1] <= $h) {
-        $nHeight = $imgInfo[1];
-        $nWidth = $imgInfo[0];
-        }else{
-                        //yeah, resize it, but keep it proportional
-        if ($w/$imgInfo[0] > $h/$imgInfo[1]) {
-        $nWidth = $w;
-        $nHeight = $imgInfo[1]*($w/$imgInfo[0]);
-        }else{
-        $nWidth = $imgInfo[0]*($h/$imgInfo[1]);
-        $nHeight = $h;
-        }
-        }
-        $nWidth = round($nWidth);
-        $nHeight = round($nHeight);
+            $newImg = imagecreatetruecolor($nWidth, $nHeight);
 
-        $newImg = imagecreatetruecolor($nWidth, $nHeight);
+            /* Check if this image is PNG or GIF, then set if Transparent*/  
+            if(($imgInfo[2] == 1) OR ($imgInfo[2]==3)){
+                imagealphablending($newImg, false);
+                imagesavealpha($newImg,true);
+                $transparent = imagecolorallocatealpha($newImg, 255, 255, 255, 127);
+                imagefilledrectangle($newImg, 0, 0, $nWidth, $nHeight, $transparent);
+            }
+            imagecopyresampled($newImg, $im, 0, 0, 0, 0, $nWidth, $nHeight, $imgInfo[0], $imgInfo[1]);
 
-        /* Check if this image is PNG or GIF, then set if Transparent*/  
-        if(($imgInfo[2] == 1) OR ($imgInfo[2]==3)){
-        imagealphablending($newImg, false);
-        imagesavealpha($newImg,true);
-        $transparent = imagecolorallocatealpha($newImg, 255, 255, 255, 127);
-        imagefilledrectangle($newImg, 0, 0, $nWidth, $nHeight, $transparent);
-        }
-        imagecopyresampled($newImg, $im, 0, 0, 0, 0, $nWidth, $nHeight, $imgInfo[0], $imgInfo[1]);
-
-        //Generate the file, and rename it to $newfilename
-        switch ($imgInfo[2]) {
-        case 1: imagegif($newImg,$newfilename); break;
-        case 2: imagejpeg($newImg,$newfilename);  break;
-        case 3: imagepng($newImg,$newfilename); break;
-        default:  trigger_error('Failed resize image!', E_USER_WARNING);  break;
-        }
+            //Generate the file, and rename it to $newfilename
+            switch ($imgInfo[2]) {
+                case 1: imagegif($newImg,$newfilename); break;
+                case 2: imagejpeg($newImg,$newfilename);  break;
+                case 3: imagepng($newImg,$newfilename); break;
+                default:  trigger_error('Failed resize image!', E_USER_WARNING);  break;
+            }
  
         }
+
+
+
 
          //IMAGE RESIZE FUNCTION FOLLOW ABOVE DIRECTIONS
         public function resize($nombre,$archivo,$ancho,$alto,$id, $path, $filter=NULL)
@@ -503,10 +538,10 @@ class fieldsattachHelper
             $tmp = $arr1[1];
 
             //$nombre = $path_absolute."/".$path .DS. $id .DS. $nombre;
-            $nombre =  $path .DS. $id .DS. $nombre;
-            $destarchivo = $path .DS. $id .DS. $archivo;
+            $nombre =  $path .'/'. $id .'/'. $nombre;
+            $destarchivo = $path .'/'. $id .'/'. $archivo;
             //$archivo =  $path_absolute."/".$path .DS. $id .DS. $archivo;
-            $archivo =  $path .DS. $id .DS. $archivo;
+            $archivo =  $path .'/'. $id .'/'. $archivo;
 
             //$app->enqueueMessage( JTEXT::_("Name file:  ").$nombre);
             //$app->enqueueMessage( JTEXT::_("New name:  ").$archivo);
@@ -556,28 +591,34 @@ class fieldsattachHelper
         {
 
             $db	=  JFactory::getDBO();
-            $query = 'SELECT a.catid, a.language FROM #__content as a WHERE a.id='. $id  ;
-
-            $db->setQuery( $query );
-            $elid = $db->loadObject();
             $empty = array();
             $result = array();
-            if(!empty($elid)){
-                $idioma = $elid->language; 
-               
-                $db	= JFactory::getDBO();
-                $query = 'SELECT a.id as idgroup, a.title as titlegroup ,  a.description as descriptiongroup, a.position, a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
-                $query .= 'WHERE a.catid = 0 AND a.published=1 AND b.published = 1 AND a.group_for=0 ';
-                //echo $elid->language."Language: ".$idioma;
-                if($elid->language != "*") $query .= ' AND (a.language="'.$elid->language.'" OR a.language="*" ) AND (b.language="'.$elid->language.'" OR b.language="*") ' ;
-                      // echo "filter::". $app->getLanguageFilter();
-                      // echo "filter::". JRequest::getVar("language");
 
-                $query .='ORDER BY a.ordering, a.title, b.ordering';
-                 
+            if(!empty($id))
+            {
+                $query = 'SELECT a.catid, a.language FROM #__content as a WHERE a.id='. $id  ;
+
                 $db->setQuery( $query );
-                $result = $db->loadObjectList();
+                $elid = $db->loadObject();
+                
+                if(!empty($elid)){
+                    $idioma = $elid->language; 
+                   
+                    $db = JFactory::getDBO();
+                    $query = 'SELECT a.access as access, a.id as idgroup, a.title as titlegroup ,  a.description as descriptiongroup, a.position, a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
+                    $query .= 'WHERE a.catid = 0 AND a.published=1 AND b.published = 1 AND a.group_for=0 ';
+                    //echo $elid->language."Language: ".$idioma;
+                    if($elid->language != "*") $query .= ' AND (a.language="'.$elid->language.'" OR a.language="*" ) AND (b.language="'.$elid->language.'" OR b.language="*") ' ;
+                          // echo "filter::". $app->getLanguageFilter();
+                          // echo "filter::". JRequest::getVar("language");
+
+                    $query .='ORDER BY a.ordering, a.title, b.ordering';
+                     
+                    $db->setQuery( $query );
+                    $result = $db->loadObjectList();
+                }
             }
+            
             if($result) return $result;
             else return $empty  ;
         }
@@ -588,10 +629,10 @@ class fieldsattachHelper
 	* @access	public
 	* @since	1.5
 	*/
-        public function  getfieldsForAllCategory($id)
+        public static function  getfieldsForAllCategory($id)
         {
 
-            $db	= & JFactory::getDBO();
+            $db	= JFactory::getDBO();
             $query = 'SELECT  a.language FROM #__categories as a WHERE a.id='. $id  ;
 
             $db->setQuery( $query );
@@ -602,8 +643,8 @@ class fieldsattachHelper
                 $idioma = $elid->language;
 
 
-                $db	= & JFactory::getDBO();
-                $query = 'SELECT a.id as idgroup, a.title as titlegroup ,  a.description as descriptiongroup, a.position, a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
+                $db	=  JFactory::getDBO();
+                $query = 'SELECT a.access as access, a.id as idgroup, a.title as titlegroup ,  a.description as descriptiongroup, a.position, a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
                 $query .= 'WHERE a.catid = 0 AND a.published=1 AND b.published = 1 AND a.group_for=1  ';
                 //echo $elid->language."Language: ".$idioma;
                 if($elid->language != "*")  $query .= ' AND (a.language="'.$elid->language.'" OR a.language="*" ) AND (b.language="'.$elid->language.'" OR b.language="*") ' ;
@@ -661,7 +702,7 @@ class fieldsattachHelper
             if(!empty($elid)){
                 
                 //Extract all groups idgrou and idcat and put into array
-                  $query = 'SELECT a.id as idgroup, a.title as titlegroup, a.description as descriptiongroup, a.position,  a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
+                  $query = 'SELECT a.access as access, a.id as idgroup, a.title as titlegroup, a.description as descriptiongroup, a.position,  a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
                   $query .= 'WHERE  a.published=1 AND b.published = 1 AND a.group_for = 0 ';
                   //echo $elid->language."Language: ".$idioma;
                   if (  ($elid->language == $idioma ) && ($elid->language != "*") ) {
@@ -763,11 +804,11 @@ class fieldsattachHelper
 	* @access	public
 	* @since	1.5
 	*/
-        public function getfieldsCategory($catid)
+        public static function getfieldsCategory($catid)
         {
 
             $result = array();
-            $db	= & JFactory::getDBO();
+            $db	= JFactory::getDBO();
             $query = 'SELECT a.id, a.language FROM #__categories as a WHERE a.id='. $catid  ;
             $src="";
 
@@ -781,10 +822,10 @@ class fieldsattachHelper
 			$idscats = $retorno_recursive;
             
             if(!empty($elid)){
-                $db	= & JFactory::getDBO();
+                $db	= JFactory::getDBO();
 
                 //Extract all groups idgrou and idcat and put into array
-                  $query = 'SELECT a.id as idgroup, a.title as titlegroup, a.description as descriptiongroup, a.position,  a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
+                  $query = 'SELECT a.access as access, a.id as idgroup, a.title as titlegroup, a.description as descriptiongroup, a.position,  a.catid, a.language, a.recursive, b.* FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
                   $query .= 'WHERE  a.published=1 AND b.published = 1 AND a.group_for = 1 ';
                   //echo $elid->language."Language: ".$idioma;
                   if (  ($elid->language == $idioma ) && ($elid->language != "*")  ) {
@@ -880,71 +921,79 @@ class fieldsattachHelper
         {
 
             $db	=  JFactory::getDBO();
-            $query = 'SELECT a.catid, a.language FROM #__content as a WHERE a.id='. $id  ;
-
-            $db->setQuery( $query );
-            $elid = $db->loadObject();
             $empty = array();
-            if(!empty($elid)){
-            $idioma = $elid->language;
+            $result = array();
 
-	   
-            //$id = ",".$id.",";
-            $db	= JFactory::getDBO();
-
-            $query = 'SELECT a.id as idgroup, a.title as titlegroup ,  a.description as descriptiongroup ,a.position, a.catid, a.language, a.recursive, b.*, a.articlesid FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
-            //$query .= 'WHERE (a.articlesid LIKE "%,'. $id .',%" )  AND a.published=1 AND b.published = 1 ';
-            $query .= 'WHERE  a.published=1 AND b.published = 1 ';
-
-            if($elid->language != "*")  $query .= ' AND (a.language="'.$elid->language.'" OR a.language="*" ) AND (b.language="'.$elid->language.'" OR b.language="*") ' ;
-
-             $query .='ORDER BY a.ordering, a.title, b.ordering';
-            //echo $query;
-            $db->setQuery( $query );
-
-            //(a.articlesid LIKE "%,'. $id .',%" )  AND
-            $results = $db->loadObjectList();
-
-            //echo "<br>count: " . count($results);
-            $cont = 0;
-            if($results)
+            if(!empty($id))
             {
-                foreach($results as $result)
-                {
-                    $taula =  explode(",", $result->articlesid);
-                    //echo "<br>srting:: ". $result->id;
-                    //echo "<br>contar taula:: ". count($taula);
-                    $trobat = false;
-                    foreach ($taula as $theid)
-                    {
-                        //echo "<br>buscando: " . $theid;
-                        if($theid == $id){
-                            $trobat = true;
-                           // echo "<br>trobat: " . $theid;
-                            break;
-                        }
-                        else{
-                            $trobat = false;
-                            }
-                    }
-                    if(! $trobat){
-                        unset($results[$cont]);
-                    }else{
-                        //Find in the fields,   exist?
-                        if($fields){
-                            foreach($fields as $obj)
-                            {
-                                if($result->id == $obj->id) unset($results[$cont]);
-                            }
-                        }
-                    }
-                    $cont++;
+                    $query = 'SELECT a.catid, a.language FROM #__content as a WHERE a.id='. $id  ;
 
+                    $db->setQuery( $query );
+                    $elid = $db->loadObject();
+                   
+                    if(!empty($elid)){
+                    $idioma = $elid->language;
+
+               
+                    //$id = ",".$id.",";
+                    $db = JFactory::getDBO();
+
+                    $query = 'SELECT a.access as access, a.id as idgroup, a.title as titlegroup ,  a.description as descriptiongroup ,a.position, a.catid, a.language, a.recursive, b.*, a.articlesid FROM #__fieldsattach_groups as a INNER JOIN #__fieldsattach as b ON a.id = b.groupid ';
+                    //$query .= 'WHERE (a.articlesid LIKE "%,'. $id .',%" )  AND a.published=1 AND b.published = 1 ';
+                    $query .= 'WHERE  a.published=1 AND b.published = 1 ';
+
+                    if($elid->language != "*")  $query .= ' AND (a.language="'.$elid->language.'" OR a.language="*" ) AND (b.language="'.$elid->language.'" OR b.language="*") ' ;
+
+                    $query .='ORDER BY a.ordering, a.title, b.ordering';
+                    //echo $query;
+                    $db->setQuery( $query );
+
+                    //(a.articlesid LIKE "%,'. $id .',%" )  AND
+                    $results = $db->loadObjectList();
+
+                    //echo "<br>count: " . count($results);
+                    $cont = 0;
+                    if($results)
+                    {
+                        foreach($results as $result)
+                        {
+                            $taula =  explode(",", $result->articlesid);
+                            //echo "<br>srting:: ". $result->id;
+                            //echo "<br>contar taula:: ". count($taula);
+                            $trobat = false;
+                            foreach ($taula as $theid)
+                            {
+                                //echo "<br>buscando: " . $theid;
+                                if($theid == $id){
+                                    $trobat = true;
+                                   // echo "<br>trobat: " . $theid;
+                                    break;
+                                }
+                                else{
+                                    $trobat = false;
+                                    }
+                            }
+                            if(! $trobat){
+                                unset($results[$cont]);
+                            }else{
+                                //Find in the fields,   exist?
+                                if($fields){
+                                    foreach($fields as $obj)
+                                    {
+                                        if($result->id == $obj->id) unset($results[$cont]);
+                                    }
+                                }
+                            }
+                            $cont++;
+
+                        }
+                        return $results;
+                    }
                 }
-                return $results;
-            }
-         }
-	 return $empty;
+
+            } 
+            
+	        return $empty;
 
 
         }
@@ -1199,7 +1248,7 @@ class fieldsattachHelper
 	* @access	public
 	* @since	1.5
 	*/
-        public function getfieldsvalueCategories($fieldsid, $catid)
+        public static function getfieldsvalueCategories($fieldsid, $catid)
         {
             $result ="";
             $db	=  JFactory::getDBO();
@@ -1255,25 +1304,64 @@ class fieldsattachHelper
         }
 
 
-         /**
-	* Get value of one field content
+    /**
+	* Save the order of imagegallery
 	*
 	* @access	public
 	* @since	1.5
-	*/
-        /*function getfieldsvalue($fieldsid, $articleid)
-        {
-            $result ="";
-            $db	= & JFactory::getDBO();
-            $query = 'SELECT a.value FROM #__fieldsattach_values as a WHERE a.fieldsid='. $fieldsid.' AND a.articleid='.$articleid  ;
-            //echo $query;
-            $db->setQuery( $query );
-            $elid = $db->loadObject();
-            $return ="";
-            if(!empty($elid))  $return =$elid->value;
-            return $return ;
-        }*/
+	*/ 
+    public function fieldsattachimagesorderajax()
+    {
+       // Log the start
+        // Initialise a basic logger with no options (once only).
+        // Include the JLog class.
+        jimport('joomla.log.log');
+        
+        JLog::addLogger(array());
+        
+        // Add a message.
+        JLog::add('Logged 3', JLog::WARNING, 'fieldsattachimagesorderajax');
+                
+         
+        // Create a new query object.
+        $db = JFactory::getDBO();
+        $query = $db->getQuery(true);
+ 
+        $session          = JFactory::getSession();
+        $fieldsattachid   = JRequest::getVar("fieldsid");
+        $order            = JRequest::getVar("order");
+        //Article -------------------
+        $articleid =  $session->get('articleid');
+        
+        // Add a message.
+        JLog::add($articleid, JLog::WARNING, 'Article ID');
+        JLog::add($fieldsattachid, JLog::WARNING, 'Fieldsattahc ID');
+        JLog::add($order, JLog::WARNING, 'Order');
+                 
+        if(empty($articleid) || empty($fieldsattachid) || empty($order)){
+        //Empty  Nothing TODO
+        }else{
+        //SQL
+            $tmporder = explode(",",$order);
+            if(count($tmporder)>0)
+            {
+                $cont = 1;
+                foreach($tmporder as $obj){
+                        //$query = 'UPDATE  #__fieldsattach_images SET ordering='.$obj.' WHERE id='.$fieldsattachid .' AND articleid='.$articleid;
+                        $query = 'UPDATE  #__fieldsattach_images SET ordering='.$cont.' WHERE id='.$obj ;
+                        
+                        JLog::add($query, JLog::WARNING, "sql");
+                        $db->setQuery($query);
+                        // Add a message.
+                        $db->execute();
+                        //$db->query();
+                        $cont++;
+                }
+        
+            }
+        }
 
+    }
 
         
 

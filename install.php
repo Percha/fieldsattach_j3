@@ -47,7 +47,7 @@ class com_fieldsattachInstallerScript
                 //INSTALL THE PLUGINS *******************************************************************************
                 $installer = new JInstaller();
                 //$installer->_overwrite = true; 
-                $pkg_path = JPATH_ADMINISTRATOR.DS.'components'.DS.'com_fieldsattach'.DS.'extensions'.DS;
+                $pkg_path = JPATH_ADMINISTRATOR.'/components/com_fieldsattach/extensions/';
                 $pkgs = array( 
 		'input.zip'=>'Plugin fieldsattachment <strong>Input</strong>',
 		'file.zip'=>'Plugin fieldsattachment <strong>File</strong>' ,
@@ -106,7 +106,7 @@ class com_fieldsattachInstallerScript
                 endforeach; 
                 
                 //DELETE EXTENSIONS
-                $pkg_path = JPATH_ADMINISTRATOR.DS.'components'.DS.'com_fieldsattach'.DS.'extensions'.DS;
+                $pkg_path = JPATH_ADMINISTRATOR.'/components/com_fieldsattach/extensions/';
 
                  
                 destroy_dir($pkg_path);

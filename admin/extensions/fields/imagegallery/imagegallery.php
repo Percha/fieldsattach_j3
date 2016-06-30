@@ -16,7 +16,10 @@ jimport( 'joomla.plugin.plugin' );
 // require helper file
 $sitepath = JPATH_BASE ;
 $sitepath = str_replace ("administrator", "", $sitepath); 
-JLoader::register('fieldattach',  $sitepath.'components/com_fieldsattach/helpers/fieldattach.php'); 
+//JLoader::register('fieldattach',  $sitepath.'components/com_fieldsattach/helpers/fieldattach.php'); 
+/* user rigin --- FIX BUG - 12/05/2016*/
+JLoader::register('fieldattach',  $sitepath.'/components/com_fieldsattach/helpers/fieldattach.php');
+
 JLoader::register('fieldsattachHelper',   $sitepath.DS.'administrator/components/com_fieldsattach/helpers/fieldsattach.php');
 
 include_once $sitepath.'/administrator/components/com_fieldsattach/helpers/extrafield.php';
@@ -66,6 +69,12 @@ class plgfieldsattachment_imagegallery extends extrafield
 		$session->set('fieldsattachid',$fieldsid);
 		
         $sitepath  =  fieldsattachHelper::getabsoluteURL();
+
+        $app = JFactory::getApplication();
+        $dir = '';
+        //if ($app->isSite())  echo 'Client is site';
+        if ($app->isAdmin()) $dir="administrator/";
+
         $str_gallery = '<div id="gallery_'.$fieldsid.'" class="galleryfield">'.plgfieldsattachment_imagegallery::getGallery1($articleid, $fieldsid).'</div>';
                 $str =''; 
                 $str .= $str_gallery; 
@@ -135,9 +144,10 @@ class plgfieldsattachment_imagegallery extends extrafield
 					      );
 					      
 					      //AJAX CALL *****
-					      var url  = \"".JURI::root(false)."/administrator/index.php?option=com_fieldsattach&task=fieldsattachimagesorderajax&catid=".$articleid."&fieldsid=\"+fieldsattachid+\"&order=\"+tmparray.toString();
-					       
-                                                  var xmlhttp;
+                            
+					      var url  = \"".JURI::root(false).$dir."index.php?option=com_fieldsattach&task=fieldsattachimagesorderajax&catid=".$articleid."&fieldsid=\"+fieldsattachid+\"&order=\"+tmparray.toString();
+					      
+                          var xmlhttp;
 					      if (window.XMLHttpRequest)
 					      {// code for IE7+, Firefox, Chrome, Opera, Safari
 					      xmlhttp=new XMLHttpRequest();
@@ -298,7 +308,7 @@ class plgfieldsattachment_imagegallery extends extrafield
 .ui-sortable{overflow:hidden; margin:0; padding:0;}
 .sortable li  {
 cursor: move;margin: 0 10px 12px 0; border:1px #ccc solid; float:left;border-radius: 5px;
-padding: 3px;   width:200px; height:200px; overflow:hidden;
+padding: 3px;   width:190px; height:190px; overflow:hidden;
 } 
 </style>"; 
         $str .= '<div   class="ui-sortable"><ul id="gallerysortable'.$fieldsattachid.'" class="sortable" >';
@@ -310,7 +320,7 @@ padding: 3px;   width:200px; height:200px; overflow:hidden;
                   $url_edit =JURI::base(false).'/index.php?option=com_fieldsattach&view=fieldsattachimage&tmpl=component&layout=edit&id='.$row->id.'&fieldsattachid='.$fieldsattachid.'&reset=2';
                   $url_delete =JURI::base(false).'/index.php?option=com_fieldsattach&amp;view=fieldsattachimages&amp;task=delete&amp;id='.$row->id.'&amp;tmpl=component&amp;fieldsid='.$fieldsattachid;
                   $str.= '
-                  <li id="image_'.$fieldsattachid.'_'.$row->id.'"  style="width:150px; height:150px; ">
+                  <li id="image_'.$fieldsattachid.'_'.$row->id.'" >
 			    <div class="btn-group" style="margin-bottom:4px;">
 				       <a class="modal btn btn-mini" href="'.$sitepath.$row->image1.'">'.JText::_('ZOOM').'</a>
 				       <a class="modal btn btn-mini" href="'.$url_edit.'" rel="{handler: \'iframe\', size: {x: 980, y: 500}}">'.JText::_('EDIT').'</a>

@@ -299,22 +299,34 @@ class fieldsattachController extends JControllerLegacy
 
             //save file
             $app = JFactory::getApplication();
-            $path = JPATH_SITE.DS.'images'.DS;
+            $path = JPATH_SITE.'/tmp';
             $filename = 'db-backup-'.time().'-'.(md5(implode(',',$tables)));
-            $handle = fopen($path.$filename.'.sql','w+');
+            $handle = fopen($path.'/'.$filename.'.sql','w+');
             fwrite($handle,$return);
             fclose($handle);
             
             $files_to_zip = array(
-            $path.$filename.'.sql'
+            $path.'/'.$filename.'.sql'
             );
             //if true, good; if false, zip creation failed
-            $result = $this->create_zip($files_to_zip, $path.$filename.'.zip');
-            $app->enqueueMessage( JTEXT::_("EXPORT OK") . '<br /><br /> Download: <a href="../images/'.$filename.'.zip">images/'.$filename.'.zip</a>' )   ;
-            unlink($path.$filename.'.sql');
+            //$result = $this->create_zip($files_to_zip, $path.'/'.$filename.'.zip');
+            $app->enqueueMessage( JTEXT::_("EXPORT OK") . '<br /><br /> Download: <a href="../tmp/'.$filename.'.sql" target="_blank">'.$filename.'.sql</a>' )   ;
+            //unlink($path.'/'.$filename.'.sql');
+
+            /*
+            //Download SQL
+            //save file
+            $handle = fopen($path.'/'.$filename.'.sql','w+');
+            // print_r($handle);exit;
+            fwrite($handle,$return);
+            fclose($handle);
+            //add below code to download it as a sql file
+            Header('Content-type: application/octet-stream');
+            Header('Content-Disposition: attachment; '.$path.'/'.$filename.'.sql');
+            echo $return;*/
             
              // Load the submenu.
-		fieldsattachHelper::addSubmenu(JRequest::getCmd('view', 'fieldsattach'));
+		    fieldsattachHelper::addSubmenu(JRequest::getCmd('view', 'fieldsattach'));
             parent::display(); 
         }
         
@@ -426,54 +438,6 @@ class fieldsattachController extends JControllerLegacy
  	function fieldsattachimagesorderajax()
 	{
 		
-		// Log the start
-		// Initialise a basic logger with no options (once only).
-		// Include the JLog class.
-		jimport('joomla.log.log');
-		
-		JLog::addLogger(array());
-		
-		// Add a message.
-		JLog::add('Logged 3', JLog::WARNING, 'fieldsattachimagesorderajax');
-			    
-		 
-		// Create a new query object.
-		$db = JFactory::getDBO();
-		$query = $db->getQuery(true);
- 
-                $session =& JFactory::getSession();
-		$fieldsattachid = JRequest::getVar("fieldsid");
-		$order = JRequest::getVar("order");
-		//Article -------------------
-        $articleid =  $session->get('articleid');
-		
-		// Add a message.
-		JLog::add($articleid, JLog::WARNING, 'Article ID');
-		JLog::add($fieldsattachid, JLog::WARNING, 'Fieldsattahc ID');
-		JLog::add($order, JLog::WARNING, 'Order');
-                 
-                if(empty($articleid) || empty($fieldsattachid) || empty($order)){
-				//Empty  Nothing TODO
-                }else{
-				//SQL
-				$tmporder = explode(",",$order);
-				if(count($tmporder)>0)
-				{
-						$cont = 1;
-						foreach($tmporder as $obj){
-								//$query = 'UPDATE  #__fieldsattach_images SET ordering='.$obj.' WHERE id='.$fieldsattachid .' AND articleid='.$articleid;
-								$query = 'UPDATE  #__fieldsattach_images SET ordering='.$cont.' WHERE id='.$obj ;
-								
-								JLog::add($query, JLog::WARNING, "sql");
-								$db->setQuery($query);
-								// Add a message.
-								$db->execute();
-								//$db->query();
-								$cont++;
-						}
-				
-				}
-		}
-
+		fieldsattachHelper::fieldsattachimagesorderajax();
 	}
 }

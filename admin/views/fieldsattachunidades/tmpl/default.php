@@ -23,19 +23,29 @@ $listOrder	= "a.ordering";
 $saveOrder	= $listOrder == 'a.ordering'; 
 $listDirn	= $this->escape("asc");
 
+
 if ($saveOrder)
 {
 	$saveOrderingUrl = 'index.php?option=com_fieldsattach&task=fieldsattachunidades.saveOrderAjax&tmpl=component';
-	
-	JHtml::_('sortablelist.sortable', 'articleList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
+	JHtml::_('sortablelist.sortable', 'contactList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
+
+ 
 ?>
 
 
 <script type="text/javascript">
+/*
+	console.dir(Joomla);
+	alert(Joomla);
+
+	 
+
 	Joomla.orderTable = function() {
+		alert("sssss orderTable");
 		table = document.getElementById("sortTable");
 		direction = document.getElementById("directionTable");
+		alert("sssss sortTable");
 		order = table.options[table.selectedIndex].value;
 		if (order != '<?php echo $listOrder; ?>') {
 			dirn = 'asc';
@@ -44,11 +54,16 @@ if ($saveOrder)
 		}
 		Joomla.tableOrdering(order, dirn, '');
 	}
-</script>
-<script type="text/javascript">
-	Joomla.submitbutton = function(task) {  
+
+	console.dir(Joomla.orderTable);
+	 
+
+ 
+	Joomla.submitbutton = function(task) { 
+		alert('submitbutton'); 
                 Joomla.submitform(task, document.getElementById('adminForm'));
 	}
+	*/
 </script>
  
  
@@ -73,7 +88,7 @@ if ($saveOrder)
 
 	</fieldset> 
 
-       <table class="table table-striped" id="articleList">
+       <table class="table table-striped" id="contactList">
 		<thead><?php echo $this->loadTemplate('head');?></thead>
 		<tfoot><?php echo $this->loadTemplate('foot');?></tfoot>
 		<tbody><?php echo $this->loadTemplate('body');?></tbody>
