@@ -149,6 +149,7 @@ class plgfieldsattachment_image extends extrafield
 		}  
 	        
 	        if($selectable=="selectable") {
+	        	JHtml::_('behavior.modal');
 			$str .= '
 			<div class="input-append">
 				<input name="field_'.$fieldsid.'" id="field_'.$fieldsid.'" type="text" value="'.$value.'" class="'.$required.'" />
