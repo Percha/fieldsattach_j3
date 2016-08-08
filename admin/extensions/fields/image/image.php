@@ -299,10 +299,6 @@ class plgfieldsattachment_image extends extrafield
 
         function action( $articleid, $fieldsid, $fieldsvalueid)
         {
-           $path = $this->path1;
-           $documentpath = $this->documentpath;
-           
-           
            //FIND FOLDER ************************************************************
            $documentpath=  JPATH_ROOT.DS.'images'.DS.'documents';
            $option = JRequest::getVar("option");
