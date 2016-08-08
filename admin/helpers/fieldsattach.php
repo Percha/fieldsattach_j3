@@ -82,7 +82,7 @@ class fieldsattachHelper
 	 * @return	array	An array of JHtmlOption elements.
 	 * @since	1.6
 	 */
-	static function getGroups()
+	public static function getGroups()
 	{
 		$db = JFactory::getDbo();
 
@@ -114,7 +114,7 @@ class fieldsattachHelper
 	 * @return	array	An array of JHtmlOption elements.
 	 * @since	1.6
 	 */
-	public function getGallery($articleid, $fieldsattachid )
+	public static function getGallery($articleid, $fieldsattachid )
 	{
             
         // Load the tooltip behavior. 
@@ -183,7 +183,7 @@ class fieldsattachHelper
 	 * @return	string	An array of JHtml FORM elements.
 	 * @since	1.6
 	*/
-    static public function getForm($name)
+    public static function getForm($name)
     {
         jimport( 'joomla.form.form' );
         $doc = JFactory::getDocument();
@@ -319,7 +319,7 @@ class fieldsattachHelper
 	 * @return	nothing
 	 * @since	1.6
 	 */
-        function uploadFile($file, $articleid, $fieldsid,  $fieldsvalueid,  $path = null)
+        public static function uploadFile($file, $articleid, $fieldsid,  $fieldsvalueid,  $path = null)
         {
             if(!empty($_FILES[$file]['tmp_name'])){
             $SafeFile = $_FILES[$file]['name'];
@@ -368,7 +368,7 @@ class fieldsattachHelper
             }
         }
 
-        function deleteFile($file, $articleid, $fieldsid,  $fieldsvalueid,  $path = null)
+        public static function deleteFile($file, $articleid, $fieldsid,  $fieldsvalueid,  $path = null)
         {
             $deletefile = JRequest::getVar("field_". $fieldsid.'_delete');
             $file = JRequest::getVar("field_". $fieldsid);
@@ -407,7 +407,7 @@ class fieldsattachHelper
         
         /*resizeImg function*/
 
-        function resizeImg($img, $w, $h, $newfilename,$filter=null) {
+        public static function resizeImg($img, $w, $h, $newfilename,$filter=null) {
 
             $app = JFactory::getApplication();
             
@@ -529,7 +529,7 @@ class fieldsattachHelper
 
 
          //IMAGE RESIZE FUNCTION FOLLOW ABOVE DIRECTIONS
-        public function resize($nombre,$archivo,$ancho,$alto,$id, $path, $filter=NULL)
+        public static function resize($nombre,$archivo,$ancho,$alto,$id, $path, $filter=NULL)
         {
             $path_absolute = JPATH_BASE ;
             $app = JFactory::getApplication();
@@ -554,7 +554,7 @@ class fieldsattachHelper
         }
 
          //GET URL absolute
-        static public function getabsoluteURL()
+        public static function getabsoluteURL()
         {
             $sitepath = JURI::base() ;
             $pos = strrpos($sitepath, "administrator");
@@ -568,7 +568,7 @@ class fieldsattachHelper
         }
 
          //GET PATH absolute
-        public function getabsolutePATH()
+        public static function getabsolutePATH()
         {
             $sitepath = JPATH_BASE ;
             echo "";
@@ -587,7 +587,7 @@ class fieldsattachHelper
     	* @access	public
     	* @since	1.5
     	*/
-        static public function  getfieldsForAll($id)
+        public static function  getfieldsForAll($id)
         {
 
             $db	=  JFactory::getDBO();
@@ -666,7 +666,7 @@ class fieldsattachHelper
     	* @access	public
     	* @since	1.5
     	*/
-        static public function getfields($id, $catid=null)
+        public static function getfields($id, $catid=null)
         {
             
             $result = array();
@@ -885,7 +885,7 @@ class fieldsattachHelper
 	* @access	public
 	* @since	1.5
 	*/
-        static public function recursivecat($catid, $idscats = "")
+        public static function recursivecat($catid, $idscats = "")
         {
         	global $retorno_recursive;
              //JError::raiseNotice(500, "CATID:: ".$catid." - ".$idscats);
@@ -917,7 +917,7 @@ class fieldsattachHelper
     	* @access	public
     	* @since	1.5
     	*/
-        static public function getfieldsForArticlesid($id, $fields = null)
+        public static function getfieldsForArticlesid($id, $fields = null)
         {
 
             $db	=  JFactory::getDBO();
@@ -1004,7 +1004,7 @@ class fieldsattachHelper
 	* @access	public
 	* @since	1.5
 	*/
-        function getTitle($id)
+        public static function getTitle($id)
         {
 		$str="";
 		if(!empty($id)){
@@ -1025,7 +1025,7 @@ class fieldsattachHelper
 	* @access	public
 	* @since	1.5
 	*/
-        function getinputfields($id, $fields, $backend, $fontend, $backendcategory, $exist_options, & $body = null, &  $str = null, &  $str_options= null)
+        public static function getinputfields($id, $fields, $backend, $fontend, $backendcategory, $exist_options, & $body = null, &  $str = null, &  $str_options= null)
         {
             $str = '';
             $this->exist = false;
@@ -1208,7 +1208,7 @@ class fieldsattachHelper
 	* @access	public
 	* @since	1.5
 	*/ 
-    static public function get_extensions()
+    public static function get_extensions()
     {
         $array_fields  = array();
         $db = JFactory::getDBO(  );
@@ -1229,7 +1229,7 @@ class fieldsattachHelper
 	* @access	public
 	* @since	1.5
 	*/
-        static public function getfieldsvalue($fieldsid, $articleid)
+        public static function getfieldsvalue($fieldsid, $articleid)
         {
             $result ="";
             $db	= JFactory::getDBO();
@@ -1268,7 +1268,7 @@ class fieldsattachHelper
 	* @since	1.5
 	*/
        // public function resetToDescription($id, $fieldsid, & $body)
-        public function resetToDescription($id, $fieldsid)
+        public static function resetToDescription($id, $fieldsid)
         {
             //echo "resetToDescriptionresetToDescriptionresetToDescriptionresetToDescription: ".$fieldsid;
             //$patron ="/{\d+}/i";
@@ -1288,7 +1288,7 @@ class fieldsattachHelper
 	* @access	public
 	* @since	1.5
 	*/
-        function getFieldsTitle($id)
+        public static function getFieldsTitle($id)
         {
 		$str="";
 		if(!empty($id)){
@@ -1310,7 +1310,7 @@ class fieldsattachHelper
 	* @access	public
 	* @since	1.5
 	*/ 
-    public function fieldsattachimagesorderajax()
+    public static function fieldsattachimagesorderajax()
     {
        // Log the start
         // Initialise a basic logger with no options (once only).
