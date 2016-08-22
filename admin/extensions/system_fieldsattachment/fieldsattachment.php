@@ -681,9 +681,12 @@ class plgSystemfieldsattachment extends JPlugin
                     if(!empty($results))
                     {
                         
-                        $function  = "plgfieldsattachment_".$obj->type."::action( ".$article->id.",".$obj->id.",".$valueslst->id.");";
+                       // $function  = "plgfieldsattachment_".$obj->type."::action( ".$article->id.",".$obj->id.",".$valueslst->id.");";
                        // JError::raiseWarning( 100,   $function   );
-                        eval($function);
+                       // eval($function);
+                         //PHP 7 
+                        call_user_func_array("plgfieldsattachment_".$obj->type, array($article->id, $obj->id , $valueslst->id));
+                   
                     }
             
              
