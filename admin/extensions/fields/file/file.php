@@ -383,8 +383,11 @@ class plgfieldsattachment_file extends extrafield
 
     function action( $articleid, $fieldsid, $fieldsvalueid)
     {
+        $path1= $sitepath .'images'.DS.'documents';
+        $documentpath=  JPATH_ROOT.DS.'images'.DS.'documents';
+
        $app = JFactory::getApplication();
-       $path = $this->path1;
+       $path = $path1;
        $file = "field_". $fieldsid."_upload"; 
        
        //FIND FOLDER ************************************************************
