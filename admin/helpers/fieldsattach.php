@@ -337,11 +337,11 @@ class fieldsattachHelper
              
             if(!JFile::upload($_FILES[$file]['tmp_name'] , $path .'/'. $articleid .'/'.  $_FILES[$file]["name"]))
             {
-                JError::raiseWarning( 100,  JTEXT::_("Uploda image Error")   );
+                JError::raiseWarning( 100,  JTEXT::_("Image upload error")   );
             }else
             {
                 $app = JFactory::getApplication();
-                $app->enqueueMessage( JTEXT::_("Uploda image OK")  );
+                $app->enqueueMessage( JTEXT::_("Image uploaded OK")  );
                 $nombreficherofinal = $_FILES[$file]["name"];
                 if (file_exists( $path .'/'. $articleid .'/'. $nombreficherofinal))
                 {
