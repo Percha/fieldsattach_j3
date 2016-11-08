@@ -1536,15 +1536,21 @@ class plgSystemfieldsattachment extends JPlugin
         $filter_category_id["category_id"];
         $filter_category_id = $filter_category_id["category_id"];
         
-
             if(empty($filter_category_id))
             {
-                $body = JResponse::getBody();
-                $tmp = explode('name="jform[catid]" value="',$body);
-                if(count($tmp)>1)
-                {
-                    $tmp = explode('"',$tmp[1]);
-                    $filter_category_id = $tmp[0];
+                # if the catid is passed in, as in creating a new article with a pre-set catid
+                $jinput = JFactory::getApplication()->input;
+                $form_cat_id = $jinput->get('catid', 0, 'int');
+                if ( $form_cat_id ) {
+                    $filter_category_id = $form_cat_id;
+                } else {             
+                    $body = JResponse::getBody();
+                    $tmp = explode('name="jform[catid]" value="',$body);
+                    if(count($tmp)>1)
+                    {
+                        $tmp = explode('"',$tmp[1]);
+                        $filter_category_id = $tmp[0];
+                    }
                 }
            
             }
