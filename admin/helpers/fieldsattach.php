@@ -1173,7 +1173,7 @@ class fieldsattachHelper
 					    
 						 eval("\$tmp=".  $function."");
 						  
-						 $str .= '<div class="control-group"><label class="control-label" for="field_'.$field->id.'">' . $field->title; 
+						 $str .= '<div class="control-group cid_'.$field->id.'"><label class="control-label" for="field_'.$field->id.'">' . $field->title; 
 						 if($field->required) {$str .= '  <span>(*)</span>';}
                                                  $str .= '</label>';
 						 $str .= '<div class="controls">'.$tmp.  '</div>';
