@@ -52,7 +52,7 @@ class plgSystemfieldsattachment extends JPlugin
      * @param   array   $config  An array that holds the plugin configuration
      * @since   1.0
      */
-    function plgSystemfieldsattachment( $subject, $config)
+    function __construct( $subject, $config)
     {
              
              
