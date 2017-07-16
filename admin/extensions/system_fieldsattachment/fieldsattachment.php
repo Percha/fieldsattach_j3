@@ -1238,7 +1238,7 @@ class plgSystemfieldsattachment extends JPlugin
                                //$uri = $_SERVER["HTTP_REFERER"];
                                $user    = JFactory::getUser();
                                $userId  = $user->get('id');
-                               $uri = JFactory::getURI();
+                               $uri = JUri::getInstance();
                                $uri = 'index.php?option=com_content&task=article.edit&a_id='.$id;
                                $app = JFactory::getApplication();
                                $app->setUserState('com_content.edit.article.id',$id);
