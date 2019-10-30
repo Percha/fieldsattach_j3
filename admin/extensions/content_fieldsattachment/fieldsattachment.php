@@ -177,6 +177,8 @@ class plgContentfieldsattachment extends JPlugin
                                        if($eltitle) $article->text .=  '<h3>'.$field->titlegroup.'</h3>';
                                        $article->text =$str_before.$article->text.$str;
                                        $str ='';
+				       $str_before ='';
+					
                                   }
                                   $idgroup = $fields[$cont+1]->idgroup;
                                 }else{
